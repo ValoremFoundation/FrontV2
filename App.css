@@ -1,0 +1,16 @@
+.App {
+  text-align: center;
+}
+
+.homepageContainer::after{
+  content: "";
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    background-image: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1));
+    z-index: -1;
+
+}
+
