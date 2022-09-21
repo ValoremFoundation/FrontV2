@@ -1,0 +1,16 @@
+.border-button {
+  padding: 11px 30px;
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 15px;
+  font-family: Inter;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 16px;
+  font-weight: 500;
+
+  &:hover {
+    background: #00000015;
+  }
+}
