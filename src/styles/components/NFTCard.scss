@@ -1,0 +1,74 @@
+.nft-card-container {
+  max-width: 360px;
+  margin: 20px;
+  padding: 18px 24px;
+  background: #ffffff;
+  border: none;
+  box-shadow: 0px 4px 4px rgb(0,0,0,0.25);
+  font-family: Poppins;
+}
+
+.nft-card-name {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: -1px;
+  color: #111827;
+}
+
+.nft-card-position {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 14px;
+  color: #111827;
+}
+
+.nft-card-favor-number {
+  font-family: 'Poppins';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 24px;
+letter-spacing: -1px;
+color: #5C5C5C;
+text-align: center;
+}
+
+.nft-card-up-percent {
+  font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 16px;
+line-height: 16px;
+color: #3FC53D;
+}
+
+.nft-card-matic-number {
+  font-family: 'Poppins';
+font-style: normal;
+font-weight: 700;
+font-size: 24px;
+line-height: 16px;
+color: #000000;
+}
+
+.nft-card-usd-number {
+  font-family: 'Poppins';
+font-style: normal;
+font-weight: 700;
+font-size: 14px;
+color: #000000;
+}
+
+.nft-card-star-number {
+  font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 16px;
+line-height: 16px;
+color: #000000;
+}
