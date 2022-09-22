@@ -8,7 +8,7 @@ import HomeCategoryCard from 'src/components/HomeCategoryCard';
 import HomeCateImage1 from 'src/assets/images/home-cate-1.svg';
 import HomeCateImage2 from 'src/assets/images/home-cate-2.svg';
 import HomeCateImage3 from 'src/assets/images/home-cate-3.svg';
-import HomeSearchMan from 'src/assets/images/home-search-man.svg';
+import HomeSearchMan from 'src/assets/images/home-search-man.png';
 import HomeSearchInput from 'src/components/HomeSearchInput';
 
 const Home = () => {
