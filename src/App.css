@@ -5,3 +5,9 @@
   /* font-family: 'Encode Sans Expanded', sans-serif; */
   font-family: Poppins, Roboto, Helvetica, sans-serif;
 }
+
+@font-face {
+  font-family: "FuturaBT-Medium";   /*Can be any text*/
+  src: local("FuturaBT-Medium"),
+    url("./assets/fonts/FuturaBT-Medium.ttf") format("truetype");
+}

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
+import './assets/fonts/FuturaBT-Medium.ttf';
 import 'bootstrap/dist/css/bootstrap.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Home from 'src/pages/Home';

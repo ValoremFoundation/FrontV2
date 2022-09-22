@@ -10,7 +10,7 @@ const Navbar = ({ toggle }) => {
     <div className="nav-container">
       <div className="nav-sub-container">
         <Link to={'/'} className="nav-logo">
-          <h1 className="nav-title">ADVALOREM</h1>
+          <div className="nav-title">ADVALOREM</div>
         </Link>
         <div className="nav-menu-icon" onClick={toggle}>
           <FiMenu fontSize={30} />
