@@ -10,10 +10,12 @@
     "bootstrap": "^5.2.1",
     "futura-font": "^1.0.0",
     "react": "^16.14.0",
+    "react-device-detect": "^2.2.2",
     "react-dom": "^16.14.0",
     "react-hot-toast": "^2.3.0",
     "react-icons": "^4.4.0",
     "react-loading": "^2.0.3",
+    "react-map-gl": "^5.2.11",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
     "sass": "^1.54.9"
