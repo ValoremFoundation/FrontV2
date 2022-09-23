@@ -5,7 +5,7 @@ import Avatar1 from 'src/assets/images/nft-card.png';
 const NFTCardAvatar = () => {
   return (
     <div>
-      <img src={Avatar1} className="nft-card-avatar" />
+      <img alt="alt" src={Avatar1} className="nft-card-avatar" />
     </div>
   );
 };

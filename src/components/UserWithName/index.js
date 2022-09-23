@@ -8,7 +8,7 @@ const UserWithName = ({ userInfo }) => {
     <div className="user-with-name">
       <div className="poppins-12-500 text-center">{info?.name}</div>
       <div className="poppins-12-500 text-center mb-1">{info?.role}</div>
-      <img src={info?.avatar} width={100} height={100} style={{ borderRadius: 100 }} />
+      <img alt="alt" src={info?.avatar} width={100} height={100} style={{ borderRadius: 100 }} />
       <div className="user-with-dot">
         <div style={{ width: 15, height: 15, background: info?.dotColor, borderRadius: 15 }}></div>
         {gift?.length &&

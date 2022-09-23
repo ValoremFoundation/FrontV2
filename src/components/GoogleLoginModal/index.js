@@ -37,7 +37,7 @@ const GoogleLoginModal = ({ modalIsOpen, closeModal, redirectUrl }) => {
         <div className="google-login-title">AdValorem</div>
         <div className="google-login-content">Welcome Back!</div>
         <div className="google-login-button" onClick={handleClickGoogleLogin}>
-          <img src={GoogleIcon} width={25} height={25} />
+          <img alt="alt" src={GoogleIcon} width={25} height={25} />
           <div className="google-login-button-title ms-3">Sign in with google</div>
         </div>
       </div>

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import BackgroundButton from 'src/components/BackgroundButton';
 import 'src/styles/Home.scss';
 import 'src/styles/Global.scss';
@@ -14,7 +13,6 @@ import HomeSearchInput from 'src/components/HomeSearchInput';
 import GoogleLoginModal from 'src/components/GoogleLoginModal';
 
 const Home = () => {
-  const hisotry = useHistory();
   const [modalIsOpen, setIsOpen] = useState(false);
   const openModal = () => {
     setIsOpen(true);
@@ -100,7 +98,7 @@ const Home = () => {
               <HomeSearchInput placeholder={'What are you looking for?'} />
             </div>
             <div className="col-12 col-md-5 col-lg-5 home-cate-search-image">
-              <img src={HomeSearchMan} width={'100%'} style={{ objectFit: 'cover', maxWidth: 330 }} />
+              <img alt="alt" src={HomeSearchMan} width={'100%'} style={{ objectFit: 'cover', maxWidth: 330 }} />
             </div>
           </div>
         </div>

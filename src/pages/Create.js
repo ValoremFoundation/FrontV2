@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ReactMapGL, { Marker, Popup, NavigationControl, GeolocateControl, FlyToInterpolator } from 'react-map-gl';
+import ReactMapGL, { /* Marker, Popup, */ NavigationControl, GeolocateControl, FlyToInterpolator } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import 'src/styles/Create.scss';
 import 'src/styles/Global.scss';
@@ -219,11 +219,11 @@ const Create = () => {
           <div className="create-middle-section">
             <div className="d-flex justify-content-between algin-items-center">
               <p className="poppins-24-600 my-3">Create New Service</p>
-              <img src={MenuIcon} style={{ width: '36px', heigt: '36px', cursor: 'pointer' }} />
+              <img alt="alt" src={MenuIcon} style={{ width: '36px', heigt: '36px', cursor: 'pointer' }} />
             </div>
             <div className="global-flex-between flex-wrap my-4">
               <div className="global-flex-start my-4">
-                <img src={Avatar2} style={{ width: 64, height: 64, borderRadius: 64 }} />
+                <img alt="alt" src={Avatar2} style={{ width: 64, height: 64, borderRadius: 64 }} />
                 <div className="poppins-14-400 ms-2">gigphoto.png</div>
               </div>
               <div className="d-flex justify-content-between flex-wrap my-2">

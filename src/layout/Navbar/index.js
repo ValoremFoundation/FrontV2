@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import 'src/styles/layout/Navbar.scss';
 import SearchInput from 'src/components/SearchInput';
@@ -8,7 +7,6 @@ import { FiMenu } from 'react-icons/fi';
 import GoogleLoginModal from 'src/components/GoogleLoginModal';
 
 const Navbar = ({ toggle }) => {
-  const hisotry = useHistory();
   const [modalIsOpen, setIsOpen] = useState(false);
   const openModal = () => {
     setIsOpen(true);

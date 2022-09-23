@@ -6,7 +6,7 @@ const HomeCategoryCard = ({ image, description }) => {
     <div className="home-category-card">
       <div>
         <div className="d-flex justify-content-center align-items-center">
-          <img src={image} />
+          <img alt="alt" src={image} />
         </div>
         <div className="home-category-text mt-4">{description}</div>
       </div>
