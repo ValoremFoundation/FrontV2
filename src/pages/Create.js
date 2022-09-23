@@ -161,7 +161,7 @@ const Create = () => {
               <span className="poppins-16-600">royalties</span>
             </div>
             <p className="poppins-20-500 my-4">Here’s a real life example of how it works</p>
-            <div className="d-flex flex-wrap">
+            <div className="create-work-flow">
               <UserWithName userInfo={user1Info} />
               <StepOrder step={step1} />
               <UserWithName userInfo={user2Info} />
@@ -319,7 +319,7 @@ const Create = () => {
           </div>
         </div>
       </div>
-      <div className="create-middle-background px-2 py-4" style={{ paddingBottom: '160px' }}>
+      <div className="create-middle-background px-2 pt-4 pb-5">
         <div className="create-middle-one-container">
           <div className="d-flex justify-content-between align-items-center flex-wrap p-4">
             <div className="d-flex justify-content-start align-items-center flex-wrap">

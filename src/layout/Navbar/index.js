@@ -1,13 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import 'src/styles/layout/Navbar.scss';
 import SearchInput from 'src/components/SearchInput';
 import BorderButton from 'src/components/BorderButton';
 import { FiMenu } from 'react-icons/fi';
+import GoogleLoginModal from 'src/components/GoogleLoginModal';
 
 const Navbar = ({ toggle }) => {
+  const hisotry = useHistory();
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const openModal = () => {
+    setIsOpen(true);
+  };
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
   return (
     <div className="nav-container">
+      <GoogleLoginModal modalIsOpen={modalIsOpen} closeModal={closeModal} redirectUrl={'/create'} />
       <div className="nav-sub-container">
         <Link to={'/'} className="nav-logo">
           <div className="nav-title">ADVALOREM</div>
@@ -23,9 +35,9 @@ const Navbar = ({ toggle }) => {
           <Link to="/resources" className="nav-link" exact="true">
             Resources
           </Link>
-          <Link to="/create" className="nav-link" exact="true">
+          <div className="nav-link" exact="true" onClick={openModal}>
             Create
-          </Link>
+          </div>
           <Link to="/map" className="nav-link" exact="true">
             Map
           </Link>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import BackgroundButton from 'src/components/BackgroundButton';
 import 'src/styles/Home.scss';
 import 'src/styles/Global.scss';
@@ -10,10 +11,21 @@ import HomeCateImage2 from 'src/assets/images/home-cate-2.svg';
 import HomeCateImage3 from 'src/assets/images/home-cate-3.svg';
 import HomeSearchMan from 'src/assets/images/home-search-man.png';
 import HomeSearchInput from 'src/components/HomeSearchInput';
+import GoogleLoginModal from 'src/components/GoogleLoginModal';
 
 const Home = () => {
+  const hisotry = useHistory();
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const openModal = () => {
+    setIsOpen(true);
+  };
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
   return (
     <div>
+      <GoogleLoginModal modalIsOpen={modalIsOpen} closeModal={closeModal} redirectUrl={'/create'} />
       <div className="home-top-section">
         <div className="home-top-overlay">
           <div className="home-top-container">
@@ -29,7 +41,9 @@ const Home = () => {
                 <BackgroundButton label={'Discover'} color={'#ffffff'} bgColor={'#000000'} />
               </div>
             </div>
-            <div className="home-top-text-bottom">How it works?</div>
+            <div className="home-top-text-bottom" onClick={openModal}>
+              How it works?
+            </div>
           </div>
         </div>
       </div>

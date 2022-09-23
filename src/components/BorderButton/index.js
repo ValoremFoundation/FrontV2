@@ -2,9 +2,9 @@ import React from 'react';
 import 'src/styles/components/BorderButton.scss';
 import 'src/styles/Global.scss';
 
-const BorderButton = ({ label, color }) => {
+const BorderButton = ({ label, color, handleClick }) => {
   return (
-    <button className="border-button" style={{ border: `1px solid ${color}` }}>
+    <button className="border-button" style={{ border: `1px solid ${color}` }} onClick={handleClick}>
       <div className="poppins-14-400" style={{ color: color }}>
         {label}
       </div>

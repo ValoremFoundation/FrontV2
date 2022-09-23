@@ -1,6 +1,5 @@
 .create-container {
   background: #F4F5FB;
-  height: calc(100vh - 84px);
 }
 
 .create-top-section {
@@ -47,6 +46,17 @@
 
   @media screen and (max-width: 978px) {
     padding: 10px;
+  }
+}
+
+.create-work-flow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+
+  @media screen and (max-width: 978px) {
+    justify-content: center;
   }
 }
 

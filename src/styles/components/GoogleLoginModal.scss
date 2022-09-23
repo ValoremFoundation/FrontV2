@@ -1,0 +1,45 @@
+.google-login-title {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 24px;
+  color: #000000;
+  text-align: center;
+}
+
+.google-login-content {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 24px;
+  color: #979797;
+  text-align: center;
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.google-login-button {
+  background: #FFFFFF;
+  border: 1px solid #D9D9D9;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 50px;
+  cursor: pointer;
+
+  &:hover {
+    background: #00000015;
+  }
+}
+
+.google-login-button-title {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  color: #000000;
+}
