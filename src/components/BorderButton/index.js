@@ -1,10 +1,10 @@
 import React from 'react';
-import 'src/styles/components/BorderButton.scss';
+import 'src/styles/components/RoundBorderButton.scss';
 import 'src/styles/Global.scss';
 
-const BorderButton = ({ label, color, handleClick }) => {
+const RoundBorderButton = ({ label, color, onClick }) => {
   return (
-    <button className="border-button" style={{ border: `1px solid ${color}` }} onClick={handleClick}>
+    <button className="round-border-button" style={{ border: `1px solid ${color}` }} onClick={onClick}>
       <div className="poppins-14-400" style={{ color: color }}>
         {label}
       </div>
@@ -12,4 +12,4 @@ const BorderButton = ({ label, color, handleClick }) => {
   );
 };
 
-export default BorderButton;
+export default RoundBorderButton;

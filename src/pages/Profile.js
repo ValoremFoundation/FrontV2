@@ -5,6 +5,7 @@ import 'src/styles/Global.scss';
 import Avatar2 from 'src/assets/images/avatar-1.png';
 import ProfileNumberName from 'src/components/ProfileNumberName';
 import ListingCard from 'src/components/ListingCard';
+import RedemptionCard from 'src/components/RedemptionCard';
 
 const Profile = () => {
   const history = useHistory();
@@ -68,11 +69,14 @@ const Profile = () => {
   ];
 
   const [selectedCategoryTabIndex, setSelectedCategoryTabIndex] = useState(0);
-  const [selectedActionTabIndex, setSelectedActionTabIndex] = useState(0);
+  const [selectedActionTabIndex, setSelectedActionTabIndex] = useState(4);
 
   const handleClickActive = index => {
     history.push(`/token-detail/${index}`);
   };
+
+  const handleClickAccept = index => {};
+  const handleClickDeny = index => {};
 
   return (
     <div className="profile-container">
@@ -136,7 +140,28 @@ const Profile = () => {
             {selectedCategoryTabIndex === 0 && (
               <>
                 <div className="global-flex-lg-between-sm-center mb-4">
-                  <div className="poppins-20-700">Listings</div>
+                  <div className="global-flex-start">
+                    <div
+                      className={
+                        selectedActionTabIndex === 4
+                          ? 'poppins-20-700 global-pointer me-3'
+                          : 'poppins-20-700-gray global-pointer me-3'
+                      }
+                      onClick={() => setSelectedActionTabIndex(4)}
+                    >
+                      Listings
+                    </div>
+                    <div
+                      className={
+                        selectedActionTabIndex === 5
+                          ? 'poppins-20-700 global-pointer me-3'
+                          : 'poppins-20-700-gray global-pointer me-3'
+                      }
+                      onClick={() => setSelectedActionTabIndex(5)}
+                    >
+                      Redemptions
+                    </div>
+                  </div>
                   <div className="global-flex-lg-between-sm-center my-2">
                     {actionTabList.map((item, index) =>
                       selectedActionTabIndex === item.id ? (
@@ -160,13 +185,32 @@ const Profile = () => {
                   </div>
                 </div>
                 <div>
-                  {selectedActionTabIndex === 0 && (
+                  {selectedActionTabIndex === 4 && (
                     <>
                       {[0, 1, 2].map(index => (
                         <div className="my-4" key={index}>
                           <ListingCard handleClickActive={() => handleClickActive(index)} />
                         </div>
                       ))}
+                    </>
+                  )}
+                  {selectedActionTabIndex === 5 && (
+                    <>
+                      {[0, 1, 2].map(index => (
+                        <div className="my-4" key={index}>
+                          <RedemptionCard
+                            handleClickAccept={() => handleClickAccept(index)}
+                            handleClickDeny={() => handleClickDeny(index)}
+                          />
+                        </div>
+                      ))}
+                    </>
+                  )}
+                  {selectedActionTabIndex === 0 && (
+                    <>
+                      <div className="my-4">
+                        <div className="poppins-20-700">Inactive page</div>
+                      </div>
                     </>
                   )}
                   {selectedActionTabIndex === 1 && (
@@ -180,7 +224,6 @@ const Profile = () => {
                     <>
                       <div className="my-4">
                         <div className="poppins-20-700">Sold page</div>
-                        <div className="poppins-20-500">Comming Soon</div>
                       </div>
                     </>
                   )}

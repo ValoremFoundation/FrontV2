@@ -28,7 +28,7 @@ const Sidebar = ({ isOpen, toggle }) => {
           Map
         </Link>
         <div>
-          <BorderButton label={'Connect'} handleClick={handleClickConnect} />
+          <BorderButton label={'Connect'} onClick={handleClickConnect} />
         </div>
       </div>
     </aside>

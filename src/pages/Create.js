@@ -193,27 +193,33 @@ const Create = () => {
         <div className="create-middle-one-container">
           <div className="create-middle-section">
             <p className="poppins-24-600 my-3">Getting Started</p>
-            <div className="d-flex justify-content-start align-items-center my-3">
-              <p className="poppins-36-500 me-5">1</p>
-              <div>
+            <div className="d-flex justify-content-start my-3 ms-3">
+              <div className="poppins-32-500" style={{ width: 70 }}>
+                1
+              </div>
+              <div className="mt-2">
                 <p className="poppins-16-600">Creating your service</p>
                 <p className="poppins-14-500">
                   Sign up for free, create your service and we automatically turn it into an NFT.
                 </p>
               </div>
             </div>
-            <div className="d-flex justify-content-start align-items-center my-3">
-              <p className="poppins-36-500 me-5">2</p>
-              <div>
+            <div className="d-flex justify-content-start my-3 ms-3">
+              <p className="poppins-32-500" style={{ width: 70 }}>
+                2
+              </p>
+              <div className="mt-2">
                 <p className="poppins-16-600">List your NFT</p>
                 <p className="poppins-14-500">
                   Once you’ve created your service you can list it on the advalorem marketplace.
                 </p>
               </div>
             </div>
-            <div className="d-flex justify-content-start align-items-center my-3">
-              <p className="poppins-36-500 me-5">3</p>
-              <div>
+            <div className="d-flex justify-content-start my-3 ms-3">
+              <p className="poppins-32-500" style={{ width: 70 }}>
+                3
+              </p>
+              <div className="mt-2">
                 <p className="poppins-16-600">Collect Royalties!</p>
                 <p className="poppins-14-500">
                   When your client trades your NFT on the advalorem marketplace you get royalties!

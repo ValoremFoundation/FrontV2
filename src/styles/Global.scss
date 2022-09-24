@@ -6,6 +6,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100%;
 }
 
 .global-flex-start {
@@ -330,6 +331,39 @@
   font-style: normal;
   font-weight: 700;
   font-size: 14px;
+  color: #95979D;
+}
+
+// font 14 500 - 700 gray
+.poppins-20-400-gray {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  color: #95979D;
+}
+
+.poppins-20-500-gray {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  color: #95979D;
+}
+
+.poppins-20-600-gray {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  color: #95979D;
+}
+
+.poppins-20-700-gray {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
   color: #95979D;
 }
 
