@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import 'src/styles/Profile.scss';
 import 'src/styles/Global.scss';
 import Avatar2 from 'src/assets/images/avatar-1.png';
@@ -6,6 +7,7 @@ import ProfileNumberName from 'src/components/ProfileNumberName';
 import ListingCard from 'src/components/ListingCard';
 
 const Profile = () => {
+  const history = useHistory();
   const data1 = [
     {
       count: 1,
@@ -68,6 +70,10 @@ const Profile = () => {
   const [selectedCategoryTabIndex, setSelectedCategoryTabIndex] = useState(0);
   const [selectedActionTabIndex, setSelectedActionTabIndex] = useState(0);
 
+  const handleClickActive = index => {
+    history.push(`/token-detail/${index}`);
+  };
+
   return (
     <div className="profile-container">
       <div style={{ background: '#F4F5FB' }}>
@@ -100,16 +106,16 @@ const Profile = () => {
                   selectedCategoryTabIndex === item.id ? (
                     <div
                       key={index}
-                      className="poppins-16-600 me-3 my-2 global-pointer"
-                      onClick={() => setSelectedCategoryTabIndex(index)}
+                      className="poppins-16-600 me-5 my-2 global-pointer"
+                      onClick={() => setSelectedCategoryTabIndex(item.id)}
                     >
                       {item?.label}
                     </div>
                   ) : (
                     <div
                       key={index}
-                      className="poppins-16-500-gray me-3 my-2 global-pointer"
-                      onClick={() => setSelectedCategoryTabIndex(index)}
+                      className="poppins-16-500-gray me-5 my-2 global-pointer"
+                      onClick={() => setSelectedCategoryTabIndex(item.id)}
                     >
                       {item?.label}
                     </div>
@@ -127,30 +133,95 @@ const Profile = () => {
       <div style={{ background: '#F4F5FB' }}>
         <div className="profile-sub-container">
           <div className="profile-third-section">
-            <div className="global-flex-lg-between-sm-center mb-4">
-              <div className="poppins-20-700">Listings</div>
-              <div className="global-flex-lg-between-sm-center my-2">
-                {actionTabList.map((item, index) =>
-                  selectedActionTabIndex === item.id ? (
-                    <div key={index} className="poppins-14-500 mx-2">
-                      {item?.label}
-                    </div>
-                  ) : (
-                    <div key={index} className="poppins-14-500-gray mx-2">
-                      {item?.label}
-                    </div>
-                  )
-                )}
-              </div>
-            </div>
-            <div>
-              <div className="my-4">
-                <ListingCard />
-              </div>
-              <div className="my-4">
-                <ListingCard />
-              </div>
-            </div>
+            {selectedCategoryTabIndex === 0 && (
+              <>
+                <div className="global-flex-lg-between-sm-center mb-4">
+                  <div className="poppins-20-700">Listings</div>
+                  <div className="global-flex-lg-between-sm-center my-2">
+                    {actionTabList.map((item, index) =>
+                      selectedActionTabIndex === item.id ? (
+                        <div
+                          key={index}
+                          className="poppins-14-500 mx-2 global-pointer"
+                          onClick={() => setSelectedActionTabIndex(item.id)}
+                        >
+                          {item?.label}
+                        </div>
+                      ) : (
+                        <div
+                          key={index}
+                          className="poppins-14-500-gray mx-2 global-pointer"
+                          onClick={() => setSelectedActionTabIndex(item.id)}
+                        >
+                          {item?.label}
+                        </div>
+                      )
+                    )}
+                  </div>
+                </div>
+                <div>
+                  {selectedActionTabIndex === 0 && (
+                    <>
+                      {[0, 1, 2].map(index => (
+                        <div className="my-4" key={index}>
+                          <ListingCard handleClickActive={() => handleClickActive(index)} />
+                        </div>
+                      ))}
+                    </>
+                  )}
+                  {selectedActionTabIndex === 1 && (
+                    <>
+                      <div className="my-4">
+                        <div className="poppins-20-700">Active page</div>
+                      </div>
+                    </>
+                  )}
+                  {selectedActionTabIndex === 2 && (
+                    <>
+                      <div className="my-4">
+                        <div className="poppins-20-700">Sold page</div>
+                        <div className="poppins-20-500">Comming Soon</div>
+                      </div>
+                    </>
+                  )}
+                  {selectedActionTabIndex === 3 && (
+                    <>
+                      <div className="my-4">
+                        <div className="poppins-20-700">Saved for later page</div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </>
+            )}
+            {selectedCategoryTabIndex === 1 && (
+              <>
+                <div className="global-flex-lg-between-sm-center mb-4">
+                  <div className="poppins-20-700">Collection page</div>
+                </div>
+              </>
+            )}
+            {selectedCategoryTabIndex === 2 && (
+              <>
+                <div className="global-flex-lg-between-sm-center mb-4">
+                  <div className="poppins-20-700">Transactions page</div>
+                </div>
+              </>
+            )}
+            {selectedCategoryTabIndex === 3 && (
+              <>
+                <div className="global-flex-lg-between-sm-center mb-4">
+                  <div className="poppins-20-700">Royalty Pool page</div>
+                </div>
+              </>
+            )}
+            {selectedCategoryTabIndex === 4 && (
+              <>
+                <div className="global-flex-lg-between-sm-center mb-4">
+                  <div className="poppins-20-700">Earn liquidity rewards</div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>

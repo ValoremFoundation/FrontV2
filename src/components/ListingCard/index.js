@@ -11,7 +11,7 @@ import LinkIcon from 'src/assets/images/facebook-icon.svg';
 import NFTCardButton from '../NFTCardButton';
 import BackgroundButton from '../BackgroundButton';
 
-const ListingCard = () => {
+const ListingCard = ({ handleClickActive }) => {
   const data1 = [
     {
       role: 'Seller',
@@ -27,9 +27,9 @@ const ListingCard = () => {
     },
   ];
 
-  const distributionItem = roleInfo => {
+  const distributionItem = (roleInfo, index) => {
     return (
-      <div className="me-2">
+      <div className="me-4" key={index}>
         <div className="poppins-14-500">{roleInfo?.role}</div>
         <div className="poppins-14-600" style={{ color: '#4ECB71' }}>
           {roleInfo?.percent}%
@@ -47,8 +47,8 @@ const ListingCard = () => {
               alt="alt"
               src={NFTImage}
               style={{
-                maxWidth: '230px',
-                height: '160px',
+                maxWidth: '250px',
+                height: '170px',
                 borderRadius: 5,
                 objectFit: 'cover',
                 objectPosition: 'center',
@@ -72,15 +72,15 @@ const ListingCard = () => {
               </div>
             </div>
             <div>
-              <div className="global-flex-start">{data1.map(item => distributionItem(item))}</div>
-              <div className="global-flex-lg-between-sm-center">
-                <div className="mx-2">
+              <div className="global-flex-start my-3">{data1.map((item, index) => distributionItem(item, index))}</div>
+              <div className="global-flex-lg-start-sm-center">
+                <div className="mx-2 mt-1" style={{ minWidth: '150px' }}>
                   <NFTCardButton label={'Web design'} bgColor={'#F4F5FB'} color={'#000000'} />
                 </div>
-                <div className="mx-2">
+                <div className="mx-2 my-1" style={{ minWidth: '150px' }}>
                   <NFTCardButton label={'SEO'} bgColor={'#F4F5FB'} color={'#000000'} />
                 </div>
-                <div className="mx-2">
+                <div className="mx-2 my-1" style={{ minWidth: '150px' }}>
                   <NFTCardButton label={'Graphic Design'} bgColor={'#F4F5FB'} color={'#000000'} />
                 </div>
               </div>
@@ -90,13 +90,18 @@ const ListingCard = () => {
         <div className="col-12 col-lg-4  p-2">
           <div className="global-flex-end" style={{ height: '100%' }}>
             <div className="global-flex-column-between">
-              <div className="global-flex-center">
+              <div className="global-flex-center mb-3">
                 <img alt="alt" src={FacebookIcon} width={20} height={20} className="mx-2 global-pointer" />
                 <img alt="alt" src={InstagramIcon} width={25} height={25} className="mx-2 global-pointer" />
                 <img alt="alt" src={LinkIcon} width={20} height={20} className="mx-2 global-pointer" />
               </div>
               <div>
-                <BackgroundButton label={'Activate'} color={'#111827'} bgColor={'#96F2A4'} />
+                <BackgroundButton
+                  label={'Activate'}
+                  color={'#111827'}
+                  bgColor={'#96F2A4'}
+                  onClick={handleClickActive}
+                />
               </div>
             </div>
           </div>

@@ -38,6 +38,17 @@
   }
 }
 
+.global-flex-lg-start-sm-center {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+
+  @media screen and (max-width: 978px) {
+    justify-content: center;
+  }
+}
+
 .global-flex-column-between {
   height: 100%;
   display: flex;

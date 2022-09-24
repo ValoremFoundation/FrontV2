@@ -47,10 +47,12 @@ const Home = () => {
       </div>
       <div className="home-trending-container">
         <div className="home-trending-title mb-4">Treding Communities</div>
-        <div className="home-trending-image-container">
-          <NFTCard />
-          <NFTCard />
-          <NFTCard />
+        <div className="row gx-5">
+          {[0, 1, 2].map(index => (
+            <div key={index} className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 my-3">
+              <NFTCard />
+            </div>
+          ))}
         </div>
       </div>
       <div className="home-browse-container">

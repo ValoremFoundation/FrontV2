@@ -14,6 +14,7 @@ import Create from 'src/pages/Create';
 import Map from 'src/pages/Map';
 import NotFound from 'src/pages/NotFound';
 import Profile from 'src/pages/Profile';
+import TokenDetail from './pages/TokenDetail';
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
@@ -62,6 +63,11 @@ function App() {
         <Route path="/profile" exact>
           <MainLayout>
             <Profile />
+          </MainLayout>
+        </Route>
+        <Route path="/token-detail/:tokenId" exact>
+          <MainLayout>
+            <TokenDetail />
           </MainLayout>
         </Route>
         <Route component={NotFound} />
