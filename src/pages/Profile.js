@@ -1,0 +1,161 @@
+import React, { useState } from 'react';
+import 'src/styles/Profile.scss';
+import 'src/styles/Global.scss';
+import Avatar2 from 'src/assets/images/avatar-1.png';
+import ProfileNumberName from 'src/components/ProfileNumberName';
+import ListingCard from 'src/components/ListingCard';
+
+const Profile = () => {
+  const data1 = [
+    {
+      count: 1,
+      name: 'Items',
+    },
+    {
+      count: 0,
+      name: 'Owners',
+    },
+    {
+      count: 0,
+      name: 'Total Volume',
+    },
+    {
+      count: 0,
+      name: 'Floor Price',
+    },
+  ];
+  const categoryTabList = [
+    {
+      id: 0,
+      label: 'Created',
+    },
+    {
+      id: 1,
+      label: 'Collections',
+    },
+    {
+      id: 2,
+      label: 'Transactions',
+    },
+    {
+      id: 3,
+      label: 'Royalty Pool',
+    },
+    {
+      id: 4,
+      label: 'Earn liquidity rewards',
+    },
+  ];
+  const actionTabList = [
+    {
+      id: 0,
+      label: 'Inactive',
+    },
+    {
+      id: 1,
+      label: 'Active',
+    },
+    {
+      id: 2,
+      label: 'Sold',
+    },
+    {
+      id: 3,
+      label: 'Saved for later',
+    },
+  ];
+
+  const [selectedCategoryTabIndex, setSelectedCategoryTabIndex] = useState(0);
+  const [selectedActionTabIndex, setSelectedActionTabIndex] = useState(0);
+
+  return (
+    <div className="profile-container">
+      <div style={{ background: '#F4F5FB' }}>
+        <div className="profile-sub-container">
+          <div className="profile-first-section">
+            <img alt="alt" src={Avatar2} className="profile-first-avatar" />
+          </div>
+        </div>
+      </div>
+      <div style={{ background: '#FFFFFF' }}>
+        <div className="profile-sub-container">
+          <div className="profile-second-section">
+            <p className="poppins-24-700">Rhinos NFT Studios</p>
+            <p className="poppins-16-500">By Ryan M Elder</p>
+            <div className="row">
+              <div className="col-12 col-lg-6">
+                <p className="cursor-pointer poppins-16-500">
+                  Lucid Creations of a SCAD Mind. ART And Music NFTs Created during lucid enlightened Psycosis
+                </p>
+              </div>
+            </div>
+            <div className="d-flex justify-conent-start align-items-center flex-wrap">
+              {data1.map((item, index) => (
+                <ProfileNumberName data={item} key={index} />
+              ))}
+            </div>
+            <div className="global-flex-lg-between-sm-center">
+              <div className="global-flex-between">
+                {categoryTabList.map((item, index) =>
+                  selectedCategoryTabIndex === item.id ? (
+                    <div
+                      key={index}
+                      className="poppins-16-600 me-3 my-2 global-pointer"
+                      onClick={() => setSelectedCategoryTabIndex(index)}
+                    >
+                      {item?.label}
+                    </div>
+                  ) : (
+                    <div
+                      key={index}
+                      className="poppins-16-500-gray me-3 my-2 global-pointer"
+                      onClick={() => setSelectedCategoryTabIndex(index)}
+                    >
+                      {item?.label}
+                    </div>
+                  )
+                )}
+              </div>
+              <div className="global-flex-between">
+                <div className="poppins-16-600 global-pointer mx-2">Buy Matic</div>
+                <div className="poppins-16-600 global-pointer mx-2">Buy VLR</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style={{ background: '#F4F5FB' }}>
+        <div className="profile-sub-container">
+          <div className="profile-third-section">
+            <div className="global-flex-lg-between-sm-center mb-4">
+              <div className="poppins-20-700">Listings</div>
+              <div className="global-flex-lg-between-sm-center my-2">
+                {actionTabList.map((item, index) =>
+                  selectedActionTabIndex === item.id ? (
+                    <div key={index} className="poppins-14-500 mx-2">
+                      {item?.label}
+                    </div>
+                  ) : (
+                    <div key={index} className="poppins-14-500-gray mx-2">
+                      {item?.label}
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+            <div>
+              <div className="my-4">
+                <ListingCard />
+              </div>
+              <div className="my-4">
+                <ListingCard />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Profile;

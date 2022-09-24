@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import ReactMapGL, { /* Marker, Popup, */ NavigationControl, GeolocateControl, FlyToInterpolator } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import 'src/styles/Create.scss';
@@ -16,6 +17,7 @@ import CustomCheckBox from 'src/components/CustomCheckBox';
 import { isMobile } from 'react-device-detect';
 
 const Create = () => {
+  const history = useHistory();
   const mapStyleLight = 'mapbox://styles/thyjames/ckyj5984oa25w14o1hnuexh2a';
   const [viewport, setViewport] = useState({
     latitude: 38.57,
@@ -136,6 +138,13 @@ const Create = () => {
   };
 
   const nearMeHandler = () => {};
+
+  const handleClickSaveForLater = () => {
+    history.push('/profile');
+  };
+  const handleClickCreate = () => {
+    history.push('/profile');
+  };
 
   return (
     <div className="create-container">
@@ -332,10 +341,20 @@ const Create = () => {
             </div>
             <div className="d-flex justify-content-start align-items-center flex-wrap">
               <div className="me-4 my-2">
-                <BackgroundButton label={'Save for later'} color={'#FFFFFF'} bgColor={'#000000'} />
+                <BackgroundButton
+                  label={'Save for later'}
+                  color={'#FFFFFF'}
+                  bgColor={'#000000'}
+                  onClick={handleClickSaveForLater}
+                />
               </div>
               <div className="my-2">
-                <BackgroundButton label={'Create NFT'} color={'#2A212E'} bgColor={'#96F2A4'} />
+                <BackgroundButton
+                  label={'Create NFT'}
+                  color={'#2A212E'}
+                  bgColor={'#96F2A4'}
+                  onClick={handleClickCreate}
+                />
               </div>
             </div>
           </div>

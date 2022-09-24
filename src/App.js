@@ -13,6 +13,7 @@ import Browse from 'src/pages/Browse';
 import Create from 'src/pages/Create';
 import Map from 'src/pages/Map';
 import NotFound from 'src/pages/NotFound';
+import Profile from 'src/pages/Profile';
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
@@ -56,6 +57,11 @@ function App() {
         <Route path="/map" exact>
           <MainLayout>
             <Map />
+          </MainLayout>
+        </Route>
+        <Route path="/profile" exact>
+          <MainLayout>
+            <Profile />
           </MainLayout>
         </Route>
         <Route component={NotFound} />
