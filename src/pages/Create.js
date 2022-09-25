@@ -170,7 +170,7 @@ const Create = () => {
               <span className="poppins-16-600">royalties</span>
             </div>
             <p className="poppins-20-500 my-4">Here’s a real life example of how it works</p>
-            <div className="create-work-flow">
+            <div className="global-flex-lg-between-sm-center">
               <UserWithName userInfo={user1Info} />
               <StepOrder step={step1} />
               <UserWithName userInfo={user2Info} />

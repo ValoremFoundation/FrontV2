@@ -72,7 +72,7 @@ const Profile = () => {
   const [selectedActionTabIndex, setSelectedActionTabIndex] = useState(4);
 
   const handleClickActive = index => {
-    history.push(`/token-detail/${index}`);
+    history.push(`/activate-listing/${index}`);
   };
 
   const handleClickAccept = index => {};

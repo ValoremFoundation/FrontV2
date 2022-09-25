@@ -49,17 +49,6 @@
   }
 }
 
-.create-work-flow {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-
-  @media screen and (max-width: 978px) {
-    justify-content: center;
-  }
-}
-
 .create-red-dot {
   background: #EF1D1D;
   width: 70px;

@@ -1,0 +1,9 @@
+.activate-listing-card {
+  background: #ffffff;
+  padding: 17px 50px;
+  border-radius: 20px;
+
+  @media screen and (max-width: 978px) {
+    padding: 30px 20px;
+  }
+}

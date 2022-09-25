@@ -20,7 +20,7 @@ const NFTCard = ({ label }) => {
         style={{ width: '100%', borderRadius: 5, objectFit: 'cover', objectPosition: 'center' }}
       />
       <div className="global-flex-between my-3">
-        <div className="global-flex-centner">
+        <div className="global-flex-center">
           <div>
             <img alt="alt" src={Avatar1} style={{ width: 55, height: 55, borderRadius: 50 }} />
             <img alt="alt" src={BlueCheck} style={{ width: 20, height: 20, marginTop: -50 }} />
@@ -33,7 +33,7 @@ const NFTCard = ({ label }) => {
             </div>
           </div>
         </div>
-        <div className="global-flex-centner">
+        <div className="global-flex-center">
           <div>
             <img alt="alt" src={Favorite} />
             <div className="nft-card-favor-number">5k</div>
