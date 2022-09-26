@@ -145,6 +145,10 @@ const Create = () => {
   const handleClickCreate = () => {
     history.push('/profile');
   };
+  const [seenVideo, setSeenVideo] = useState(false);
+  const handleChangeSeenVideo = event => {
+    setSeenVideo(event.target.value);
+  };
 
   return (
     <div className="create-container">
@@ -330,7 +334,11 @@ const Create = () => {
         <div className="create-middle-one-container">
           <div className="create-middle-section">
             <div className="poppins-24-600 my-3">Have you seen the video?</div>
-            <CustomCheckBox label={'I have seen the video and understand how the advalorem marketplace works'} />
+            <CustomCheckBox
+              label={'I have seen the video and understand how the advalorem marketplace works'}
+              onChange={handleChangeSeenVideo}
+              value={seenVideo}
+            />
           </div>
         </div>
       </div>

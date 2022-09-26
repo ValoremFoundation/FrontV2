@@ -6,8 +6,10 @@ import Avatar2 from 'src/assets/images/avatar-1.png';
 import ProfileNumberName from 'src/components/ProfileNumberName';
 import ListingCard from 'src/components/ListingCard';
 import RedemptionCard from 'src/components/RedemptionCard';
+import BoostPost from 'src/components/BoostPost';
+import NFTCard from 'src/components/NFTCard';
 
-const Profile = ({ props }) => {
+const Profile = () => {
   const { state } = useLocation();
   const history = useHistory();
   const data1 = [
@@ -88,6 +90,10 @@ const Profile = ({ props }) => {
 
   const handleClickAccept = index => {};
   const handleClickDeny = index => {};
+  const handleChangeOption = event => {
+    console.log('>>>>>>>>>>>>>>>>>> : ', event.target.value);
+  };
+  const handleClickBuy = () => {};
 
   return (
     <div className="profile-container">
@@ -220,7 +226,14 @@ const Profile = ({ props }) => {
                   {selectedActionTabIndex === 6 && (
                     <>
                       <div className="my-4">
-                        <div className="poppins-24-600">Listed Page</div>
+                        <BoostPost handleClickBuy={handleClickBuy} onChange={handleChangeOption} />
+                        <div className="row gx-5 my-4">
+                          {[0, 1, 2].map(index => (
+                            <div key={index} className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 my-3">
+                              <NFTCard />
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </>
                   )}
