@@ -1,0 +1,18 @@
+.token-detail-container {
+  background: #FFFFFF;
+  min-height: calc(100vh - 84px);
+  padding: 60px 60px;
+  max-width: 1440px;
+  margin: auto;
+
+  @media screen and (max-width: 978px) {
+    padding: 30px 15px;
+  }
+}
+
+.token-detail-service {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(270deg, #FBBC05 30.21%, #F2E9BA 100%);
+}

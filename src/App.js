@@ -14,7 +14,8 @@ import Create from 'src/pages/Create';
 import Map from 'src/pages/Map';
 import NotFound from 'src/pages/NotFound';
 import Profile from 'src/pages/Profile';
-import TokenDetail from './pages/ActivateListing';
+import ActivateListing from './pages/ActivateListing';
+import TokenDetail from './pages/TokenDetail';
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
@@ -66,6 +67,11 @@ function App() {
           </MainLayout>
         </Route>
         <Route path="/activate-listing/:tokenId" exact>
+          <MainLayout>
+            <ActivateListing />
+          </MainLayout>
+        </Route>
+        <Route path="/token-detail/:tokenId" exact>
           <MainLayout>
             <TokenDetail />
           </MainLayout>

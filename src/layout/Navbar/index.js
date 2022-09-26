@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import 'src/styles/layout/Navbar.scss';
 import SearchInput from 'src/components/SearchInput';
-import BorderButton from 'src/components/BorderButton';
+import RoundBorderButton from 'src/components/RoundBorderButton';
 import { FiMenu } from 'react-icons/fi';
 import GoogleLoginModal from 'src/components/GoogleLoginModal';
 
@@ -39,7 +39,7 @@ const Navbar = ({ toggle }) => {
           <Link to="/map" className="nav-link" exact="true">
             Map
           </Link>
-          <BorderButton label={'Connect'} />
+          <RoundBorderButton label={'Connect'} />
         </div>
       </div>
     </div>

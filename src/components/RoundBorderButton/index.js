@@ -1,10 +1,15 @@
 import React from 'react';
-import 'src/styles/components/BorderButton.scss';
+import 'src/styles/components/RoundBorderButton.scss';
 import 'src/styles/Global.scss';
 
-const BorderButton = ({ label, color, onClick }) => {
+const RoundBorderButton = ({ label, color, onClick, icon, fullWidth = false }) => {
   return (
-    <button className="border-button" style={{ border: `1px solid ${color}` }} onClick={onClick}>
+    <button
+      className="round-border-button"
+      style={{ border: `1px solid ${color}`, width: fullWidth ? '100%' : '' }}
+      onClick={onClick}
+    >
+      {icon && <img alt="alt" src={icon} className="me-3" />}
       <div className="poppins-14-400" style={{ color: color }}>
         {label}
       </div>
@@ -12,4 +17,4 @@ const BorderButton = ({ label, color, onClick }) => {
   );
 };
 
-export default BorderButton;
+export default RoundBorderButton;

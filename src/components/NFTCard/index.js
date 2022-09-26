@@ -10,10 +10,11 @@ import Message from 'src/assets/images/message.svg';
 import Star from 'src/assets/images/star.svg';
 import NFTCardButton from 'src/components/NFTCardButton';
 import NFTDivideLine from 'src/components/NFTDivideLine';
+import StarString from '../StarString';
 
-const NFTCard = ({ label }) => {
+const NFTCard = ({ onClick }) => {
   return (
-    <div className="nft-card-container">
+    <div className="nft-card-container" onClick={onClick}>
       <img
         alt="alt"
         src={NFTImage}
@@ -65,10 +66,7 @@ const NFTCard = ({ label }) => {
       <NFTDivideLine />
       <div className="global-flex-between my-3">
         <div className="nft-card-name">Top Comments</div>
-        <div className="global-flex-between">
-          <img alt="alt" src={Star} />
-          <div className="nft-card-star-number ms-2">1</div>
-        </div>
+        <StarString label={1} />
       </div>
       <div className="global-flex-start">
         <img alt="alt" src={Avatar1} style={{ width: 48, height: 40 }} />

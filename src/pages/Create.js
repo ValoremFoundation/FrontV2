@@ -10,7 +10,7 @@ import UserWithName from 'src/components/UserWithName';
 import StepOrder from 'src/components/StepOrder';
 import BackgroundButton from 'src/components/BackgroundButton';
 import MenuIcon from 'src/assets/images/menu-icon.svg';
-import BorderButton from 'src/components/BorderButton';
+import RoundBorderButton from 'src/components/RoundBorderButton';
 import TextInput from 'src/components/TextInput';
 import CustomRadio from 'src/components/CustomRadio';
 import CustomCheckBox from 'src/components/CustomCheckBox';
@@ -247,10 +247,10 @@ const Create = () => {
               </div>
               <div className="d-flex justify-content-between flex-wrap my-2">
                 <div className="my-2 me-3">
-                  <BorderButton label={'Delete photo'} color={'#E75B2E'} />
+                  <RoundBorderButton label={'Delete photo'} color={'#E75B2E'} />
                 </div>
                 <div className="my-2">
-                  <BorderButton label={'Choose another photo '} color={'#2DC015'} />
+                  <RoundBorderButton label={'Choose another photo '} color={'#2DC015'} />
                 </div>
               </div>
             </div>

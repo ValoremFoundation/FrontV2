@@ -5,13 +5,9 @@ import NFTImage from 'src/assets/images/nft-card.png';
 import Favorite from 'src/assets/images/favorite.svg';
 import Message from 'src/assets/images/message.svg';
 import Position from 'src/assets/images/position.svg';
-import FacebookIcon from 'src/assets/images/facebook-icon.svg';
-import InstagramIcon from 'src/assets/images/instagram-icon.svg';
-import LinkIcon from 'src/assets/images/facebook-icon.svg';
 import NFTCardButton from '../NFTCardButton';
 import BackgroundButton from '../BackgroundButton';
-import BorderButton from '../BorderButton';
-import RoundBorderButton from '../BorderButton';
+import RoundBorderButton from '../RoundBorderButton';
 
 const RedemptionCard = ({ handleClickAccept, handleClickDeny }) => {
   const data1 = [

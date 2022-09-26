@@ -1,3 +1,22 @@
 .browser-container {
-  background: #c7ecb9;
+  background: #FFFFFF;
+  max-width: 1440px;
+  margin: auto;
+  min-height: calc(100vh - 84px);
+  padding: 60px 60px;
+
+  @media screen and (max-width: 978px) {
+    padding: 30px 15px;
+  }
+}
+
+.browser-tab-text {
+  // padding: 4px 0px;
+  cursor: pointer;
+}
+
+.browser-selected-tab-text {
+  border-bottom: 2px solid #000000;
+  // padding: 3px 0px;
+  cursor: pointer;
 }

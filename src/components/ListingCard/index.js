@@ -10,6 +10,7 @@ import InstagramIcon from 'src/assets/images/instagram-icon.svg';
 import LinkIcon from 'src/assets/images/facebook-icon.svg';
 import NFTCardButton from '../NFTCardButton';
 import BackgroundButton from '../BackgroundButton';
+import DistributionItem from '../DistributionItem';
 
 const ListingCard = ({ handleClickActive }) => {
   const data1 = [
@@ -26,17 +27,6 @@ const ListingCard = ({ handleClickActive }) => {
       percent: 10,
     },
   ];
-
-  const distributionItem = (roleInfo, index) => {
-    return (
-      <div className="me-4" key={index}>
-        <div className="poppins-14-500">{roleInfo?.role}</div>
-        <div className="poppins-14-600" style={{ color: '#4ECB71' }}>
-          {roleInfo?.percent}%
-        </div>
-      </div>
-    );
-  };
 
   return (
     <div className="listing-card-container">
@@ -72,7 +62,11 @@ const ListingCard = ({ handleClickActive }) => {
               </div>
             </div>
             <div>
-              <div className="global-flex-start my-3">{data1.map((item, index) => distributionItem(item, index))}</div>
+              <div className="global-flex-start my-3">
+                {data1.map((item, index) => (
+                  <DistributionItem roleInfo={item} key={index} />
+                ))}
+              </div>
               <div className="global-flex-lg-start-sm-center">
                 <div className="mx-2 mt-1" style={{ minWidth: '150px' }}>
                   <NFTCardButton label={'Web design'} bgColor={'#F4F5FB'} color={'#000000'} />

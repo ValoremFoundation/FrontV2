@@ -1,8 +1,7 @@
 import React from 'react';
-import 'src/styles/components/NFTDivideLine.scss';
 
-const NFTDivideLine = () => {
-  return <div className="nft-divide-line"></div>;
+const NFTDivideLine = ({ color = '#F4F5FB' }) => {
+  return <div style={{ width: '100%', border: `1px solid ${color}` }}></div>;
 };
 
 export default NFTDivideLine;

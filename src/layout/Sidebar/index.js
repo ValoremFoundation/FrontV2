@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import 'src/styles/layout/Sidebar.scss';
+import 'src/styles/Global.scss';
 import { CgClose } from 'react-icons/cg';
-import BorderButton from 'src/components/BorderButton';
+import RoundBorderButton from 'src/components/RoundBorderButton';
 
 const Sidebar = ({ isOpen, toggle }) => {
   const handleClickConnect = () => {
@@ -27,8 +28,8 @@ const Sidebar = ({ isOpen, toggle }) => {
         <Link to="/map" className="nav-link" exact="true" onClick={toggle}>
           Map
         </Link>
-        <div>
-          <BorderButton label={'Connect'} onClick={handleClickConnect} />
+        <div className="global-flex-center">
+          <RoundBorderButton label={'Connect'} onClick={handleClickConnect} />
         </div>
       </div>
     </aside>
