@@ -9,7 +9,7 @@ import NFTCardButton from '../NFTCardButton';
 import BackgroundButton from '../BackgroundButton';
 import RoundBorderButton from '../RoundBorderButton';
 
-const RedemptionCard = ({ handleClickAccept, handleClickDeny }) => {
+const RedemptionCard = ({ handleClickAccept, handleClickDeny, handleClick }) => {
   const data1 = [
     {
       role: 'Seller',
@@ -37,7 +37,7 @@ const RedemptionCard = ({ handleClickAccept, handleClickDeny }) => {
   };
 
   return (
-    <div className="listing-card-container">
+    <div className="listing-card-container global-pointer" onClick={handleClick}>
       <div className="row gx-4">
         <div className="col-12 col-lg-3 p-2">
           <div className="global-flex-center">

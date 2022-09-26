@@ -206,7 +206,10 @@ const Profile = () => {
                     <>
                       {[0, 1, 2].map(index => (
                         <div className="my-4" key={index}>
-                          <ListingCard handleClickActive={() => handleClickActive(index)} />
+                          <ListingCard
+                            handleClickActive={() => handleClickActive(index)}
+                            handleClick={() => history.push(`/token-detail/${index}`)}
+                          />
                         </div>
                       ))}
                     </>
@@ -218,6 +221,7 @@ const Profile = () => {
                           <RedemptionCard
                             handleClickAccept={() => handleClickAccept(index)}
                             handleClickDeny={() => handleClickDeny(index)}
+                            handleClick={() => history.push(`/token-detail/${index}`)}
                           />
                         </div>
                       ))}
@@ -230,7 +234,7 @@ const Profile = () => {
                         <div className="row gx-5 my-4">
                           {[0, 1, 2].map(index => (
                             <div key={index} className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 my-3">
-                              <NFTCard />
+                              <NFTCard onClick={() => history.push(`/token-detail/${index}`)} />
                             </div>
                           ))}
                         </div>

@@ -30,9 +30,9 @@ const Navbar = ({ toggle }) => {
           <Link to="/browse" className="nav-link" exact="true">
             Browse
           </Link>
-          <Link to="/resources" className="nav-link" exact="true">
+          <a className="nav-link" href="https://discord.com" target="_blank" rel="noopener noreferrer">
             Resources
-          </Link>
+          </a>
           <div className="nav-link" exact="true" onClick={openModal}>
             Create
           </div>

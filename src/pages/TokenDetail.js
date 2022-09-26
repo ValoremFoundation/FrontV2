@@ -24,7 +24,7 @@ const TokenDetail = () => {
     latitude: 38.57,
     longitude: -121.47,
     width: '100%',
-    height: '300px',
+    height: '351px',
     zoom: 1,
   });
   const navStyle = {

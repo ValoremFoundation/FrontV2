@@ -12,7 +12,7 @@ import NFTCardButton from '../NFTCardButton';
 import BackgroundButton from '../BackgroundButton';
 import DistributionItem from '../DistributionItem';
 
-const ListingCard = ({ handleClickActive }) => {
+const ListingCard = ({ handleClickActive, handleClick }) => {
   const data1 = [
     {
       role: 'Seller',
@@ -29,7 +29,7 @@ const ListingCard = ({ handleClickActive }) => {
   ];
 
   return (
-    <div className="listing-card-container">
+    <div className="listing-card-container global-pointer" onClick={handleClick}>
       <div className="row gx-4">
         <div className="col-12 col-lg-3 p-2">
           <div className="global-flex-center">

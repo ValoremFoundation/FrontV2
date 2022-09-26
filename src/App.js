@@ -46,11 +46,11 @@ function App() {
             <Browse />
           </MainLayout>
         </Route>
-        <Route path="/resources" exact>
+        {/* <Route path="/resources" exact>
           <MainLayout>
             <Resources />
           </MainLayout>
-        </Route>
+        </Route> */}
         <Route path="/create" exact>
           <MainLayout>
             <Create />

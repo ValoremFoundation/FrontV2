@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import BackgroundButton from 'src/components/BackgroundButton';
 import 'src/styles/Home.scss';
 import 'src/styles/Global.scss';
@@ -13,6 +14,7 @@ import HomeSearchInput from 'src/components/HomeSearchInput';
 import GoogleLoginModal from 'src/components/GoogleLoginModal';
 
 const Home = () => {
+  const history = useHistory();
   const [modalIsOpen, setIsOpen] = useState(false);
   const openModal = () => {
     setIsOpen(true);
@@ -50,7 +52,7 @@ const Home = () => {
         <div className="row gx-5">
           {[0, 1, 2].map(index => (
             <div key={index} className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 my-3">
-              <NFTCard />
+              <NFTCard onClick={() => history.push(`/token-detail/${index}`)} />
             </div>
           ))}
         </div>

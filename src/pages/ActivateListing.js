@@ -81,7 +81,7 @@ const ActivateListing = () => {
           <div className="listing-second-section">
             <div className="row gx-5">
               <div className="col-12 col-lg-4 my-4">
-                <NFTCard />
+                <NFTCard onClick={() => history.push(`/token-detail/1`)} />
               </div>
               <div className="col-12 col-lg-8 my-4">
                 <ActivateListingCard onClick={handleClickActivate} />
