@@ -8,7 +8,7 @@ import { toastOptions } from 'src/utils/toastOptions';
 import { Toaster } from 'react-hot-toast';
 import Navbar from 'src/layout/Navbar';
 import Sidebar from 'src/layout/Sidebar';
-import Resources from 'src/pages/Resources';
+// import Resources from 'src/pages/Resources';
 import Browse from 'src/pages/Browse';
 import Create from 'src/pages/Create';
 import Map from 'src/pages/Map';

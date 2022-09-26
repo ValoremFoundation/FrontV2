@@ -79,6 +79,7 @@ const Profile = () => {
     if (state?.actionTabIndex) {
       setSelectedActionTabIndex(state?.actionTabIndex);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [selectedCategoryTabIndex, setSelectedCategoryTabIndex] = useState(0);

@@ -7,7 +7,6 @@ import BlueCheck from 'src/assets/images/blue-check.svg';
 import Position from 'src/assets/images/position.svg';
 import Favorite from 'src/assets/images/favorite.svg';
 import Message from 'src/assets/images/message.svg';
-import Star from 'src/assets/images/star.svg';
 import NFTCardButton from 'src/components/NFTCardButton';
 import NFTDivideLine from 'src/components/NFTDivideLine';
 import StarString from '../StarString';

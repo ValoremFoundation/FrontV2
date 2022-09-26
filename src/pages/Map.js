@@ -5,7 +5,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { isMobile } from 'react-device-detect';
 
 const Map = () => {
-  const mapStyleDark = 'mapbox://styles/mapbox/dark-v10';
+  // const mapStyleDark = 'mapbox://styles/mapbox/dark-v10';
   const mapStyleLight = 'mapbox://styles/thyjames/ckyj5984oa25w14o1hnuexh2a';
   const [viewport, setViewport] = useState({
     latitude: 38.57,

@@ -6,6 +6,7 @@ const StepOrder = ({ step, existGift = 1 }) => {
   const [currentWidth, setCurrentWidth] = useState(768);
   useEffect(() => {
     setCurrentWidth(document.body.offsetWidth);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [document.body.offsetWidth]);
 
   return (

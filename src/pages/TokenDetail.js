@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import 'src/styles/TokenDetail.scss';
 import 'src/styles/Global.scss';
 import Avatar2 from 'src/assets/images/avatar-1.png';
@@ -18,7 +17,6 @@ import { isMobile } from 'react-device-detect';
 import NFTDivideLine from 'src/components/NFTDivideLine';
 
 const TokenDetail = () => {
-  const history = useHistory();
   const mapStyleLight = 'mapbox://styles/thyjames/ckyj5984oa25w14o1hnuexh2a';
   const [viewport, setViewport] = useState({
     latitude: 38.57,
