@@ -29,9 +29,9 @@ const ListingCard = ({ handleClickActive, handleClick }) => {
   ];
 
   return (
-    <div className="listing-card-container global-pointer" onClick={handleClick}>
+    <div className="listing-card-container global-pointer">
       <div className="row gx-4">
-        <div className="col-12 col-lg-3 p-2">
+        <div className="col-12 col-lg-3 p-2" onClick={handleClick}>
           <div className="global-flex-center">
             <img
               alt="alt"
@@ -46,7 +46,7 @@ const ListingCard = ({ handleClickActive, handleClick }) => {
             />
           </div>
         </div>
-        <div className="col-12 col-lg-5 p-2">
+        <div className="col-12 col-lg-5 p-2" onClick={handleClick}>
           <div className="global-flex-column-between">
             <div>
               <div className="global-flex-between">
