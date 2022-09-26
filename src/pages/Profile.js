@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 import 'src/styles/Profile.scss';
 import 'src/styles/Global.scss';
 import Avatar2 from 'src/assets/images/avatar-1.png';
@@ -7,7 +7,8 @@ import ProfileNumberName from 'src/components/ProfileNumberName';
 import ListingCard from 'src/components/ListingCard';
 import RedemptionCard from 'src/components/RedemptionCard';
 
-const Profile = () => {
+const Profile = ({ props }) => {
+  const { state } = useLocation();
   const history = useHistory();
   const data1 = [
     {
@@ -59,6 +60,10 @@ const Profile = () => {
       label: 'Active',
     },
     {
+      id: 6,
+      label: 'Listed',
+    },
+    {
       id: 2,
       label: 'Sold',
     },
@@ -67,6 +72,12 @@ const Profile = () => {
       label: 'Saved for later',
     },
   ];
+
+  useEffect(() => {
+    if (state?.actionTabIndex) {
+      setSelectedActionTabIndex(state?.actionTabIndex);
+    }
+  }, []);
 
   const [selectedCategoryTabIndex, setSelectedCategoryTabIndex] = useState(0);
   const [selectedActionTabIndex, setSelectedActionTabIndex] = useState(4);
@@ -204,6 +215,13 @@ const Profile = () => {
                           />
                         </div>
                       ))}
+                    </>
+                  )}
+                  {selectedActionTabIndex === 6 && (
+                    <>
+                      <div className="my-4">
+                        <div className="poppins-24-600">Listed Page</div>
+                      </div>
                     </>
                   )}
                   {selectedActionTabIndex === 0 && (

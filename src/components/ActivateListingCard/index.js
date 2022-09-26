@@ -5,7 +5,7 @@ import BackgroundButton from '../BackgroundButton';
 import ShowRoleInfo from '../ShowRoleInfo';
 import TextInput from '../TextInput';
 
-const ActivateListingCard = () => {
+const ActivateListingCard = ({ onClick }) => {
   return (
     <div className="activate-listing-card">
       <div className="poppins-24-600 my-2">Activating your listing</div>
@@ -58,7 +58,7 @@ const ActivateListingCard = () => {
       <div className="poppins-12-400 my-1">*Burn Fee</div>
       <div className="poppins-12-400 my-1">*Advalorem transaction fee</div>
       <div className="global-flex-end">
-        <BackgroundButton label={'Activate'} color={'#000000'} bgColor={'#96F2A4'} />
+        <BackgroundButton label={'Activate'} color={'#000000'} bgColor={'#96F2A4'} onClick={onClick} />
       </div>
     </div>
   );

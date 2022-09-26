@@ -2,10 +2,10 @@ import React from 'react';
 import 'src/styles/components/UserWithName.scss';
 import 'src/styles/Global.scss';
 
-const UserWithName = ({ userInfo }) => {
+const UserWithName = ({ userInfo, last = false }) => {
   const { info, gift } = userInfo;
   return (
-    <div className="user-with-name" style={{ height: gift?.length > 0 ? '320px' : '' }}>
+    <div className="user-with-name" style={{ height: gift?.length > 0 || last ? '320px' : '' }}>
       <div className="poppins-12-500 text-center">{info?.name}</div>
       <div className="poppins-12-500 text-center mb-1">{info?.role}</div>
       <img alt="alt" src={info?.avatar} width={100} height={100} style={{ borderRadius: 100 }} />

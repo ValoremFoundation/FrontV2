@@ -5,7 +5,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import 'src/styles/Create.scss';
 import 'src/styles/Global.scss';
 import CreateUploadButton from 'src/components/CreateUploadButton';
-import Avatar2 from 'src/assets/images/avatar-2.png';
+import Avatar2 from 'src/assets/images/avatar-1.png';
 import UserWithName from 'src/components/UserWithName';
 import StepOrder from 'src/components/StepOrder';
 import BackgroundButton from 'src/components/BackgroundButton';
@@ -177,7 +177,7 @@ const Create = () => {
               <StepOrder step={step2} />
               <UserWithName userInfo={user3Info} />
               <StepOrder step={step3} />
-              <UserWithName userInfo={user4Info} />
+              <UserWithName userInfo={user4Info} last={true} />
             </div>
             <div className="global-flex-start">
               <div className="create-red-dot"></div>

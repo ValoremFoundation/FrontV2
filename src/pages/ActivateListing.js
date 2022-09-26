@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import 'src/styles/ActivateListing.scss';
 import 'src/styles/Global.scss';
 import Avatar2 from 'src/assets/images/avatar-1.png';
@@ -8,6 +9,7 @@ import UserWithName from 'src/components/UserWithName';
 import StepOrder from 'src/components/StepOrder';
 
 const ActivateListing = () => {
+  const history = useHistory();
   const user1Info = {
     info: {
       name: 'Sarah',
@@ -56,6 +58,11 @@ const ActivateListing = () => {
     description: 'resells web design service to Tom for',
     amount: '',
   };
+
+  const handleClickActivate = () => {
+    history.push('/profile', { actionTabIndex: 6 });
+  };
+
   return (
     <div className="activate-listing-container">
       <div style={{ background: '#FFFFFF' }}>
@@ -77,7 +84,7 @@ const ActivateListing = () => {
                 <NFTCard />
               </div>
               <div className="col-12 col-lg-8 my-4">
-                <ActivateListingCard />
+                <ActivateListingCard onClick={handleClickActivate} />
               </div>
             </div>
             <div className="listing-service-price my-4">
