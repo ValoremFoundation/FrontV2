@@ -14,8 +14,8 @@ import Create from 'src/pages/Create';
 import Map from 'src/pages/Map';
 import NotFound from 'src/pages/NotFound';
 import Profile from 'src/pages/Profile';
-import ActivateListing from './pages/ActivateListing';
-import TokenDetail from './pages/TokenDetail';
+import ActivateListing from 'src/pages/ActivateListing';
+import TokenDetail from 'src/pages/TokenDetail';
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);

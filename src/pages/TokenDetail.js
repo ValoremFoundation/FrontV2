@@ -3,8 +3,8 @@ import 'src/styles/TokenDetail.scss';
 import 'src/styles/Global.scss';
 import Avatar2 from 'src/assets/images/avatar-1.png';
 import DiscodIcon from 'src/assets/images/discord-blue.svg';
-import NFTImage from 'src/assets/images/nft-card.png';
-import FavoriteIcon from 'src/assets/images/favorite-black-icon.svg';
+import TokenImage from 'src/assets/images/nft-card.png';
+import FavoriteBlackIcon from 'src/assets/images/favorite-black-icon.svg';
 import EyeIcon from 'src/assets/images/eye-icon.svg';
 import BarCode from 'src/assets/images/barcode.svg';
 import BenefitCard from 'src/components/BenefitCard';
@@ -44,7 +44,7 @@ const TokenDetail = () => {
         <div className="col-12 col-lg-7 my-4">
           <img
             alt="alt"
-            src={NFTImage}
+            src={TokenImage}
             style={{ width: '100%', borderRadius: 5, objectFit: 'cover', objectPosition: 'center' }}
           />
           <div className="mt-4">
@@ -67,7 +67,7 @@ const TokenDetail = () => {
               <div className="poppins-16-500-gray">5</div>
             </div>
             <div className="global-flex-start">
-              <img alt="alt" src={FavoriteIcon} width={21} height={18} className="me-1 global-pointer" />
+              <img alt="alt" src={FavoriteBlackIcon} width={21} height={18} className="me-1 global-pointer" />
               <div className="poppins-16-500-gray">10</div>
             </div>
           </div>
