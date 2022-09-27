@@ -26,6 +26,20 @@
   background: #F4F5FB;
 }
 
+.create-work-flow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  // flex-wrap: wrap;
+  @media screen and (max-width: 840px) {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  @media screen and (max-width: 978px) {
+    justify-content: center;
+  }
+}
+
 .create-middle-container {
   max-width: 1440px;
   width: 100%;

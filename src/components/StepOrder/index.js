@@ -11,7 +11,7 @@ const StepOrder = ({ step, existGift = 1 }) => {
 
   return (
     // <div style={{ maxWidth: 180, marginBottom: '230px' }}>
-    <div style={{ marginBottom: currentWidth < 319 ? '20px' : existGift > 0 ? '230px' : '40px' }}>
+    <div style={{ marginBottom: currentWidth < 380 ? '20px' : existGift > 0 ? '230px' : '40px' }}>
       <div className="poppins-12-400 p-3">{step?.description}</div>
       <div className="poppins-16-700 text-center" style={{ height: '24px' }}>
         {step?.amount ? step?.amount + ' VLR' : ''}

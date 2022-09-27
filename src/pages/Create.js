@@ -15,9 +15,17 @@ import TextInput from 'src/components/TextInput';
 import CustomRadio from 'src/components/CustomRadio';
 import CustomCheckBox from 'src/components/CustomCheckBox';
 import { isMobile } from 'react-device-detect';
+import MetamaskSigninModal from 'src/components/MetamaskSigninModal';
 
 const Create = () => {
   const history = useHistory();
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const openModal = () => {
+    setIsOpen(true);
+  };
+  const closeModal = () => {
+    setIsOpen(false);
+  };
   const mapStyleLight = 'mapbox://styles/thyjames/ckyj5984oa25w14o1hnuexh2a';
   const [viewport, setViewport] = useState({
     latitude: 38.57,
@@ -142,9 +150,6 @@ const Create = () => {
   const handleClickSaveForLater = () => {
     history.push('/profile');
   };
-  const handleClickCreate = () => {
-    history.push('/profile');
-  };
   const [seenVideo, setSeenVideo] = useState(false);
   const handleChangeSeenVideo = event => {
     setSeenVideo(event.target.value);
@@ -152,6 +157,7 @@ const Create = () => {
 
   return (
     <div className="create-container">
+      <MetamaskSigninModal modalIsOpen={modalIsOpen} closeModal={closeModal} redirectUrl={'/profile'} />  
       <div style={{ background: '#ffffff' }}>
         <div className="create-top-section">
           <div className="poppins-14-700">+Upload Banner</div>
@@ -174,7 +180,7 @@ const Create = () => {
               <span className="poppins-16-600">royalties</span>
             </div>
             <p className="poppins-20-500 my-4">Here’s a real life example of how it works</p>
-            <div className="global-flex-lg-between-sm-center">
+            <div className="create-work-flow">
               <UserWithName userInfo={user1Info} />
               <StepOrder step={step1} />
               <UserWithName userInfo={user2Info} />
@@ -367,7 +373,7 @@ const Create = () => {
                   label={'Create NFT'}
                   color={'#2A212E'}
                   bgColor={'#96F2A4'}
-                  onClick={handleClickCreate}
+                  onClick={openModal}
                 />
               </div>
             </div>
