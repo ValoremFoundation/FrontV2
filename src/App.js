@@ -25,11 +25,11 @@ function App() {
 
   const MainLayout = ({ children, ...rest }) => {
     return (
-      <>
+      <React.Fragment>
         <Sidebar isOpen={isOpen} toggle={toggle} />
         <Navbar toggle={toggle} />
         {children}
-      </>
+      </React.Fragment>
     );
   };
 

@@ -34,7 +34,7 @@ const SwitchNetworkModal = ({ modalIsOpen, closeModal, handleSwithNetwork }) => 
         <div className="poppins-24-700">Choose Network</div>
         <div
           className="global-flex-center global-pointer"
-          onClick={() => handleSwithNetwork(process.env.NODE_ENV === 'production' ? 137 : 80001)}
+          onClick={() => handleSwithNetwork(process.env.REACT_APP_NODE_ENV === 'production' ? 137 : 80001)}
         >
           <img src={MaticIcon} className="me-3" alt="polygon-icon" width="56px" height="56px" />
           <div className="poppins-20-500">Polygon Mainnet</div>

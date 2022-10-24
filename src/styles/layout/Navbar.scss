@@ -96,3 +96,11 @@
   text-decoration: none;
   cursor: pointer;
 }
+
+.caret-none {
+  text-decoration: none;
+}
+
+.caret-none::after {
+  display: none !important;
+}

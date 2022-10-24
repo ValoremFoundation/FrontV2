@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import 'src/styles/layout/Navbar.scss';
 import SearchInput from 'src/components/SearchInput';
 import RoundBorderButton from 'src/components/RoundBorderButton';
@@ -15,8 +15,10 @@ import { setWalletAddress } from 'src/actions/wallet';
 import { setProfile } from 'src/actions/profile';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from 'src/api';
+import { MDBDropdown, MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem } from 'mdb-react-ui-kit';
 
 const Navbar = ({ toggle }) => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const wallet = useSelector(state => state.wallet.address);
   const profile = useSelector(state => state.profile);
@@ -47,6 +49,11 @@ const Navbar = ({ toggle }) => {
   }, []);
 
   useEffect(() => {
+    loginAction();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account]);
+
+  useEffect(() => {
     if (!active) {
       localStorage.setItem('authToken', '');
     }
@@ -62,7 +69,7 @@ const Navbar = ({ toggle }) => {
       return;
     }
 
-    const visible = JSON.parse(localStorage.getItem(LS_KEY)) ? localStorage.getItem(LS_KEY) : false;
+    const visible = localStorage.getItem(LS_KEY) ? localStorage.getItem(LS_KEY) : false;
 
     if (!account) {
       if (visible) setSwitchNetworkModal(false);
@@ -84,7 +91,6 @@ const Navbar = ({ toggle }) => {
       const {
         data: { status, token, user },
       } = await login({ wallet_address: account, userName, userEmail });
-
       if (!status) {
         console.log('Failed to login');
       } else {
@@ -162,9 +168,21 @@ const Navbar = ({ toggle }) => {
     }
   };
 
+  const logout = async () => {
+    try {
+      deactivate();
+      localStorage.setItem('isWalletConnected', false);
+      localStorage.setItem('authToken', '');
+      dispatch(setWalletAddress(''));
+      localStorage.setItem(LS_KEY, '');
+      history.push('/');
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
+
   return (
     <div className="nav-container">
-      {console.log('>>>>>>>>>>>> wallet = ', wallet, profile)}
       <GoogleLoginModal modalIsOpen={modalIsOpen} closeModal={closeModal} redirectUrl={'/create'} />
       <SwitchNetworkModal
         modalIsOpen={switchNetworkModal}
@@ -195,7 +213,22 @@ const Navbar = ({ toggle }) => {
             Map
           </Link>
           {active ? (
-            <RoundBorderButton label={truncateAddress(account)} onClick={handleDisconnectWallet} />
+            <MDBDropdown>
+              <MDBDropdownToggle tag="a" className="caret-none">
+                <RoundBorderButton label={truncateAddress(account)}></RoundBorderButton>
+              </MDBDropdownToggle>
+              <MDBDropdownMenu>
+                <MDBDropdownItem href="" link onClick={() => history.push(`/profile`)}>
+                  Profile
+                </MDBDropdownItem>
+                <MDBDropdownItem href="" link onClick={handleDisconnectWallet}>
+                  Disconnect Wallet
+                </MDBDropdownItem>
+                <MDBDropdownItem href="" link onClick={logout}>
+                  Logout
+                </MDBDropdownItem>
+              </MDBDropdownMenu>
+            </MDBDropdown>
           ) : (
             <RoundBorderButton label={'Connect'} onClick={handleConnectWallet} />
           )}
