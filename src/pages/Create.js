@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import ReactMapGL, { /* Marker, Popup, */ NavigationControl, GeolocateControl, FlyToInterpolator } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -19,6 +19,12 @@ import MetamaskSigninModal from 'src/components/MetamaskSigninModal';
 
 const Create = () => {
   const history = useHistory();
+  const bannerRef = useRef(null);
+  const avatarRef = useRef(null);
+  const [bannerFile, setBannerFile] = useState({});
+  const [avatarFile, setAvatarFile] = useState({});
+  const [bannerObjectURL, setBannerObjectURL] = useState('');
+  const [avatarObjectURL, setAvatarObjectURL] = useState('');
   const [modalIsOpen, setIsOpen] = useState(false);
   const openModal = () => {
     setIsOpen(true);
@@ -155,16 +161,67 @@ const Create = () => {
     setSeenVideo(event.target.value);
   };
 
+  const handleCoverPhotoInputChange = async e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setBannerFile(file);
+    setBannerObjectURL(window.URL.createObjectURL(file));
+  };
+
+  const handleAvatarInputChange = async e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setAvatarFile(file);
+    setAvatarObjectURL(window.URL.createObjectURL(file));
+  };
+
   return (
     <div className="create-container">
-      <MetamaskSigninModal modalIsOpen={modalIsOpen} closeModal={closeModal} redirectUrl={'/profile'} />  
-      <div style={{ background: '#ffffff' }}>
+      <MetamaskSigninModal modalIsOpen={modalIsOpen} closeModal={closeModal} redirectUrl={'/profile'} />
+      <div style={{ background: '#ffffff', position: 'relative', height: '192px' }}>
+        {bannerObjectURL && (
+          <img
+            alt="banner-image"
+            src={bannerObjectURL}
+            width={'100%'}
+            height={192}
+            style={{ objectFit: 'cover', objectPosition: 'center' }}
+            className="global-pointer"
+          />
+        )}
         <div className="create-top-section">
-          <div className="poppins-14-700">+Upload Banner</div>
-          <div className="create-upload-picture-content">
-            <CreateUploadButton label={'+Upload Picture'} color={'#000000'} bgColor={'#F4F5FB'} />
+          <div className="poppins-14-700 global-pointer" onClick={() => bannerRef.current.click()}>
+            +Upload Banner
           </div>
+          <input ref={bannerRef} type="file" className="d-none" onChange={handleCoverPhotoInputChange} />
         </div>
+        {/* <div className="create-upload-picture-content"> */}
+      </div>
+      <div className="avatar-container">
+        {avatarObjectURL ? (
+          <img
+            alt="avatar-image"
+            src={avatarObjectURL}
+            width={140}
+            height={140}
+            className="avatar-image global-pointer"
+          />
+        ) : (
+          <div
+            className="create-avater"
+            style={{ color: '#000000', background: '#F4F5FB' }}
+            onClick={() => avatarRef.current.click()}
+          >
+            Upload avatar
+          </div>
+        )}
+        <input ref={avatarRef} type="file" className="d-none" onChange={handleAvatarInputChange} />
+        {/* <CreateUploadButton
+            label={'+Upload Picture'}
+            color={'#000000'}
+            bgColor={'#F4F5FB'}
+            onClick={() => avatarRef.current.click()}
+          /> */}
       </div>
       <div className="create-middle-background px-2 py-4">
         <div className="create-middle-container">
@@ -369,12 +426,7 @@ const Create = () => {
                 />
               </div>
               <div className="my-2">
-                <BackgroundButton
-                  label={'Create NFT'}
-                  color={'#2A212E'}
-                  bgColor={'#96F2A4'}
-                  onClick={openModal}
-                />
+                <BackgroundButton label={'Create NFT'} color={'#2A212E'} bgColor={'#96F2A4'} onClick={openModal} />
               </div>
             </div>
           </div>

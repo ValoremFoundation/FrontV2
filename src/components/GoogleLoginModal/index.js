@@ -4,6 +4,8 @@ import Modal from 'react-modal';
 import GoogleIcon from 'src/assets/images/google.svg';
 import 'src/styles/components/GoogleLoginModal.scss';
 import 'src/styles/Global.scss';
+import { GoogleLogin } from 'react-google-login';
+import toast from 'react-hot-toast';
 
 const GoogleLoginModal = ({ modalIsOpen, closeModal, redirectUrl }) => {
   const hisotry = useHistory();
@@ -31,16 +33,40 @@ const GoogleLoginModal = ({ modalIsOpen, closeModal, redirectUrl }) => {
     closeModal();
   };
 
+  const responseGoogle = response => {
+    const accessToken = response.accessToken;
+    const userName = response.profileObj.name;
+    const userEmail = response.profileObj.email;
+    localStorage.setItem('userName', userName);
+    localStorage.setItem('userEmail', userEmail);
+    localStorage.setItem('login-with-google', accessToken);
+    hisotry.push(redirectUrl);
+    closeModal();
+  };
+
+  const responseGoogleFail = response => {
+    toast.error('Signin Google login failed!');
+  };
+
   return (
     <Modal isOpen={modalIsOpen} onRequestClose={closeModal} style={customStyles} contentLabel="Google Login Modal">
-      <div style={{ padding: '65px' }}>
-        <div className="google-login-title">AdValorem</div>
-        <div className="google-login-content">Welcome Back!</div>
-        <div className="google-login-button" onClick={handleClickGoogleLogin}>
-          <img alt="alt" src={GoogleIcon} width={25} height={25} />
-          <div className="google-login-button-title ms-3">Sign in with google</div>
-        </div>
-      </div>
+      <GoogleLogin
+        clientId={process.env.REACT_APP_GOOGLE_KEY}
+        buttonText="Login"
+        onSuccess={responseGoogle}
+        onFailure={responseGoogleFail}
+        cookiePolicy={'single_host_origin'}
+        render={renderProps => (
+          <div style={{ padding: '65px' }}>
+            <div className="google-login-title">AdValorem</div>
+            <div className="google-login-content">Welcome Back!</div>
+            <div className="google-login-button" onClick={renderProps.onClick}>
+              <img alt="alt" src={GoogleIcon} width={25} height={25} />
+              <div className="google-login-button-title ms-3">Sign in with google</div>
+            </div>
+          </div>
+        )}
+      />
     </Modal>
   );
 };

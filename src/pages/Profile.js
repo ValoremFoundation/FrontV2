@@ -1,17 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import 'src/styles/Profile.scss';
 import 'src/styles/Global.scss';
-import Avatar2 from 'src/assets/images/avatar-1.png';
 import ProfileNumberName from 'src/components/ProfileNumberName';
 import ListingCard from 'src/components/ListingCard';
 import RedemptionCard from 'src/components/RedemptionCard';
 import BoostPost from 'src/components/BoostPost';
 import NFTCard from 'src/components/NFTCard';
+import EditIcon from 'src/assets/images/editIcon.svg';
 
 const Profile = () => {
   const { state } = useLocation();
   const history = useHistory();
+  const bannerRef = useRef(null);
+  const avatarRef = useRef(null);
+  const [bannerFile, setBannerFile] = useState({});
+  const [avatarFile, setAvatarFile] = useState({});
+  const [bannerSource, setBannerSource] = useState('/images/default-banner.png');
+  const [avatarSource, setAvatarSource] = useState('/images/default-avatar.png');
   const data1 = [
     {
       count: 1,
@@ -96,13 +102,55 @@ const Profile = () => {
   };
   const handleClickBuy = () => {};
 
+  const handleCoverPhotoInputChange = async e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setBannerFile(file);
+    setBannerSource(window.URL.createObjectURL(file));
+  };
+
+  const handleAvatarInputChange = async e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setAvatarFile(file);
+    setAvatarSource(window.URL.createObjectURL(file));
+  };
+
   return (
     <div className="profile-container">
-      <div style={{ background: '#F4F5FB' }}>
-        <div className="profile-sub-container">
-          <div className="profile-first-section">
-            <img alt="alt" src={Avatar2} className="profile-first-avatar" />
+      <div className="profile-banner-container">
+        <img
+          alt="banner-image"
+          src={bannerSource}
+          width={'100%'}
+          height={192}
+          style={{ objectFit: 'cover', objectPosition: 'center' }}
+          className="global-pointer"
+          onClick={() => bannerRef.current.click()}
+        />
+        <div className={'profile-imgOverlay'} onClick={() => bannerRef.current.click()}>
+          <img src={EditIcon} width="40" height="40" color="white" />
+        </div>
+        <input ref={bannerRef} type="file" className="d-none" onChange={handleCoverPhotoInputChange} />
+      </div>
+      <div className="profile-avatar-container">
+        <div style={{ width: 'fit-content', position: 'relative' }}>
+          <img
+            alt="avatar-image"
+            src={avatarSource}
+            width={140}
+            height={140}
+            className="profile-avatar-image global-pointer"
+            onClick={() => avatarRef.current.click()}
+          />
+          <div
+            className={'profile-avatar-imgOverlay'}
+            style={{ borderRadius: '50%' }}
+            onClick={() => avatarRef.current.click()}
+          >
+            <img src={EditIcon} width="40" height="40" color="white" />
           </div>
+          <input ref={avatarRef} type="file" className="d-none" onChange={handleAvatarInputChange} />
         </div>
       </div>
       <div style={{ background: '#FFFFFF' }}>

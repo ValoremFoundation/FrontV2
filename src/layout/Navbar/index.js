@@ -9,7 +9,6 @@ import { useWeb3React } from '@web3-react/core';
 import { injected, networkItem } from 'src/utils/connector';
 import toast from 'react-hot-toast';
 import SwitchNetworkModal from 'src/components/SwitchNetworkModal';
-import { LS_KEY } from 'src/constants';
 import { truncateAddress } from 'src/utils/formartString';
 import { setWalletAddress } from 'src/actions/wallet';
 import { setProfile } from 'src/actions/profile';
@@ -27,7 +26,11 @@ const Navbar = ({ toggle }) => {
   const [switchNetworkModal, setSwitchNetworkModal] = useState(false);
   const [modalIsOpen, setIsOpen] = useState(false);
   const openModal = () => {
-    setIsOpen(true);
+    if (!localStorage.getItem('login-with-google')) {
+      setIsOpen(true);
+    } else {
+      history.push('/create');
+    }
   };
   const closeModal = () => {
     setIsOpen(false);
@@ -69,7 +72,7 @@ const Navbar = ({ toggle }) => {
       return;
     }
 
-    const visible = localStorage.getItem(LS_KEY) ? localStorage.getItem(LS_KEY) : false;
+    const visible = localStorage.getItem('login-with-metamask') ? localStorage.getItem('login-with-metamask') : false;
 
     if (!account) {
       if (visible) setSwitchNetworkModal(false);
@@ -86,8 +89,8 @@ const Navbar = ({ toggle }) => {
 
   const loginAction = async () => {
     if (account) {
-      const userName = JSON.parse(localStorage.getItem('userName'));
-      const userEmail = JSON.parse(localStorage.getItem('userEmail'));
+      const userName = localStorage.getItem('userName');
+      const userEmail = localStorage.getItem('userEmail');
       const {
         data: { status, token, user },
       } = await login({ wallet_address: account, userName, userEmail });
@@ -95,7 +98,6 @@ const Navbar = ({ toggle }) => {
         console.log('Failed to login');
       } else {
         localStorage.setItem('authToken', token);
-        localStorage.setItem(LS_KEY, token);
         // if (user.feature_id > 0 && user.feature_upgraded) {
         //   const {
         //     data: { data: features },
@@ -173,8 +175,9 @@ const Navbar = ({ toggle }) => {
       deactivate();
       localStorage.setItem('isWalletConnected', false);
       localStorage.setItem('authToken', '');
+      localStorage.setItem('login-with-google', '');
       dispatch(setWalletAddress(''));
-      localStorage.setItem(LS_KEY, '');
+      localStorage.setItem('login-with-metamask', '');
       history.push('/');
     } catch (ex) {
       console.log(ex);
