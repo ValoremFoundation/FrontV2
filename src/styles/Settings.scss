@@ -1,0 +1,62 @@
+.settings-container {
+  background: #ffffff;
+  max-width: 768px;
+  margin: auto;
+  padding: 40px 20px;
+}
+
+.settings-banner-container {
+  position: relative;
+  height: 192px;
+}
+
+.settings-avatar-container {
+  position: relative;
+} 
+
+.settings-avatar-image {
+  object-fit: cover;
+  object-position: center;
+  border: 4px solid #a4a9c3;
+  border-radius: 70px;
+
+  @media screen and (max-width: 978px) {
+    width: 100px;
+    height: 100px;
+    font-size: 12px;
+  }
+}
+
+
+img + .settings-imgOverlay {
+  display: none;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.3);
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+*:hover> .settings-imgOverlay {
+  display: flex;
+}
+
+img + .settings-avatar-imgOverlay {
+  display: none;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  background-color: rgba(0,0,0,0.3);
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+*:hover> .settings-avatar-imgOverlay {
+  display: inline-flex;
+}

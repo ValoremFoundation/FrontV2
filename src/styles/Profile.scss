@@ -7,7 +7,6 @@
 .profile-banner-container {
   position: relative;
   height: 192px;
-  
 }
 
 .profile-avatar-container {
@@ -18,6 +17,11 @@
   margin-right: auto;
   z-index: 1;
   height: 0px;
+  padding: 0px 60px;
+
+  @media screen and (max-width: 978px) {
+    padding: 0px 20px;
+  }
 } 
 
 .profile-avatar-image {
@@ -44,6 +48,12 @@
     padding-left: 30px;
     padding-right: 30px;
   }
+}
+
+.profile-sub-container {
+  max-width: 1440px;
+  margin: auto;
+  position: relative;
 }
 
 .profile-first-avatar {

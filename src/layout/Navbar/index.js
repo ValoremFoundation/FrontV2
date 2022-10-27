@@ -224,6 +224,9 @@ const Navbar = ({ toggle }) => {
                 <MDBDropdownItem href="" link onClick={() => history.push(`/profile`)}>
                   Profile
                 </MDBDropdownItem>
+                <MDBDropdownItem href="" link onClick={() => history.push(`/settings`)}>
+                  Settings
+                </MDBDropdownItem>
                 <MDBDropdownItem href="" link onClick={handleDisconnectWallet}>
                   Disconnect Wallet
                 </MDBDropdownItem>

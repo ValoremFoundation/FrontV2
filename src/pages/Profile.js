@@ -133,24 +133,26 @@ const Profile = () => {
         </div>
         <input ref={bannerRef} type="file" className="d-none" onChange={handleCoverPhotoInputChange} />
       </div>
-      <div className="profile-avatar-container">
-        <div style={{ width: 'fit-content', position: 'relative' }}>
-          <img
-            alt="avatar-image"
-            src={avatarSource}
-            width={140}
-            height={140}
-            className="profile-avatar-image global-pointer"
-            onClick={() => avatarRef.current.click()}
-          />
-          <div
-            className={'profile-avatar-imgOverlay'}
-            style={{ borderRadius: '50%' }}
-            onClick={() => avatarRef.current.click()}
-          >
-            <img src={EditIcon} width="40" height="40" color="white" />
+      <div className="profile-sub-container">
+        <div className="profile-avatar-container">
+          <div style={{ width: 'fit-content', position: 'relative' }}>
+            <img
+              alt="avatar-image"
+              src={avatarSource}
+              width={140}
+              height={140}
+              className="profile-avatar-image global-pointer"
+              onClick={() => avatarRef.current.click()}
+            />
+            <div
+              className={'profile-avatar-imgOverlay'}
+              style={{ borderRadius: '50%' }}
+              onClick={() => avatarRef.current.click()}
+            >
+              <img src={EditIcon} width="40" height="40" color="white" />
+            </div>
+            <input ref={avatarRef} type="file" className="d-none" onChange={handleAvatarInputChange} />
           </div>
-          <input ref={avatarRef} type="file" className="d-none" onChange={handleAvatarInputChange} />
         </div>
       </div>
       <div style={{ background: '#FFFFFF' }}>

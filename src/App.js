@@ -16,6 +16,7 @@ import NotFound from 'src/pages/NotFound';
 import Profile from 'src/pages/Profile';
 import ActivateListing from 'src/pages/ActivateListing';
 import TokenDetail from 'src/pages/TokenDetail';
+import Settings from 'src/pages/Settings';
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
@@ -64,6 +65,11 @@ function App() {
         <Route path="/profile" exact>
           <MainLayout>
             <Profile />
+          </MainLayout>
+        </Route>
+        <Route path="/settings" exact>
+          <MainLayout>
+            <Settings />
           </MainLayout>
         </Route>
         <Route path="/activate-listing/:tokenId" exact>
