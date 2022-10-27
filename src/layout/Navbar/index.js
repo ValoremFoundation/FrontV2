@@ -15,6 +15,7 @@ import { setProfile } from 'src/actions/profile';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from 'src/api';
 import { MDBDropdown, MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem } from 'mdb-react-ui-kit';
+import { setAuthToken } from 'src/actions/auth';
 
 const Navbar = ({ toggle }) => {
   const history = useHistory();
@@ -98,6 +99,7 @@ const Navbar = ({ toggle }) => {
         console.log('Failed to login');
       } else {
         localStorage.setItem('authToken', token);
+        dispatch(setAuthToken(token));
         // if (user.feature_id > 0 && user.feature_upgraded) {
         //   const {
         //     data: { data: features },

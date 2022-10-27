@@ -22,24 +22,23 @@ const Settings = () => {
   const [isLoading, setIsLoading] = useState(false);
   const authToken = localStorage.getItem('authToken');
 
-  const getProfileData = async () => {
-    try {
-      if (!authToken) return;
-      setIsLoading(true);
-      const {
-        data: { data: profileInfo },
-      } = await getProfile({
-        Authorization: `Bearer ${authToken}`,
-      });
-      setProfile(profileInfo);
-      setIsLoading(false);
-    } catch (err) {
-      console.log('Error Settings : ', err);
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const getProfileData = async () => {
+      try {
+        if (!authToken) return;
+        setIsLoading(true);
+        const {
+          data: { data: profileInfo },
+        } = await getProfile({
+          Authorization: `Bearer ${authToken}`,
+        });
+        setProfile(profileInfo);
+        setIsLoading(false);
+      } catch (err) {
+        console.log('Error Settings : ', err);
+        setIsLoading(false);
+      }
+    };
     getProfileData();
   }, []);
 

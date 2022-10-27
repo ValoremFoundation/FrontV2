@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { memo } from 'react';
 import 'src/styles/Global.scss';
 
-const ProfileNumberName = ({ data }) => {
+const ProfileNumberName = memo(({ data }) => {
   return (
     <div className="me-3">
       <p className="poppins-16-600 text-center">{data?.count}</p>
@@ -10,6 +10,6 @@ const ProfileNumberName = ({ data }) => {
       </p>
     </div>
   );
-};
+});
 
 export default ProfileNumberName;
