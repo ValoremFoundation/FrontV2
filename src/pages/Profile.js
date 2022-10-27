@@ -18,7 +18,7 @@ const Profile = () => {
   const [profile, setProfile] = useState([]);
   const bannerRef = useRef(null);
   const avatarRef = useRef(null);
-  const [bannerSource, setBannerSource] = useState('');
+  const [bannerSource, setBannerSource] = useState('/images/default-banner.png');
   const [avatarSource, setAvatarSource] = useState('/images/default-avatar.png');
   const [isLoading, setIsLoading] = useState(false);
   const [geoLocation, setGeoLocation] = useState({ latitude: 0, longitude: 0 });

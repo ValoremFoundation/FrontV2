@@ -1,10 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import ReactMapGL, { /* Marker, Popup, */ NavigationControl, GeolocateControl, FlyToInterpolator } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import 'src/styles/Create.scss';
 import 'src/styles/Global.scss';
-import CreateUploadButton from 'src/components/CreateUploadButton';
 import Avatar2 from 'src/assets/images/avatar-1.png';
 import UserWithName from 'src/components/UserWithName';
 import StepOrder from 'src/components/StepOrder';
@@ -16,40 +14,25 @@ import CustomRadio from 'src/components/CustomRadio';
 import CustomCheckBox from 'src/components/CustomCheckBox';
 import { isMobile } from 'react-device-detect';
 import MetamaskSigninModal from 'src/components/MetamaskSigninModal';
+import { useSelector } from 'react-redux';
+import { getProfile } from 'src/api';
+import LoadingSpinner from 'src/components/LoadingSpinner';
 
 const Create = () => {
   const history = useHistory();
-  const bannerRef = useRef(null);
-  const avatarRef = useRef(null);
-  const [bannerFile, setBannerFile] = useState({});
-  const [avatarFile, setAvatarFile] = useState({});
-  const [bannerObjectURL, setBannerObjectURL] = useState('');
-  const [avatarObjectURL, setAvatarObjectURL] = useState('');
+  const [profile, setProfile] = useState([]);
+  const [bannerSource, setBannerSource] = useState('/images/default-banner.png');
+  const [avatarSource, setAvatarSource] = useState('/images/default-avatar.png');
+  const [isLoading, setIsLoading] = useState(false);
+  const [geoLocation, setGeoLocation] = useState({ latitude: 0, longitude: 0 });
+  const authToken = useSelector(state => state.auth.token);
+
   const [modalIsOpen, setIsOpen] = useState(false);
   const openModal = () => {
     setIsOpen(true);
   };
   const closeModal = () => {
     setIsOpen(false);
-  };
-  const mapStyleLight = 'mapbox://styles/thyjames/ckyj5984oa25w14o1hnuexh2a';
-  const [viewport, setViewport] = useState({
-    latitude: 38.57,
-    longitude: -121.47,
-    width: '100%',
-    height: '300px',
-    zoom: 1,
-  });
-  const navStyle = {
-    position: 'absolute',
-    top: 40,
-    left: 0,
-    padding: '10px',
-  };
-
-  const geolocateControlStyle = {
-    right: isMobile ? 40 : 40,
-    top: isMobile ? 40 : 40,
   };
   const user1Info = {
     info: {
@@ -151,7 +134,28 @@ const Create = () => {
     amount: 200,
   };
 
-  const nearMeHandler = () => {};
+  const getProfileData = async () => {
+    try {
+      if (!authToken) return;
+      setIsLoading(true);
+      const {
+        data: { data: profileInfo },
+      } = await getProfile({
+        Authorization: `Bearer ${authToken}`,
+      });
+      setProfile(profileInfo);
+      setAvatarSource(profileInfo?.avatar || '/images/default-avatar.png');
+      setBannerSource(profileInfo?.cover_photo || '/images/default-banner.png');
+      setIsLoading(false);
+    } catch (err) {
+      console.log('Error Profile : ', err);
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getProfileData();
+  }, [authToken]);
 
   const handleClickSaveForLater = () => {
     history.push('/profile');
@@ -161,278 +165,222 @@ const Create = () => {
     setSeenVideo(event.target.value);
   };
 
-  const handleCoverPhotoInputChange = async e => {
-    const file = e.target.files[0];
-    if (!file) return;
-    setBannerFile(file);
-    setBannerObjectURL(window.URL.createObjectURL(file));
-  };
-
-  const handleAvatarInputChange = async e => {
-    const file = e.target.files[0];
-    if (!file) return;
-    setAvatarFile(file);
-    setAvatarObjectURL(window.URL.createObjectURL(file));
-  };
-
   return (
-    <div className="create-container">
-      <MetamaskSigninModal modalIsOpen={modalIsOpen} closeModal={closeModal} redirectUrl={'/profile'} />
-      <div style={{ background: '#ffffff', position: 'relative', height: '192px' }}>
-        {bannerObjectURL && (
+    <>
+      {isLoading && <LoadingSpinner />}
+      <div className="create-container">
+        <MetamaskSigninModal modalIsOpen={modalIsOpen} closeModal={closeModal} redirectUrl={'/profile'} />
+        <div style={{ background: '#ffffff', position: 'relative', height: '192px' }}>
           <img
             alt="banner-image"
-            src={bannerObjectURL}
+            src={bannerSource}
             width={'100%'}
             height={192}
             style={{ objectFit: 'cover', objectPosition: 'center' }}
             className="global-pointer"
           />
-        )}
-        <div className="create-top-section">
-          <div className="poppins-14-700 global-pointer" onClick={() => bannerRef.current.click()}>
-            +Upload Banner
-          </div>
-          <input ref={bannerRef} type="file" className="d-none" onChange={handleCoverPhotoInputChange} />
         </div>
-        {/* <div className="create-upload-picture-content"> */}
-      </div>
-      <div className="avatar-container">
-        {avatarObjectURL ? (
+        <div className="avatar-container">
           <img
             alt="avatar-image"
-            src={avatarObjectURL}
+            src={avatarSource || '/images/default-avatar.png'}
             width={140}
             height={140}
             className="avatar-image global-pointer"
           />
-        ) : (
-          <div
-            className="create-avater"
-            style={{ color: '#000000', background: '#F4F5FB' }}
-            onClick={() => avatarRef.current.click()}
-          >
-            Upload avatar
-          </div>
-        )}
-        <input ref={avatarRef} type="file" className="d-none" onChange={handleAvatarInputChange} />
-        {/* <CreateUploadButton
-            label={'+Upload Picture'}
-            color={'#000000'}
-            bgColor={'#F4F5FB'}
-            onClick={() => avatarRef.current.click()}
-          /> */}
-      </div>
-      <div className="create-middle-background px-2 py-4">
-        <div className="create-middle-container">
-          <div className="create-middle-section">
-            <div className="poppins-24-600 my-3">How it works</div>
-            <div style={{ maxWidth: 800 }}>
-              <span className="poppins-16-400">
-                We created a system that rewards your customer everytime resell your service to someone else in the
-                advalorem marketplace for a{' '}
-              </span>
-              <span className="poppins-16-600">commision </span>
-              <span className="poppins-16-400">and you still get paid your original fee plus </span>
-              <span className="poppins-16-600">royalties</span>
-            </div>
-            <p className="poppins-20-500 my-4">Here’s a real life example of how it works</p>
-            <div className="create-work-flow">
-              <UserWithName userInfo={user1Info} />
-              <StepOrder step={step1} />
-              <UserWithName userInfo={user2Info} />
-              <StepOrder step={step2} />
-              <UserWithName userInfo={user3Info} />
-              <StepOrder step={step3} />
-              <UserWithName userInfo={user4Info} last={true} />
-            </div>
-            <div className="global-flex-start">
-              <div className="create-red-dot"></div>
-              <div className="poppins-20-500 ms-4 sm:poppins-14-500">
-                Please watch the explainer video for a more
-                <br /> in depth explaination.
+        </div>
+        <div className="create-middle-background px-2 py-4">
+          <div className="create-middle-container">
+            <div className="create-middle-section">
+              <div className="poppins-24-600 my-3">How it works</div>
+              <div style={{ maxWidth: 800 }}>
+                <span className="poppins-16-400">
+                  We created a system that rewards your customer everytime resell your service to someone else in the
+                  advalorem marketplace for a{' '}
+                </span>
+                <span className="poppins-16-600">commision </span>
+                <span className="poppins-16-400">and you still get paid your original fee plus </span>
+                <span className="poppins-16-600">royalties</span>
+              </div>
+              <p className="poppins-20-500 my-4">Here’s a real life example of how it works</p>
+              <div className="create-work-flow">
+                <UserWithName userInfo={user1Info} />
+                <StepOrder step={step1} />
+                <UserWithName userInfo={user2Info} />
+                <StepOrder step={step2} />
+                <UserWithName userInfo={user3Info} />
+                <StepOrder step={step3} />
+                <UserWithName userInfo={user4Info} last={true} />
+              </div>
+              <div className="global-flex-start">
+                <div className="create-red-dot"></div>
+                <div className="poppins-20-500 ms-4 sm:poppins-14-500">
+                  Please watch the explainer video for a more
+                  <br /> in depth explaination.
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="create-middle-background px-2 py-4">
-        <div className="create-middle-one-container">
-          <div className="create-middle-section">
-            <p className="poppins-24-600 my-3">Getting Started</p>
-            <div className="d-flex justify-content-start my-3 ms-3">
-              <div className="poppins-32-500" style={{ width: 70 }}>
-                1
+        <div className="create-middle-background px-2 py-4">
+          <div className="create-middle-one-container">
+            <div className="create-middle-section">
+              <p className="poppins-24-600 my-3">Getting Started</p>
+              <div className="d-flex justify-content-start my-3 ms-3">
+                <div className="poppins-32-500" style={{ width: 70 }}>
+                  1
+                </div>
+                <div className="mt-2">
+                  <p className="poppins-16-600">Creating your service</p>
+                  <p className="poppins-14-500">
+                    Sign up for free, create your service and we automatically turn it into an NFT.
+                  </p>
+                </div>
               </div>
-              <div className="mt-2">
-                <p className="poppins-16-600">Creating your service</p>
-                <p className="poppins-14-500">
-                  Sign up for free, create your service and we automatically turn it into an NFT.
+              <div className="d-flex justify-content-start my-3 ms-3">
+                <p className="poppins-32-500" style={{ width: 70 }}>
+                  2
                 </p>
+                <div className="mt-2">
+                  <p className="poppins-16-600">List your NFT</p>
+                  <p className="poppins-14-500">
+                    Once you’ve created your service you can list it on the advalorem marketplace.
+                  </p>
+                </div>
               </div>
-            </div>
-            <div className="d-flex justify-content-start my-3 ms-3">
-              <p className="poppins-32-500" style={{ width: 70 }}>
-                2
-              </p>
-              <div className="mt-2">
-                <p className="poppins-16-600">List your NFT</p>
-                <p className="poppins-14-500">
-                  Once you’ve created your service you can list it on the advalorem marketplace.
+              <div className="d-flex justify-content-start my-3 ms-3">
+                <p className="poppins-32-500" style={{ width: 70 }}>
+                  3
                 </p>
-              </div>
-            </div>
-            <div className="d-flex justify-content-start my-3 ms-3">
-              <p className="poppins-32-500" style={{ width: 70 }}>
-                3
-              </p>
-              <div className="mt-2">
-                <p className="poppins-16-600">Collect Royalties!</p>
-                <p className="poppins-14-500">
-                  When your client trades your NFT on the advalorem marketplace you get royalties!
-                </p>
+                <div className="mt-2">
+                  <p className="poppins-16-600">Collect Royalties!</p>
+                  <p className="poppins-14-500">
+                    When your client trades your NFT on the advalorem marketplace you get royalties!
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="create-middle-background px-2 py-4">
-        <div className="create-middle-one-container">
-          <div className="create-middle-section">
-            <div className="d-flex justify-content-between algin-items-center">
-              <p className="poppins-24-600 my-3">Create New Service</p>
-              <img alt="alt" src={MenuIcon} style={{ width: '36px', heigt: '36px', cursor: 'pointer' }} />
-            </div>
-            <div className="global-flex-between flex-wrap my-4">
-              <div className="global-flex-start my-4">
-                <img alt="alt" src={Avatar2} style={{ width: 64, height: 64, borderRadius: 64 }} />
-                <div className="poppins-14-400 ms-2">gigphoto.png</div>
+        <div className="create-middle-background px-2 py-4">
+          <div className="create-middle-one-container">
+            <div className="create-middle-section">
+              <div className="d-flex justify-content-between algin-items-center">
+                <p className="poppins-24-600 my-3">Create New Service</p>
+                <img alt="alt" src={MenuIcon} style={{ width: '36px', heigt: '36px', cursor: 'pointer' }} />
               </div>
-              <div className="d-flex justify-content-between flex-wrap my-2">
-                <div className="my-2 me-3">
-                  <RoundBorderButton label={'Delete photo'} color={'#E75B2E'} />
+              <div className="global-flex-between flex-wrap my-4">
+                <div className="global-flex-start my-4">
+                  <img alt="alt" src={Avatar2} style={{ width: 64, height: 64, borderRadius: 64 }} />
+                  <div className="poppins-14-400 ms-2">gigphoto.png</div>
+                </div>
+                <div className="d-flex justify-content-between flex-wrap my-2">
+                  <div className="my-2 me-3">
+                    <RoundBorderButton label={'Delete photo'} color={'#E75B2E'} />
+                  </div>
+                  <div className="my-2">
+                    <RoundBorderButton label={'Choose another photo '} color={'#2DC015'} />
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div className="row gx-5">
+                  <div className="col-12 col-lg-6 my-2">
+                    <TextInput label={'Name of service'} type={'text'} />
+                  </div>
+                  <div className="col-12 col-lg-6 my-2">
+                    <TextInput label={'Category'} type={'text'} />
+                  </div>
+                </div>
+                <div className="my-3">
+                  <TextInput label={'Tell us about your services'} type={'textarea'} />
+                </div>
+                <div className="my-4">
+                  <TextInput label={'Describe your service'} type={'text'} />
+                </div>
+              </div>
+              <div className="global-flex-start my-3">
+                <CustomRadio label={'Remote'} value={'remote'} />
+                <div className="ms-5">
+                  <CustomRadio label={'In Person'} value={'person'} />
+                </div>
+              </div>
+              <div className="row gx-5">
+                <div className="col-12 col-lg-4 my-2">
+                  <TextInput label={'Location'} type={'text'} />
+                </div>
+                <div className="col-12 col-lg-4 my-2">
+                  <TextInput label={'Website'} type={'text'} />
+                </div>
+                <div className="col-12 col-lg-4 my-2">
+                  <TextInput label={'Dicord'} type={'text'} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="create-middle-background px-2 py-4">
+          <div className="create-middle-one-container">
+            <div className="create-middle-section">
+              <div className="poppins-24-600 my-3">Set your token percent</div>
+              <div className="row gx-5">
+                <div className="col-12 col-lg-4 my-2">
+                  <TextInput label={'Creater'} type={'text'} />
+                </div>
+                <div className="col-12 col-lg-4 my-2">
+                  <TextInput label={'Reseller'} type={'text'} />
+                </div>
+                <div className="col-12 col-lg-4 my-2">
+                  <TextInput label={'Royalty Pool'} type={'text'} />
+                </div>
+              </div>
+              <div className="my-2">
+                <TextInput label={'Expiration'} type={'text'} />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="create-middle-background px-2 py-4">
+          <div className="create-middle-one-container">
+            <div className="create-middle-section">
+              <div className="poppins-24-600 my-3">Have you seen the video?</div>
+              <CustomCheckBox
+                label={'I have seen the video and understand how the advalorem marketplace works'}
+                onChange={handleChangeSeenVideo}
+                value={seenVideo}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="create-middle-background px-2 pt-4 pb-5">
+          <div className="create-middle-one-container">
+            <div className="d-flex justify-content-between align-items-center flex-wrap p-4">
+              <div className="d-flex justify-content-start align-items-center flex-wrap">
+                <div className="me-4 my-2">
+                  <BackgroundButton label={'Remove NFT'} color={'#000000'} bgColor={'#D9D9D9'} />
                 </div>
                 <div className="my-2">
-                  <RoundBorderButton label={'Choose another photo '} color={'#2DC015'} />
+                  <BackgroundButton label={'Add NFT'} color={'#000000'} bgColor={'#D9D9D9'} />
                 </div>
               </div>
-            </div>
-            <div>
-              <div className="row gx-5">
-                <div className="col-12 col-lg-6 my-2">
-                  <TextInput label={'Name of service'} type={'text'} />
+              <div className="d-flex justify-content-start align-items-center flex-wrap">
+                <div className="me-4 my-2">
+                  <BackgroundButton
+                    label={'Save for later'}
+                    color={'#FFFFFF'}
+                    bgColor={'#000000'}
+                    onClick={handleClickSaveForLater}
+                  />
                 </div>
-                <div className="col-12 col-lg-6 my-2">
-                  <TextInput label={'Category'} type={'text'} />
+                <div className="my-2">
+                  <BackgroundButton label={'Create NFT'} color={'#2A212E'} bgColor={'#96F2A4'} onClick={openModal} />
                 </div>
-              </div>
-              <div className="my-3">
-                <TextInput label={'Tell us about your services'} type={'textarea'} />
-              </div>
-              <div className="my-4">
-                <TextInput label={'Describe your service'} type={'text'} />
-              </div>
-            </div>
-            <div className="global-flex-start my-3">
-              <CustomRadio label={'Remote'} value={'remote'} />
-              <div className="ms-5">
-                <CustomRadio label={'In Person'} value={'person'} />
-              </div>
-            </div>
-            <div className="row gx-5">
-              <div className="col-12 col-lg-4 my-2">
-                <TextInput label={'Location'} type={'text'} />
-              </div>
-              <div className="col-12 col-lg-4 my-2">
-                <TextInput label={'Website'} type={'text'} />
-              </div>
-              <div className="col-12 col-lg-4 my-2">
-                <TextInput label={'Dicord'} type={'text'} />
-              </div>
-            </div>
-            <div style={{ position: 'relative', border: '2px solid #2BC11E' }} className="mt-4">
-              <ReactMapGL
-                {...viewport}
-                mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-                mapStyle={mapStyleLight}
-                onViewportChange={viewport => setViewport(viewport)}
-                transitionDuration={500}
-                transitionInterpolator={new FlyToInterpolator()}
-              >
-                <div style={navStyle}>
-                  <NavigationControl />
-                </div>
-                <GeolocateControl
-                  style={geolocateControlStyle}
-                  positionOptions={{ enableHighAccuracy: true }}
-                  onClick={nearMeHandler}
-                />
-              </ReactMapGL>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="create-middle-background px-2 py-4">
-        <div className="create-middle-one-container">
-          <div className="create-middle-section">
-            <div className="poppins-24-600 my-3">Set your token percent</div>
-            <div className="row gx-5">
-              <div className="col-12 col-lg-4 my-2">
-                <TextInput label={'Creater'} type={'text'} />
-              </div>
-              <div className="col-12 col-lg-4 my-2">
-                <TextInput label={'Reseller'} type={'text'} />
-              </div>
-              <div className="col-12 col-lg-4 my-2">
-                <TextInput label={'Royalty Pool'} type={'text'} />
-              </div>
-            </div>
-            <div className="my-2">
-              <TextInput label={'Expiration'} type={'text'} />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="create-middle-background px-2 py-4">
-        <div className="create-middle-one-container">
-          <div className="create-middle-section">
-            <div className="poppins-24-600 my-3">Have you seen the video?</div>
-            <CustomCheckBox
-              label={'I have seen the video and understand how the advalorem marketplace works'}
-              onChange={handleChangeSeenVideo}
-              value={seenVideo}
-            />
-          </div>
-        </div>
-      </div>
-      <div className="create-middle-background px-2 pt-4 pb-5">
-        <div className="create-middle-one-container">
-          <div className="d-flex justify-content-between align-items-center flex-wrap p-4">
-            <div className="d-flex justify-content-start align-items-center flex-wrap">
-              <div className="me-4 my-2">
-                <BackgroundButton label={'Remove NFT'} color={'#000000'} bgColor={'#D9D9D9'} />
-              </div>
-              <div className="my-2">
-                <BackgroundButton label={'Add NFT'} color={'#000000'} bgColor={'#D9D9D9'} />
-              </div>
-            </div>
-            <div className="d-flex justify-content-start align-items-center flex-wrap">
-              <div className="me-4 my-2">
-                <BackgroundButton
-                  label={'Save for later'}
-                  color={'#FFFFFF'}
-                  bgColor={'#000000'}
-                  onClick={handleClickSaveForLater}
-                />
-              </div>
-              <div className="my-2">
-                <BackgroundButton label={'Create NFT'} color={'#2A212E'} bgColor={'#96F2A4'} onClick={openModal} />
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
