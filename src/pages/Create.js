@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import 'src/styles/Create.scss';
@@ -14,18 +14,40 @@ import CustomRadio from 'src/components/CustomRadio';
 import CustomCheckBox from 'src/components/CustomCheckBox';
 import { isMobile } from 'react-device-detect';
 import MetamaskSigninModal from 'src/components/MetamaskSigninModal';
-import { useSelector } from 'react-redux';
-import { getProfile } from 'src/api';
+import { useSelector, useDispatch } from 'react-redux';
+import { getProfile, pinFileToIPFS } from 'src/api';
 import LoadingSpinner from 'src/components/LoadingSpinner';
+import SelectInput from 'src/components/SelectInput';
+import { fetchAllCategories } from 'src/actions/categories';
 
 const Create = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
+  const categories = useSelector(state => state.categories.items.items);
+  console.log('>>>>>>>>>>>>>>>>>>>>> = ', categories);
+  const [category, setCategory] = useState(0);
   const [profile, setProfile] = useState([]);
   const [bannerSource, setBannerSource] = useState('/images/default-banner.png');
   const [avatarSource, setAvatarSource] = useState('/images/default-avatar.png');
   const [isLoading, setIsLoading] = useState(false);
   const [geoLocation, setGeoLocation] = useState({ latitude: 0, longitude: 0 });
   const authToken = useSelector(state => state.auth.token);
+  const avatarRef = useRef(null);
+  const [nftFileUrl, setNftFileUrl] = useState('/images/default-avatar.png');
+  const [nftFileName, setNftFileName] = useState('Default Avatar');
+  const [nftMediaType, setNftMediaType] = useState('image');
+  const [nftName, setNftName] = useState('');
+  const [nftCategory, setNftCategory] = useState('');
+  const [nftTellUs, setNftTellUs] = useState('');
+  const [nftDescription, setNftDescription] = useState('');
+  const [nftRemotePerson, setNftRemotePerson] = useState('');
+  const [nftLocation, setNftLocation] = useState('');
+  const [nftWebsite, setNftWebsite] = useState('');
+  const [nftDiscord, setNftDiscord] = useState();
+  const [nftHashtag1, setNftHashTag1] = useState('');
+  const [nftHashtag2, setNftHashTag2] = useState('');
+  const [nftHashtag3, setNftHashTag3] = useState('');
+  const [giftCardType, setGiftCardType] = useState(-1);
 
   const [modalIsOpen, setIsOpen] = useState(false);
   const openModal = () => {
@@ -134,6 +156,33 @@ const Create = () => {
     amount: 200,
   };
 
+  const giftCardOptions = [
+    {
+      id: 1,
+      name: '30 days',
+    },
+    {
+      id: 2,
+      name: '60 days',
+    },
+    {
+      id: 3,
+      name: '90 days',
+    },
+    {
+      id: 4,
+      name: '180 days',
+    },
+    {
+      id: 5,
+      name: '360 days',
+    },
+  ];
+
+  useEffect(() => {
+    dispatch(fetchAllCategories());
+  }, []);
+
   const getProfileData = async () => {
     try {
       if (!authToken) return;
@@ -163,6 +212,34 @@ const Create = () => {
   const [seenVideo, setSeenVideo] = useState(false);
   const handleChangeSeenVideo = event => {
     setSeenVideo(event.target.value);
+  };
+
+  const handleAvatarInputChange = async e => {
+    try {
+      setIsLoading(true);
+      const file = e.target.files[0];
+      //upload ipfs
+      const formData = new FormData();
+      if (!file) return;
+      formData.append('file', file);
+      const {
+        status,
+        data: { IpfsHash },
+      } = await pinFileToIPFS(formData);
+      if (status !== 200) return;
+      setNftFileUrl(`https://ipfs.io/ipfs/${IpfsHash}`);
+      setNftMediaType(file.type.split('/')[0]);
+      setNftFileName(file.name);
+      setIsLoading(false);
+    } catch (err) {
+      console.log('Error Create : ', err);
+      setIsLoading(false);
+    }
+  };
+
+  const handleDeleteNftPhoto = () => {
+    setNftFileName('Default Avatar');
+    setNftFileUrl('/images/default-avatar.png');
   };
 
   return (
@@ -271,49 +348,139 @@ const Create = () => {
               </div>
               <div className="global-flex-between flex-wrap my-4">
                 <div className="global-flex-start my-4">
-                  <img alt="alt" src={Avatar2} style={{ width: 64, height: 64, borderRadius: 64 }} />
-                  <div className="poppins-14-400 ms-2">gigphoto.png</div>
+                  <img alt="alt" src={nftFileUrl} style={{ width: 80, height: 80, borderRadius: 64 }} />
+                  <div className="poppins-14-400 ms-2">{nftFileName}</div>
                 </div>
                 <div className="d-flex justify-content-between flex-wrap my-2">
                   <div className="my-2 me-3">
-                    <RoundBorderButton label={'Delete photo'} color={'#E75B2E'} />
+                    <RoundBorderButton label={'Delete photo'} color={'#E75B2E'} onClick={handleDeleteNftPhoto} />
                   </div>
                   <div className="my-2">
-                    <RoundBorderButton label={'Choose another photo '} color={'#2DC015'} />
+                    <RoundBorderButton
+                      label={'Choose another photo '}
+                      color={'#2DC015'}
+                      onClick={() => avatarRef.current.click()}
+                    />
+                    <input ref={avatarRef} type="file" className="d-none" onChange={handleAvatarInputChange} />
                   </div>
                 </div>
               </div>
               <div>
                 <div className="row gx-5">
                   <div className="col-12 col-lg-6 my-2">
-                    <TextInput label={'Name of service'} type={'text'} />
+                    <TextInput
+                      label={'Name of service'}
+                      type={'text'}
+                      value={nftName}
+                      onChange={e => {
+                        setNftName(e.target.value);
+                      }}
+                    />
                   </div>
                   <div className="col-12 col-lg-6 my-2">
-                    <TextInput label={'Category'} type={'text'} />
+                    {/* <TextInput label={'Category'} type={'text'} /> */}
+                    <SelectInput
+                      label={'Category'}
+                      placeFolder={'Select Category'}
+                      value={category}
+                      options={categories}
+                      onChange={e => setCategory(e.target.value)}
+                    />
                   </div>
                 </div>
                 <div className="my-3">
-                  <TextInput label={'Tell us about your services'} type={'textarea'} />
+                  <TextInput
+                    label={'Tell us about your services'}
+                    type={'textarea'}
+                    onChange={e => {
+                      setNftTellUs(e.target.value);
+                    }}
+                  />
                 </div>
                 <div className="my-4">
-                  <TextInput label={'Describe your service'} type={'text'} />
+                  <TextInput
+                    label={'Describe your service'}
+                    type={'text'}
+                    onChange={e => {
+                      setNftDescription(e.target.value);
+                    }}
+                  />
                 </div>
               </div>
               <div className="global-flex-start my-3">
-                <CustomRadio label={'Remote'} value={'remote'} />
+                <CustomRadio
+                  label={'Remote'}
+                  value={'remote'}
+                  onChange={e => {
+                    setNftRemotePerson(e.target.value);
+                  }}
+                />
                 <div className="ms-5">
-                  <CustomRadio label={'In Person'} value={'person'} />
+                  <CustomRadio
+                    label={'In Person'}
+                    value={'person'}
+                    onChange={e => {
+                      setNftRemotePerson(e.target.value);
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="row gx-5 my-3">
+                <div className="col-12 col-lg-4 my-2">
+                  <TextInput
+                    label={'Location'}
+                    type={'text'}
+                    onChange={e => {
+                      setNftLocation(e.target.value);
+                    }}
+                  />
+                </div>
+                <div className="col-12 col-lg-4 my-2">
+                  <TextInput
+                    label={'Website'}
+                    type={'text'}
+                    onChange={e => {
+                      setNftWebsite(e.target.value);
+                    }}
+                  />
+                </div>
+                <div className="col-12 col-lg-4 my-2">
+                  <TextInput
+                    label={'Dicord'}
+                    type={'text'}
+                    onChange={e => {
+                      setNftDiscord(e.target.value);
+                    }}
+                  />
                 </div>
               </div>
               <div className="row gx-5">
                 <div className="col-12 col-lg-4 my-2">
-                  <TextInput label={'Location'} type={'text'} />
+                  <TextInput
+                    label={'Hastag 1'}
+                    type={'text'}
+                    onChange={e => {
+                      setNftHashTag1(e.target.value);
+                    }}
+                  />
                 </div>
                 <div className="col-12 col-lg-4 my-2">
-                  <TextInput label={'Website'} type={'text'} />
+                  <TextInput
+                    label={'Hastag 2'}
+                    type={'text'}
+                    onChange={e => {
+                      setNftHashTag2(e.target.value);
+                    }}
+                  />
                 </div>
                 <div className="col-12 col-lg-4 my-2">
-                  <TextInput label={'Dicord'} type={'text'} />
+                  <TextInput
+                    label={'Hastag 3'}
+                    type={'text'}
+                    onChange={e => {
+                      setNftHashTag3(e.target.value);
+                    }}
+                  />
                 </div>
               </div>
             </div>
@@ -335,7 +502,14 @@ const Create = () => {
                 </div>
               </div>
               <div className="my-2">
-                <TextInput label={'Expiration'} type={'text'} />
+                {/* <TextInput label={'Expiration'} type={'text'} /> */}
+                <SelectInput
+                  label={'Expiration'}
+                  placeFolder={'Days to Auto-Burn'}
+                  value={giftCardType}
+                  options={giftCardOptions}
+                  onChange={e => setGiftCardType(e.target.value)}
+                />
               </div>
             </div>
           </div>
