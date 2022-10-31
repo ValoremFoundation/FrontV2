@@ -8,7 +8,6 @@ export function* fetchAllCategories() {
     const {
       data: { data },
     } = yield call(getCategories);
-    console.log('>>>>>>>>>>>>>> saga : ', data);
     yield put({ type: GET_CATEGORIES_SUCCESS, payload: { items: data } });
   } catch (e) {
     yield put({ type: GET_CATEGORIES_FAILURE, e });

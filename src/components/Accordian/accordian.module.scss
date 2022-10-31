@@ -1,0 +1,46 @@
+.root {
+  width: 100%;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+  & > .titleBar {
+    width: 100%;
+    padding: 18px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    background-color: #e9ecef;
+    position: relative;
+    &:hover {
+      background-color: #ced4da;
+    }
+
+    & > svg {
+      transition: 0.1s all ease-in-out;
+    }
+
+    & > svg.active {
+      transform: rotate(180deg);
+    }
+  }
+
+  & > div {
+    transition: 0.2s all ease-in-out;
+    overflow: hidden;
+  }
+
+  & > .childWrapperActive {
+    padding: 16px;
+    border-bottom: 1px solid #ced4da;
+  }
+
+  & > .childWrapper {
+    padding: 0px;
+    margin: 0px;
+    height: 0px;
+  }
+}
+

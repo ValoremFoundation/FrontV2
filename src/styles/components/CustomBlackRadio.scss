@@ -6,7 +6,10 @@
 #custom-black-radio-id {
   width: 100%;
   height: 100%;
-  
+}
+
+#custom-black-radio-id:hover {
+  cursor: pointer;
 }
 
 input[name="boost-post"] {
