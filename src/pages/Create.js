@@ -11,7 +11,7 @@ import CustomCheckBox from 'src/components/CustomCheckBox';
 import { isMobile } from 'react-device-detect';
 import MetamaskSigninModal from 'src/components/MetamaskSigninModal';
 import { useSelector, useDispatch } from 'react-redux';
-import { getProfile, pinFileToIPFS } from 'src/api';
+import { getGeoLocationFromIPAddress, getProfile, pinFileToIPFS, tokenCreate } from 'src/api';
 import { fetchAllCategories } from 'src/actions/categories';
 import NewNFT from 'src/components/NewNFT';
 import { user1Info, user2Info, user3Info, user4Info, step1, step2, step3 } from 'src/constants';
@@ -59,7 +59,7 @@ const Create = () => {
 
   useEffect(() => {
     dispatch(fetchAllCategories());
-  }, []);
+  }, [dispatch]);
 
   const getProfileData = async () => {
     try {
@@ -154,7 +154,7 @@ const Create = () => {
     setArrayNFT(restArrayNFT);
   };
 
-  const handleCreateNFT = () => {
+  const handleCreateNFT = async () => {
     let requireToast = false;
     var BreakException = {};
     try {
@@ -172,6 +172,74 @@ const Create = () => {
     if (requireToast) {
       toast.error('Please input all field!');
       return;
+    }
+
+    try {
+      setIsLoading(true);
+      // setSaveForLater(false)
+
+      const newNFTs = await handleSaveNFTAPI();
+      console.log('>>>>>>>>>>>>>>> api result : ', newNFTs);
+      // setCreatedArrayToken(newNFTs)
+
+      // await Promise.all(newNFTs.map(async newNFT => await handleMintActionContract(newNFT)))
+      // setToggleOneModal(!toggleOneModal)
+      // setIsLoading(false)
+      // toast.success('Successfully minted.')
+    } catch (err) {
+      console.log('Error Create : ', err.message);
+    }
+  };
+
+  const handleSaveNFTAPI = async () => {
+    try {
+      const res = await Promise.all(arrayNFT.map(async item => await handleSaveOneNFTAPI(item)));
+      return res;
+    } catch (err) {
+      console.log('Error Create : ', err.message);
+    }
+  };
+
+  const handleSaveOneNFTAPI = async nftData => {
+    try {
+      let geoLocation = {};
+      if (nftData.location?.length < 5) {
+        const {
+          data: { latitude, longitude },
+        } = await getGeoLocationFromIPAddress();
+
+        geoLocation.latitude = latitude;
+        geoLocation.longitude = longitude;
+      }
+      console.log('>>>>>>>>>>>>>>  geoLocation : ', latitude, longitude);
+
+      const resp = await tokenCreate(
+        {
+          uri: nftData.imageUrl,
+          mediaType: nftData.type,
+          name: nftData.name,
+          category: nftData.category,
+          tellUs: nftData.tellUs,
+          description: nftData.description,
+          remotePerson: nftData.remotePerson,
+          location: nftData.location,
+          website: nftData.website,
+          discord: nftData.discord,
+          hashtag1: nftData.hashtag1,
+          hashtag2: nftData.hashtag2,
+          hashtag3: nftData.hashtag3,
+          creator: nftData.creator,
+          reseller: nftData.reseller,
+          royaltyPool: nftData.royaltyPool,
+          expiration: nftData.expiration,
+        },
+        {
+          Authorization: `Bearer ${authToken}`,
+        }
+      );
+      return resp.data.data;
+    } catch (err) {
+      console.log(err.message);
     }
   };
 

@@ -34,6 +34,21 @@ export const pinFileToIPFS = async file => {
   });
 };
 
+export const getGeoLocationFromAddress = async address => {
+  return await axios.get(`https://positionstack.com/geo_api.php?query=${encodeURI(address)}`);
+};
+
+export const getGeoLocationFromIPAddress = async () => {
+  const {
+    data: { ip },
+  } = await axios.get('https://api.ipify.org/?format=json');
+  return await axios.get(`https://ipapi.co/${ip}/json/`);
+};
+
 export const getCategories = async () => {
   return await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/categories`);
+};
+
+export const tokenCreate = async (data, header) => {
+  return await axios.post(`${process.env.REACT_APP_BACKEND_BASE_URL}/tokens`, data, { headers: header });
 };

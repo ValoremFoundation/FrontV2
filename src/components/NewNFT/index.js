@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, memo, useRef } from 'react';
 import 'src/styles/Global.scss';
 import { useState } from 'react';
 import Accordian from 'src/components/Accordian';
@@ -11,7 +11,7 @@ import { fetchAllCategories } from 'src/actions/categories';
 import { useSelector, useDispatch } from 'react-redux';
 import MultipleNFTCard from '../MultipleNFTCard';
 
-const NewNFT = ({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT }) => {
+const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT }) => {
   const dispatch = useDispatch();
   const avatarRef = useRef(null);
   const [statusOpen, setStatusOpen] = useState(false);
@@ -198,6 +198,6 @@ const NewNFT = ({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT }) => {
       </div>
     </Accordian>
   );
-};
+});
 
 export default NewNFT;
