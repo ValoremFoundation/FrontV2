@@ -12,8 +12,8 @@ const Settings = () => {
   const avatarRef = useRef(null);
   const [bannerFile, setBannerFile] = useState('');
   const [avatarFile, setAvatarFile] = useState('');
-  const [bannerSource, setBannerSource] = useState('/images/blank-image.jpg');
-  const [avatarSource, setAvatarSource] = useState('/images/default-avatar.png');
+  const [bannerSource, setBannerSource] = useState('/img/blank-image.jpg');
+  const [avatarSource, setAvatarSource] = useState('/img/default-avatar.png');
   const [name, setName] = useState('');
   const [header, setHeader] = useState('');
   const [description, setDescription] = useState('');
@@ -47,8 +47,8 @@ const Settings = () => {
     setName(profile?.name);
     setHeader(profile?.header);
     setDescription(profile?.description);
-    setAvatarSource(profile?.avatar || '/images/default-avatar.png');
-    setBannerSource(profile?.cover_photo || '/images/blank-image.jpg');
+    setAvatarSource(profile?.avatar || '/img/default-avatar.png');
+    setBannerSource(profile?.cover_photo || '/img/blank-image.jpg');
   }, [profile]);
 
   const handleCoverPhotoInputChange = async e => {

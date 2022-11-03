@@ -21,6 +21,7 @@ const GoogleLoginModal = ({ modalIsOpen, closeModal, redirectUrl }) => {
     },
     overlay: {
       background: '#00000060',
+      zIndex: 99,
     },
   };
 

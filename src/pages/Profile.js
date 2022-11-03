@@ -18,8 +18,8 @@ const Profile = () => {
   const [profile, setProfile] = useState([]);
   const bannerRef = useRef(null);
   const avatarRef = useRef(null);
-  const [bannerSource, setBannerSource] = useState('/images/default-banner.png');
-  const [avatarSource, setAvatarSource] = useState('/images/default-avatar.png');
+  const [bannerSource, setBannerSource] = useState('/img/default-banner.png');
+  const [avatarSource, setAvatarSource] = useState('/img/default-avatar.png');
   const [isLoading, setIsLoading] = useState(false);
   const [geoLocation, setGeoLocation] = useState({ latitude: 0, longitude: 0 });
   const authToken = useSelector(state => state.auth.token);
@@ -108,8 +108,8 @@ const Profile = () => {
           Authorization: `Bearer ${authToken}`,
         });
         setProfile(profileInfo);
-        setAvatarSource(profileInfo?.avatar || '/images/default-avatar.png');
-        setBannerSource(profileInfo?.cover_photo || '/images/default-banner.png');
+        setAvatarSource(profileInfo?.avatar || '/img/default-avatar.png');
+        setBannerSource(profileInfo?.cover_photo || '/img/default-banner.png');
         setUserName(profileInfo?.name);
         setHeader(profileInfo?.header);
         setDescription(profileInfo?.description);

@@ -5,7 +5,7 @@ export const injected = new InjectedConnector();
 export const networkItem = [
   {
     ChainID: 137,
-    btIcon: '/images/net/polygon.png',
+    btIcon: '/img/net/polygon.png',
     networkName: 'Polygon',
     selected: false,
     isBridgeSupport: false,

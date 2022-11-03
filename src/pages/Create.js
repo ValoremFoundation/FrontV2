@@ -30,8 +30,8 @@ const Create = () => {
   const history = useHistory();
   const { account, chainId } = useWeb3React();
   const dispatch = useDispatch();
-  const [bannerSource, setBannerSource] = useState('/images/default-banner.png');
-  const [avatarSource, setAvatarSource] = useState('/images/default-avatar.png');
+  const [bannerSource, setBannerSource] = useState('/img/default-banner.png');
+  const [avatarSource, setAvatarSource] = useState('/img/default-avatar.png');
   const [isLoading, setIsLoading] = useState(false);
   const authToken = useSelector(state => state.auth.token);
   const [seenVideo, setSeenVideo] = useState(false);
@@ -39,7 +39,7 @@ const Create = () => {
   const [createdArrayToken, setCreatedArrayToken] = useState([]);
   const [arrayNFT, setArrayNFT] = useState([
     {
-      imageUrl: '/images/default-avatar.png',
+      imageUrl: '/img/default-avatar.png',
       fileName: '',
       type: 'image',
       name: '',
@@ -81,8 +81,8 @@ const Create = () => {
       } = await getProfile({
         Authorization: `Bearer ${authToken}`,
       });
-      setAvatarSource(profileInfo?.avatar || '/images/default-avatar.png');
-      setBannerSource(profileInfo?.cover_photo || '/images/default-banner.png');
+      setAvatarSource(profileInfo?.avatar || '/img/default-avatar.png');
+      setBannerSource(profileInfo?.cover_photo || '/img/default-banner.png');
       setIsLoading(false);
     } catch (err) {
       console.log('Error Profile : ', err);
@@ -174,7 +174,7 @@ const Create = () => {
     setArrayNFT([
       ...arrayNFT,
       {
-        imageUrl: '/images/default-avatar.png',
+        imageUrl: '/img/default-avatar.png',
         fileName: '',
         type: 'image',
         name: '',
@@ -373,7 +373,7 @@ const Create = () => {
         <div className="avatar-container">
           <img
             alt="avatar-image"
-            src={avatarSource || '/images/default-avatar.png'}
+            src={avatarSource || '/img/default-avatar.png'}
             width={140}
             height={140}
             className="avatar-image global-pointer"

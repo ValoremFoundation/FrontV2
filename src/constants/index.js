@@ -4,7 +4,7 @@ export const user1Info = {
   info: {
     name: 'Sarah',
     role: 'Creator',
-    avatar: '/images/avatar-1.png',
+    avatar: '/img/avatar-1.png',
     dotColor: '#111827',
   },
   gift: [
@@ -27,7 +27,7 @@ export const user2Info = {
   info: {
     name: 'John',
     role: 'Client/Reseller',
-    avatar: '/images/avatar-1.png',
+    avatar: '/img/avatar-1.png',
     dotColor: '#96F2A4',
   },
   gift: [
@@ -55,7 +55,7 @@ export const user3Info = {
   info: {
     name: 'Jane',
     role: 'Client/Reseller',
-    avatar: '/images/avatar-1.png',
+    avatar: '/img/avatar-1.png',
     dotColor: '#96F2A4',
   },
   gift: [
@@ -83,7 +83,7 @@ export const user4Info = {
   info: {
     name: 'Tom',
     role: 'Client/Reseller',
-    avatar: '/images/avatar-1.png',
+    avatar: '/img/avatar-1.png',
     dotColor: '',
   },
 };
