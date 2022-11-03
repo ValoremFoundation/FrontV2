@@ -52,3 +52,7 @@ export const getCategories = async () => {
 export const tokenCreate = async (data, header) => {
   return await axios.post(`${process.env.REACT_APP_BACKEND_BASE_URL}/tokens`, data, { headers: header });
 };
+
+export const tokenMint = async (tokenId, data) => {
+  return await axios.post(`${process.env.REACT_APP_BACKEND_BASE_URL}/tokens/${tokenId}/mint`, data);
+};

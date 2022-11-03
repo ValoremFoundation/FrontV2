@@ -8,11 +8,25 @@ const TextInput = ({ label, type = 'text', value = '', onChange = () => {}, disa
       <div className="poppins-14-500">{label}</div>
       {type === 'text' ? (
         <div className="text-input">
-          <input id="text-input-id" type={type} value={value} onChange={onChange} disabled={disabled} />
+          <input
+            id={label}
+            type={type}
+            value={value}
+            onChange={onChange}
+            disabled={disabled}
+            className="custom-text-input"
+          />
         </div>
       ) : (
-        <div className="text-input" style={{ height: 'auto' }}>
-          <textarea id="text-input-id" rows="4" value={value} onChange={onChange} disabled={disabled} />
+        <div className={'text-input'} style={{ height: 'auto' }}>
+          <textarea
+            id={label}
+            rows="4"
+            value={value}
+            onChange={onChange}
+            disabled={disabled}
+            className="custom-text-input"
+          />
         </div>
       )}
     </div>

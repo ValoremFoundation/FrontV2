@@ -37,7 +37,6 @@ const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT }) 
               style={{ width: 100, height: 100, borderRadius: 64, objectFit: 'cover', objectPosition: 'center' }}
               mediaType={itemNFT?.type}
             />
-            {/* <img alt="alt" src={itemNFT?.imageUrl} style={{ width: 80, height: 80, borderRadius: 64 }} /> */}
             <div className="poppins-14-400 ms-2">{itemNFT?.fileName}</div>
           </div>
 

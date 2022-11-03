@@ -11,25 +11,36 @@ import CustomCheckBox from 'src/components/CustomCheckBox';
 import { isMobile } from 'react-device-detect';
 import MetamaskSigninModal from 'src/components/MetamaskSigninModal';
 import { useSelector, useDispatch } from 'react-redux';
-import { getGeoLocationFromIPAddress, getProfile, pinFileToIPFS, tokenCreate } from 'src/api';
+import { getGeoLocationFromIPAddress, getProfile, pinFileToIPFS, tokenCreate, tokenMint } from 'src/api';
 import { fetchAllCategories } from 'src/actions/categories';
 import NewNFT from 'src/components/NewNFT';
 import { user1Info, user2Info, user3Info, user4Info, step1, step2, step3 } from 'src/constants';
 import toast from 'react-hot-toast';
 import LoadingPage from 'src/components/LoadingPage';
+import { addDays } from 'date-fns';
+import Web3 from 'web3';
+import { useWeb3React } from '@web3-react/core';
+import nftABI from 'src/assets/abis/nftAdValorem.json';
+
+const web3 = new Web3(window.ethereum);
+const nftContract = new web3.eth.Contract(nftABI, process.env.REACT_APP_NFT_CONTRACT_ADDRESS);
+const impactClickId = localStorage.getItem('Impact_ClickId');
 
 const Create = () => {
   const history = useHistory();
+  const { account, chainId } = useWeb3React();
   const dispatch = useDispatch();
   const [bannerSource, setBannerSource] = useState('/images/default-banner.png');
   const [avatarSource, setAvatarSource] = useState('/images/default-avatar.png');
   const [isLoading, setIsLoading] = useState(false);
   const authToken = useSelector(state => state.auth.token);
   const [seenVideo, setSeenVideo] = useState(false);
+  let savedForLater = 0;
+  const [createdArrayToken, setCreatedArrayToken] = useState([]);
   const [arrayNFT, setArrayNFT] = useState([
     {
       imageUrl: '/images/default-avatar.png',
-      fileName: 'Default Avatar',
+      fileName: '',
       type: 'image',
       name: '',
       category: '',
@@ -75,6 +86,7 @@ const Create = () => {
       setIsLoading(false);
     } catch (err) {
       console.log('Error Profile : ', err);
+      toast.error(err.message);
       setIsLoading(false);
     }
   };
@@ -83,8 +95,43 @@ const Create = () => {
     getProfileData();
   }, [authToken]);
 
-  const handleClickSaveForLater = () => {
-    history.push('/profile');
+  const handleClickSaveForLater = async () => {
+    if (!account) {
+      toast.error('Please connect wallet!');
+      return;
+    }
+    let requireToast = false;
+    var BreakException = {};
+    try {
+      arrayNFT.forEach((element, index) => {
+        Object.values(element).forEach((item, index) => {
+          if (item === '') {
+            requireToast = true;
+            throw BreakException;
+          }
+        });
+      });
+    } catch (e) {
+      if (e !== BreakException) throw e;
+    }
+    if (requireToast) {
+      toast.error('Please input all field!');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      savedForLater = 1;
+      const newNFTs = await handleSaveNFTAPI();
+      setCreatedArrayToken(newNFTs);
+      toast.success('Successfully saved!');
+      setIsLoading(false);
+      history.push('/profile');
+    } catch (err) {
+      console.log('Error Create :', err.message);
+      toast.error(err?.message);
+      setIsLoading(false);
+    }
   };
 
   const handleChangeSeenVideo = event => {
@@ -128,7 +175,7 @@ const Create = () => {
       ...arrayNFT,
       {
         imageUrl: '/images/default-avatar.png',
-        fileName: 'Default Avatar',
+        fileName: '',
         type: 'image',
         name: '',
         category: '',
@@ -155,6 +202,10 @@ const Create = () => {
   };
 
   const handleCreateNFT = async () => {
+    if (!account) {
+      toast.error('Please connect wallet!');
+      return;
+    }
     let requireToast = false;
     var BreakException = {};
     try {
@@ -176,18 +227,58 @@ const Create = () => {
 
     try {
       setIsLoading(true);
-      // setSaveForLater(false)
-
       const newNFTs = await handleSaveNFTAPI();
-      console.log('>>>>>>>>>>>>>>> api result : ', newNFTs);
-      // setCreatedArrayToken(newNFTs)
-
-      // await Promise.all(newNFTs.map(async newNFT => await handleMintActionContract(newNFT)))
-      // setToggleOneModal(!toggleOneModal)
-      // setIsLoading(false)
-      // toast.success('Successfully minted.')
+      setCreatedArrayToken(newNFTs);
+      const tokenURIs = newNFTs.map(item => item.uri);
+      const tokenIds = newNFTs.map(item => item.id);
+      const res = await handleMultiMintContract(tokenURIs, tokenIds);
+      toast.success('Successfully minted!');
+      setIsLoading(false);
+      history.push('/profile');
     } catch (err) {
       console.log('Error Create : ', err.message);
+      toast.error(err?.message);
+      setIsLoading(false);
+    }
+  };
+
+  const handleMultiMintContract = async (tokenURIs, tokenIds) => {
+    try {
+      const gasPrice = await web3.eth.getGasPrice();
+      const { from, to, transactionHash, blockNumber, events } = await nftContract.methods
+        .createMultiToken(tokenURIs)
+        .send({ from: account, gasPrice: gasPrice * 5 });
+      let nftTokenIds = [];
+      if (events?.TokenCreated?.length > 0) {
+        nftTokenIds = events?.TokenCreated?.map(item => item?.returnValues?.tokenId);
+      } else {
+        nftTokenIds.push(events?.TokenCreated?.returnValues?.tokenId);
+      }
+      const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
+      const res = await Promise.all(
+        nftTokenIds.map(
+          async (nftTokenId, index) =>
+            await handleSingleMintAPI(nftTokenId, tokenIds[index], from, to, transactionHash, blockTimeStamp)
+        )
+      );
+    } catch (err) {
+      console.log(err);
+      toast.error(err?.message);
+    }
+  };
+
+  const handleSingleMintAPI = async (nftTokenId, id, from, to, transactionHash, blockTimeStamp) => {
+    try {
+      await tokenMint(id, {
+        hash: transactionHash,
+        from: to,
+        to: from,
+        timestamp: blockTimeStamp,
+        tokenId: nftTokenId,
+        impactClickId,
+      });
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -197,6 +288,8 @@ const Create = () => {
       return res;
     } catch (err) {
       console.log('Error Create : ', err.message);
+      toast.error(err?.message);
+      setIsLoading(false);
     }
   };
 
@@ -211,7 +304,6 @@ const Create = () => {
         geoLocation.latitude = latitude;
         geoLocation.longitude = longitude;
       }
-      console.log('>>>>>>>>>>>>>>  geoLocation : ', latitude, longitude);
 
       const resp = await tokenCreate(
         {
@@ -223,6 +315,7 @@ const Create = () => {
           description: nftData.description,
           remotePerson: nftData.remotePerson,
           location: nftData.location,
+          geoLocation: geoLocation,
           website: nftData.website,
           discord: nftData.discord,
           hashtag1: nftData.hashtag1,
@@ -231,7 +324,9 @@ const Create = () => {
           creator: nftData.creator,
           reseller: nftData.reseller,
           royaltyPool: nftData.royaltyPool,
-          expiration: nftData.expiration,
+          expiration: handleExpireTimeChange(nftData.expiration),
+          savedForLater: savedForLater,
+          seenVideo: seenVideo,
         },
         {
           Authorization: `Bearer ${authToken}`,
@@ -240,12 +335,28 @@ const Create = () => {
       return resp.data.data;
     } catch (err) {
       console.log(err.message);
+      toast.error(err.message);
+    }
+  };
+
+  const handleExpireTimeChange = idx => {
+    if (idx === '1') {
+      return addDays(new Date(), 30).getTime();
+    } else if (idx === '2') {
+      return addDays(new Date(), 60).getTime();
+    } else if (idx === '3') {
+      return addDays(new Date(), 90).getTime();
+    } else if (idx === '4') {
+      return addDays(new Date(), 180).getTime();
+    } else if (idx === '5') {
+      return addDays(new Date(), 360).getTime();
+    } else {
+      return addDays(new Date(), 0).getTime();
     }
   };
 
   return (
     <>
-      {console.log('>>>>>>>>>>>>>>>>>>>>> ', arrayNFT)}
       {isLoading && <LoadingPage />}
       <div className="create-container">
         <MetamaskSigninModal modalIsOpen={modalIsOpen} closeModal={closeModal} redirectUrl={'/profile'} />

@@ -1,19 +1,4 @@
-#text-input-id:focus {
-  outline: none;
-}
-
-.text-input {
-  width: 100%;
-  height: 44px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  background: #F3F3F3;
-  border-radius: 5px;
-}
-
-#text-input-id {
+.custom-text-input {
   width: 100%;
   height: 100%;
   border: none;
@@ -27,5 +12,26 @@
   padding-bottom: 10px;
   float: left;
   color: #000000;
+}
+
+.custom-text-input:focus {
+  outline: none;
+}
+
+// input:focus,
+// select:focus,
+// textarea:focus{
+//   outline: none;
+// }
+
+.text-input {
+  width: 100%;
+  height: 44px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background: #F3F3F3;
+  border-radius: 5px;
 }
 

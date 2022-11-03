@@ -1,0 +1,286 @@
+[
+  { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "uint256", "name": "itemId", "type": "uint256" },
+      { "indexed": true, "internalType": "address", "name": "nftContract", "type": "address" },
+      { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+      { "indexed": false, "internalType": "address", "name": "businessOwner", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "seller", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "currentOwner", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "price", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "businessOwnerPercent", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "sellerPercent", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "royaltyPercent", "type": "uint256" }
+    ],
+    "name": "BuyMarketItem",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "uint256", "name": "itemId", "type": "uint256" },
+      { "indexed": true, "internalType": "address", "name": "nftContract", "type": "address" },
+      { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+      { "indexed": false, "internalType": "address", "name": "seller", "type": "address" }
+    ],
+    "name": "CancelledMarketItem",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{ "indexed": false, "internalType": "uint8", "name": "version", "type": "uint8" }],
+    "name": "Initialized",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "uint256", "name": "itemId", "type": "uint256" },
+      { "indexed": true, "internalType": "address", "name": "nftContract", "type": "address" },
+      { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+      { "indexed": false, "internalType": "address", "name": "businessOwner", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "seller", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "currentOwner", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "price", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "businessOwnerPercent", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "sellerPercent", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "royaltyPercent", "type": "uint256" }
+    ],
+    "name": "MarketItemCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" },
+      { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{ "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }],
+    "name": "RewardTokenDeposited",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "uint256", "name": "itemId", "type": "uint256" },
+      { "indexed": true, "internalType": "address", "name": "nftContract", "type": "address" },
+      { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+      { "indexed": false, "internalType": "address", "name": "businessOwner", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "seller", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "currentOwner", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "price", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "businessOwnerPercent", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "sellerPercent", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "royaltyPercent", "type": "uint256" }
+    ],
+    "name": "SellMarketItem",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "_itemsBuy",
+    "outputs": [{ "internalType": "uint256", "name": "_value", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "_itemsSell",
+    "outputs": [{ "internalType": "uint256", "name": "_value", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "businessOwners",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "itemId", "type": "uint256" }],
+    "name": "buyMarketItem",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "itemId", "type": "uint256" }],
+    "name": "cancelSale",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "nftContract", "type": "address" },
+      { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+      { "internalType": "uint256", "name": "businessOwnerPercent", "type": "uint256" },
+      { "internalType": "uint256", "name": "sellerPercent", "type": "uint256" },
+      { "internalType": "uint256", "name": "royaltyPercent", "type": "uint256" }
+    ],
+    "name": "createMarketItem",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "_amount", "type": "uint256" }],
+    "name": "depositRewardToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getVlrTokenBalance",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "name": "idToMarketItem",
+    "outputs": [
+      { "internalType": "enum NFTMarketplace.ListingStatus", "name": "status", "type": "uint8" },
+      { "internalType": "uint256", "name": "itemId", "type": "uint256" },
+      { "internalType": "address", "name": "nftContract", "type": "address" },
+      { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+      { "internalType": "address payable", "name": "businessOwner", "type": "address" },
+      { "internalType": "address payable", "name": "seller", "type": "address" },
+      { "internalType": "address payable", "name": "currentOwner", "type": "address" },
+      { "internalType": "uint256", "name": "price", "type": "uint256" },
+      { "internalType": "uint256", "name": "businessOwnerPercent", "type": "uint256" },
+      { "internalType": "uint256", "name": "sellerPercent", "type": "uint256" },
+      { "internalType": "uint256", "name": "royaltyPercent", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address payable", "name": "_royaltyContract", "type": "address" },
+      { "internalType": "address", "name": "_vlrTokenContract", "type": "address" }
+    ],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "marketFeePercent",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "oldRoyaltyContract",
+    "outputs": [{ "internalType": "contract IRoyaltyPool", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  { "inputs": [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+  {
+    "inputs": [],
+    "name": "royaltyContract",
+    "outputs": [{ "internalType": "address payable", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "_marketFeePercent", "type": "uint256" }],
+    "name": "seMarketFeePercent",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "itemId", "type": "uint256" },
+      { "internalType": "uint256", "name": "price", "type": "uint256" }
+    ],
+    "name": "sellMarketItem",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address payable", "name": "_royaltyContract", "type": "address" }],
+    "name": "setRoyaltyContract",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "itemId", "type": "uint256" },
+      { "internalType": "uint256", "name": "businessOwnerPercent", "type": "uint256" },
+      { "internalType": "uint256", "name": "sellerPercent", "type": "uint256" },
+      { "internalType": "uint256", "name": "royaltyPercent", "type": "uint256" }
+    ],
+    "name": "setRoyaltyPool",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_vlrTokenContract", "type": "address" }],
+    "name": "setVlrTokenContract",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "_vlrTokenTaxFee", "type": "uint256" }],
+    "name": "setVlrTokenTaxFee",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "totalRewardSupply",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "vlrTokenContract",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "vlrTokenTaxFee",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  { "inputs": [], "name": "withdraw", "outputs": [], "stateMutability": "payable", "type": "function" },
+  { "inputs": [], "name": "withdrawVlrToken", "outputs": [], "stateMutability": "nonpayable", "type": "function" }
+]
