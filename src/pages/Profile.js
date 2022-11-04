@@ -9,8 +9,8 @@ import BoostPost from 'src/components/BoostPost';
 import NFTCard from 'src/components/NFTCard';
 import EditIcon from 'src/assets/images/editIcon.svg';
 import { getProfile, updateProfile, uploadFile } from 'src/api';
-import LoadingSpinner from 'src/components/LoadingSpinner';
 import { useSelector } from 'react-redux';
+import LoadingPage from 'src/components/LoadingPage';
 
 const Profile = () => {
   const { state } = useLocation();
@@ -198,7 +198,7 @@ const Profile = () => {
 
   return (
     <>
-      {isLoading && <LoadingSpinner />}
+      {isLoading && <LoadingPage />}
       <div className="profile-container">
         <div className="profile-banner-container">
           <img

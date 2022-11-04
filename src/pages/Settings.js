@@ -4,8 +4,8 @@ import 'src/styles/Global.scss';
 import TextInput from 'src/components/TextInput';
 import EditIcon from 'src/assets/images/editIcon.svg';
 import BackgroundButton from 'src/components/BackgroundButton';
-import LoadingSpinner from 'src/components/LoadingSpinner';
 import { getProfile, updateProfile, uploadFile } from 'src/api';
+import LoadingPage from 'src/components/LoadingPage';
 
 const Settings = () => {
   const bannerRef = useRef(null);
@@ -109,7 +109,7 @@ const Settings = () => {
 
   return (
     <>
-      {isLoading && <LoadingSpinner />}
+      {isLoading && <LoadingPage />}
       <div className="settings-container">
         <p className="poppins-32-500">Profile Details</p>
         <div className="my-4">
