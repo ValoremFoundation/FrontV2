@@ -60,7 +60,7 @@ const ActivateListing = () => {
   };
 
   const handleClickActivate = () => {
-    history.push('/profile', { actionTabIndex: 6 });
+    history.push('/profile?activeTab=created&actionTab=listed', { actionTabIndex: 6 });
   };
 
   return (

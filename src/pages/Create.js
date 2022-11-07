@@ -126,7 +126,7 @@ const Create = () => {
       setCreatedArrayToken(newNFTs);
       toast.success('Successfully saved!');
       setIsLoading(false);
-      history.push('/profile');
+      history.push('/profile?activeTab=created&actionTab=listed');
     } catch (err) {
       console.log('Error Create :', err.message);
       toast.error(err?.message);
@@ -234,7 +234,7 @@ const Create = () => {
       const res = await handleMultiMintContract(tokenURIs, tokenIds);
       toast.success('Successfully minted!');
       setIsLoading(false);
-      history.push('/profile');
+      history.push('/profile/activeTab=created&actionTab=listed');
     } catch (err) {
       console.log('Error Create : ', err.message);
       toast.error(err?.message);
@@ -359,7 +359,11 @@ const Create = () => {
     <>
       {isLoading && <LoadingPage />}
       <div className="create-container">
-        <MetamaskSigninModal modalIsOpen={modalIsOpen} closeModal={closeModal} redirectUrl={'/profile'} />
+        <MetamaskSigninModal
+          modalIsOpen={modalIsOpen}
+          closeModal={closeModal}
+          redirectUrl={'/profile?activeTab=created&actionTab=listed'}
+        />
         <div style={{ background: '#ffffff', position: 'relative', height: '192px' }}>
           <img
             alt="banner-image"

@@ -13,11 +13,19 @@ import { useSelector } from 'react-redux';
 import LoadingPage from 'src/components/LoadingPage';
 import { profileNumberNameData } from 'src/constants';
 import Tabs, { Tab } from 'src/components/LineTab';
+import Created from 'src/components/Profile/Created';
+import Collections from 'src/components/Profile/Collections';
+import Transactions from 'src/components/Profile/Transactions';
+import RoyaltyPool from 'src/components/Profile/RoyaltyPool';
+import EarnLiquidityRewards from 'src/components/Profile/EarnLiquidityRewards';
+import BuyMatic from 'src/components/Profile/BuyMatic';
+import BuyVLR from 'src/components/Profile/BuyVLR';
 
 const Profile = () => {
   const { state, search } = useLocation();
   const query = new URLSearchParams(search);
   const activeTab = query.get('activeTab');
+  const actionTab = query.get('actionTab');
   const history = useHistory();
   const [profile, setProfile] = useState([]);
   const bannerRef = useRef(null);
@@ -239,10 +247,10 @@ const Profile = () => {
                 ))}
               </div>
               <Tabs>
-                <Tab active={activeTab === 'created'} path="/profile?activeTab=created">
+                <Tab active={activeTab === 'created'} path="/profile?activeTab=created&actionTab=listed">
                   Created
                 </Tab>
-                <Tab active={activeTab === 'collections'} path="/profile?activeTab=collections">
+                <Tab active={activeTab === 'collections'} path="/profile?activeTab=collections&actionTab=redeemed">
                   Collections
                 </Tab>
                 <Tab active={activeTab === 'transactions'} path="/profile?activeTab=transactions">
@@ -261,38 +269,19 @@ const Profile = () => {
                   Buy VLR
                 </Tab>
               </Tabs>
-              <div className="global-flex-lg-between-sm-center">
-                <div></div>
-                {/* {categoryTabList.map((item, index) =>
-                  selectedCategoryTabIndex === item.id ? (
-                    <div
-                      key={index}
-                      className="poppins-16-600 me-5 my-2 global-pointer"
-                      onClick={() => setSelectedCategoryTabIndex(item.id)}
-                    >
-                      {item?.label}
-                    </div>
-                  ) : (
-                    <div
-                      key={index}
-                      className="poppins-16-500-gray me-5 my-2 global-pointer"
-                      onClick={() => setSelectedCategoryTabIndex(item.id)}
-                    >
-                      {item?.label}
-                    </div>
-                  )
-                )} */}
-                <div className="global-flex-between">
-                  <div className="poppins-16-600 global-pointer mx-2">Buy Matic</div>
-                  <div className="poppins-16-600 global-pointer mx-2">Buy VLR</div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
         <div style={{ background: '#F4F5FB' }}>
           <div className="profile-sub-container">
             <div className="profile-third-section">
+              {activeTab === 'created' && <Created actionTab={actionTab} />}
+              {activeTab === 'collections' && <Collections actionTab={actionTab} />}
+              {activeTab === 'transactions' && <Transactions />}
+              {activeTab === 'royalty-pool' && <RoyaltyPool />}
+              {activeTab === 'earn-liquidity-rewards' && <EarnLiquidityRewards />}
+              {activeTab === 'buy-matic' && <BuyMatic />}
+              {activeTab === 'buy-vlr' && <BuyVLR />}
               {selectedCategoryTabIndex === 0 && (
                 <>
                   <div className="global-flex-lg-between-sm-center mb-4">

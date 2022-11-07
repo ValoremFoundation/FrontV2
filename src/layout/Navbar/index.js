@@ -223,7 +223,11 @@ const Navbar = ({ toggle }) => {
                 <RoundBorderButton label={truncateAddress(account)}></RoundBorderButton>
               </MDBDropdownToggle>
               <MDBDropdownMenu>
-                <MDBDropdownItem href="" link onClick={() => history.push(`/profile`)}>
+                <MDBDropdownItem
+                  href=""
+                  link
+                  onClick={() => history.push(`/profile?activeTab=created&actionTab=listed`)}
+                >
                   Profile
                 </MDBDropdownItem>
                 <MDBDropdownItem href="" link onClick={() => history.push(`/settings`)}>
