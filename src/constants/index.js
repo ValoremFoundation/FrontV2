@@ -123,3 +123,22 @@ export const giftCardOptions = [
     name: '360 days',
   },
 ];
+
+export const profileNumberNameData = [
+  {
+    count: 1,
+    name: 'Items',
+  },
+  {
+    count: 0,
+    name: 'Owners',
+  },
+  {
+    count: 0,
+    name: 'Total Volume',
+  },
+  {
+    count: 0,
+    name: 'Floor Price',
+  },
+];

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, Link, NavLink } from 'react-router-dom';
 import 'src/styles/Profile.scss';
 import 'src/styles/Global.scss';
 import ProfileNumberName from 'src/components/ProfileNumberName';
@@ -11,9 +11,13 @@ import EditIcon from 'src/assets/images/editIcon.svg';
 import { getProfile, updateProfile, uploadFile } from 'src/api';
 import { useSelector } from 'react-redux';
 import LoadingPage from 'src/components/LoadingPage';
+import { profileNumberNameData } from 'src/constants';
+import Tabs, { Tab } from 'src/components/LineTab';
 
 const Profile = () => {
-  const { state } = useLocation();
+  const { state, search } = useLocation();
+  const query = new URLSearchParams(search);
+  const activeTab = query.get('activeTab');
   const history = useHistory();
   const [profile, setProfile] = useState([]);
   const bannerRef = useRef(null);
@@ -27,24 +31,6 @@ const Profile = () => {
   const [header, setHeader] = useState('');
   const [description, setDescription] = useState('');
 
-  const data1 = [
-    {
-      count: 1,
-      name: 'Items',
-    },
-    {
-      count: 0,
-      name: 'Owners',
-    },
-    {
-      count: 0,
-      name: 'Total Volume',
-    },
-    {
-      count: 0,
-      name: 'Floor Price',
-    },
-  ];
   const categoryTabList = [
     {
       id: 0,
@@ -248,32 +234,54 @@ const Profile = () => {
                 </div>
               </div>
               <div className="d-flex justify-conent-start align-items-center flex-wrap">
-                {data1.map((item, index) => (
+                {profileNumberNameData.map((item, index) => (
                   <ProfileNumberName data={item} key={index} />
                 ))}
               </div>
+              <Tabs>
+                <Tab active={activeTab === 'created'} path="/profile?activeTab=created">
+                  Created
+                </Tab>
+                <Tab active={activeTab === 'collections'} path="/profile?activeTab=collections">
+                  Collections
+                </Tab>
+                <Tab active={activeTab === 'transactions'} path="/profile?activeTab=transactions">
+                  Transactions
+                </Tab>
+                <Tab active={activeTab === 'royalty-pool'} path="/profile?activeTab=royalty-pool">
+                  Royalty Pool
+                </Tab>
+                <Tab active={activeTab === 'earn-liquidity-rewards'} path="/profile?activeTab=earn-liquidity-rewards">
+                  Earn Liquidity Rewards
+                </Tab>
+                <Tab active={activeTab === 'buy-matic'} path="/profile?activeTab=buy-matic">
+                  Buy Matic
+                </Tab>
+                <Tab active={activeTab === 'buy-vlr'} path="/profile?activeTab=buy-vlr">
+                  Buy VLR
+                </Tab>
+              </Tabs>
               <div className="global-flex-lg-between-sm-center">
-                <div className="global-flex-between">
-                  {categoryTabList.map((item, index) =>
-                    selectedCategoryTabIndex === item.id ? (
-                      <div
-                        key={index}
-                        className="poppins-16-600 me-5 my-2 global-pointer"
-                        onClick={() => setSelectedCategoryTabIndex(item.id)}
-                      >
-                        {item?.label}
-                      </div>
-                    ) : (
-                      <div
-                        key={index}
-                        className="poppins-16-500-gray me-5 my-2 global-pointer"
-                        onClick={() => setSelectedCategoryTabIndex(item.id)}
-                      >
-                        {item?.label}
-                      </div>
-                    )
-                  )}
-                </div>
+                <div></div>
+                {/* {categoryTabList.map((item, index) =>
+                  selectedCategoryTabIndex === item.id ? (
+                    <div
+                      key={index}
+                      className="poppins-16-600 me-5 my-2 global-pointer"
+                      onClick={() => setSelectedCategoryTabIndex(item.id)}
+                    >
+                      {item?.label}
+                    </div>
+                  ) : (
+                    <div
+                      key={index}
+                      className="poppins-16-500-gray me-5 my-2 global-pointer"
+                      onClick={() => setSelectedCategoryTabIndex(item.id)}
+                    >
+                      {item?.label}
+                    </div>
+                  )
+                )} */}
                 <div className="global-flex-between">
                   <div className="poppins-16-600 global-pointer mx-2">Buy Matic</div>
                   <div className="poppins-16-600 global-pointer mx-2">Buy VLR</div>
