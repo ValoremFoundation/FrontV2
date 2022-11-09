@@ -52,7 +52,7 @@ const BenefitCard = () => {
         <div className="global-flex-end">
           <div className="global-flex-center">
             {data1.map((item, index) => (
-              <DistributionItem roleInfo={item} key={index} />
+              <DistributionItem label={item.role} value={item.percent} key={index} />
             ))}
           </div>
         </div>

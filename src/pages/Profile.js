@@ -22,7 +22,7 @@ import BuyMatic from 'src/components/Profile/BuyMatic';
 import BuyVLR from 'src/components/Profile/BuyVLR';
 
 const Profile = () => {
-  const { state, search } = useLocation();
+  const { search } = useLocation();
   const query = new URLSearchParams(search);
   const activeTab = query.get('activeTab');
   const actionTab = query.get('actionTab');
@@ -38,36 +38,6 @@ const Profile = () => {
   const [userName, setUserName] = useState('');
   const [header, setHeader] = useState('');
   const [description, setDescription] = useState('');
-
-  const actionTabList = [
-    {
-      id: 0,
-      label: 'Inactive',
-    },
-    {
-      id: 1,
-      label: 'Active',
-    },
-    {
-      id: 6,
-      label: 'Listed',
-    },
-    {
-      id: 2,
-      label: 'Sold',
-    },
-    {
-      id: 3,
-      label: 'Saved for later',
-    },
-  ];
-
-  useEffect(() => {
-    if (state?.actionTabIndex) {
-      setSelectedActionTabIndex(state?.actionTabIndex);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     const getProfileData = async () => {
@@ -93,9 +63,6 @@ const Profile = () => {
     };
     getProfileData();
   }, [authToken]);
-
-  const [selectedCategoryTabIndex, setSelectedCategoryTabIndex] = useState(0);
-  const [selectedActionTabIndex, setSelectedActionTabIndex] = useState(4);
 
   const handleClickRedeem = index => {
     console.log('>>>>>>>>>>>>>>>>>> handleClickRedeem : ', index);
@@ -259,6 +226,7 @@ const Profile = () => {
                   actionTab={actionTab}
                   handleClickBuy={handleClickBuy}
                   handleChangeOption={handleChangeOption}
+                  profile={profile}
                 />
               )}
               {activeTab === 'collections' && (

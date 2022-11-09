@@ -10,26 +10,31 @@ import Message from 'src/assets/images/message.svg';
 import NFTCardButton from 'src/components/NFTCardButton';
 import NFTDivideLine from 'src/components/NFTDivideLine';
 import StarString from '../StarString';
+import { SYMBOL } from 'src/constants';
 
-const NFTCard = ({ onClick }) => {
+const NFTCard = ({ onClick, token, profileInfo }) => {
   return (
     <div className="nft-card-container" onClick={onClick}>
       <img
         alt="alt"
-        src={NFTImage}
+        src={token?.uri || '/img/blank-image.jpg'}
         style={{ width: '100%', borderRadius: 5, objectFit: 'cover', objectPosition: 'center' }}
       />
       <div className="global-flex-between my-3">
         <div className="global-flex-center">
           <div>
-            <img alt="alt" src={Avatar1} style={{ width: 55, height: 55, borderRadius: 50 }} />
+            <img
+              alt="alt"
+              src={profileInfo?.avatar || '/img/default-avatar.png'}
+              style={{ width: 55, height: 55, borderRadius: 50 }}
+            />
             <img alt="alt" src={BlueCheck} style={{ width: 20, height: 20, marginTop: -50 }} />
           </div>
           <div>
-            <div className="nft-card-name">Janes Salon</div>
+            <div className="nft-card-name">{profileInfo?.name}</div>
             <div className="global-flex-start">
               <img alt="alt" src={Position} style={{ width: 13, height: 21 }} />
-              <div className="nft-card-position ms-1 mt-1">Miami</div>
+              <div className="nft-card-position ms-1 mt-1">{token?.location}</div>
             </div>
           </div>
         </div>
@@ -46,7 +51,7 @@ const NFTCard = ({ onClick }) => {
       </div>
       <div className="global-flex-between my-3">
         <div className="d-flex justify-content-start">
-          <div className="nft-card-matic-number">10 Matic</div>
+          <div className="nft-card-matic-number">10 {SYMBOL}</div>
           <div className="nft-card-usd-number">($20 usd)</div>
         </div>
         <div className="nft-card-up-percent">+5%</div>

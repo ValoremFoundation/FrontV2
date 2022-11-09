@@ -2,10 +2,29 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import Tabs, { Tab } from 'src/components/SubLineTab';
 import BoostPost from '../BoostPost';
+import MintCard from '../MintCard';
 import NFTCard from '../NFTCard';
 
-const Created = ({ actionTab = 'listed', handleClickBuy, handleChangeOption }) => {
+const Created = ({ actionTab = 'listed', handleClickBuy, handleChangeOption, profile }) => {
   const history = useHistory();
+  const mintedTokens = profile?.tokens?.minted;
+  const savedForLaterTokens = profile?.tokens?.saved;
+
+  const Minted = () => {
+    return (
+      <div className="my-4">
+        {mintedTokens?.map((token, index) => (
+          <MintCard
+            handleClick={() => history.push(`/token-detail/${token.id}`)}
+            token={token}
+            userInfo={profile}
+            key={index}
+          />
+        ))}
+      </div>
+    );
+  };
+
   const Listed = () => {
     return (
       <div className="my-4">
@@ -26,12 +45,26 @@ const Created = ({ actionTab = 'listed', handleClickBuy, handleChangeOption }) =
   };
 
   const SavedForLater = () => {
-    return <div>SavedForLater Page</div>;
+    return (
+      <div className="my-4">
+        {savedForLaterTokens?.map((token, index) => (
+          <MintCard
+            handleClick={() => history.push(`/token-detail/${token.id}`)}
+            token={token}
+            userInfo={profile}
+            key={index}
+          />
+        ))}
+      </div>
+    );
   };
 
   return (
     <div>
       <Tabs>
+        <Tab active={actionTab === 'minted'} path="/profile?activeTab=created&actionTab=minted">
+          Minted
+        </Tab>
         <Tab active={actionTab === 'listed'} path="/profile?activeTab=created&actionTab=listed">
           Listed
         </Tab>
@@ -42,6 +75,7 @@ const Created = ({ actionTab = 'listed', handleClickBuy, handleChangeOption }) =
           Saved for Later
         </Tab>
       </Tabs>
+      {actionTab === 'minted' && <Minted />}
       {actionTab === 'listed' && <Listed />}
       {actionTab === 'sold' && <Sold />}
       {actionTab === 'saved-for-later' && <SavedForLater />}

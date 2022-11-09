@@ -126,7 +126,7 @@ const Create = () => {
       setCreatedArrayToken(newNFTs);
       toast.success('Successfully saved!');
       setIsLoading(false);
-      history.push('/profile?activeTab=created&actionTab=listed');
+      history.push('/profile?activeTab=created&actionTab=saved-for-later');
     } catch (err) {
       console.log('Error Create :', err.message);
       toast.error(err?.message);
@@ -234,7 +234,7 @@ const Create = () => {
       const res = await handleMultiMintContract(tokenURIs, tokenIds);
       toast.success('Successfully minted!');
       setIsLoading(false);
-      history.push('/profile/activeTab=created&actionTab=listed');
+      history.push('/profile?activeTab=created&actionTab=minted');
     } catch (err) {
       console.log('Error Create : ', err.message);
       toast.error(err?.message);

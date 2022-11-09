@@ -1,5 +1,7 @@
 export const LS_KEY = 'login-with-metamask';
 
+export const SYMBOL = 'VLR';
+
 export const user1Info = {
   info: {
     name: 'Sarah',
