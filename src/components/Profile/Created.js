@@ -49,10 +49,11 @@ const Created = ({ actionTab = 'listed', handleClickBuy, handleChangeOption, pro
       <div className="my-4">
         {savedForLaterTokens?.map((token, index) => (
           <MintCard
-            handleClick={() => history.push(`/token-detail/${token.id}`)}
+            handleClick={() => {}}
             token={token}
             userInfo={profile}
             key={index}
+            handleClickEdit={() => history.push(`/token-detail/${token.id}/edit`)}
           />
         ))}
       </div>

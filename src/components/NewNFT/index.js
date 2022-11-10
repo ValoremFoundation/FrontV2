@@ -11,10 +11,10 @@ import { fetchAllCategories } from 'src/actions/categories';
 import { useSelector, useDispatch } from 'react-redux';
 import MultipleNFTCard from '../MultipleNFTCard';
 
-const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT }) => {
+const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT, editable = false }) => {
   const dispatch = useDispatch();
   const avatarRef = useRef(null);
-  const [statusOpen, setStatusOpen] = useState(false);
+  const [statusOpen, setStatusOpen] = useState(editable || false);
   const categories = useSelector(state => state.categories.items.items);
 
   useEffect(() => {
@@ -91,12 +91,14 @@ const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT }) 
           <CustomRadio
             label={'Remote'}
             value={'remote'}
+            variable={itemNFT?.remotePerson}
             onChange={e => handleChangeArrayNFT(e, 'remotePerson', index)}
           />
           <div className="ms-5">
             <CustomRadio
               label={'In Person'}
               value={'person'}
+              variable={itemNFT?.remotePerson}
               onChange={e => handleChangeArrayNFT(e, 'remotePerson', index)}
             />
           </div>
@@ -191,9 +193,11 @@ const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT }) 
             />
           </div>
         </div>
-        <div className="global-flex-end my-3">
-          <RoundBorderButton label={'Remove NFT'} color={'#E75B2E'} onClick={() => handleRemoveNFT(index)} />
-        </div>
+        {!editable && (
+          <div className="global-flex-end my-3">
+            <RoundBorderButton label={'Remove NFT'} color={'#E75B2E'} onClick={() => handleRemoveNFT(index)} />
+          </div>
+        )}
       </div>
     </Accordian>
   );

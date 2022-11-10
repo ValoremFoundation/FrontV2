@@ -17,6 +17,7 @@ import Profile from 'src/pages/Profile';
 import ActivateListing from 'src/pages/ActivateListing';
 import TokenDetail from 'src/pages/TokenDetail';
 import Settings from 'src/pages/Settings';
+import TokenEdit from './pages/TokenEdit';
 
 function App() {
   const [isOpen, setIsOpen] = useState(false);
@@ -80,6 +81,11 @@ function App() {
         <Route path="/token-detail/:tokenId" exact>
           <MainLayout>
             <TokenDetail />
+          </MainLayout>
+        </Route>
+        <Route path="/token-detail/:tokenId/edit" exact>
+          <MainLayout>
+            <TokenEdit />
           </MainLayout>
         </Route>
         <Route component={NotFound} />

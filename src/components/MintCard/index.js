@@ -12,11 +12,11 @@ import NFTCardButton from '../NFTCardButton';
 import BackgroundButton from '../BackgroundButton';
 import DistributionItem from '../DistributionItem';
 
-const MintCard = ({ handleClickRedeem, handleClick, token, userInfo }) => {
+const MintCard = ({ handleClickRedeem, handleClick, token, userInfo, handleClickEdit }) => {
   return (
     <div className="listing-card-container global-pointer">
       <div className="row gx-4">
-        <div className="col-12 col-lg-4 p-2" onClick={handleClick}>
+        <div className="col-12 col-lg-3 p-2" onClick={handleClick}>
           <div className="global-flex-center">
             <img
               alt="alt"
@@ -67,7 +67,7 @@ const MintCard = ({ handleClickRedeem, handleClick, token, userInfo }) => {
             </div>
           </div>
         </div>
-        <div className="col-12 col-lg-2  p-2">
+        <div className="col-12 col-lg-3  p-2">
           <div className="global-flex-end" style={{ height: '100%' }}>
             <div className="global-flex-column-between">
               <div className="global-flex-center mb-3">
@@ -75,9 +75,18 @@ const MintCard = ({ handleClickRedeem, handleClick, token, userInfo }) => {
                 <img alt="alt" src={InstagramIcon} width={25} height={25} className="mx-2 global-pointer" />
                 <img alt="alt" src={LinkIcon} width={20} height={20} className="mx-2 global-pointer" />
               </div>
-              <div>
-                {/* <BackgroundButton label={'Redeem'} color={'#111827'} bgColor={'#96F2A4'} onClick={handleClickRedeem} /> */}
-              </div>
+              {token?.saved_for_later ? (
+                <div className="global-flex-start gap-2">
+                  <BackgroundButton
+                    label={'Create/Edit'}
+                    color={'#111827'}
+                    bgColor={'#D9D9D9'}
+                    onClick={handleClickEdit}
+                  />
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
           </div>
         </div>
