@@ -149,7 +149,6 @@ const TokenEdit = () => {
       setIsLoading(true);
       savedForLater = 1;
       const res = await handleSaveOneNFTAPI();
-      console.log('>>>>>>>>>>>>>>>>>  res  11111 : ', res?.data);
       if (res?.status) {
         toast.success(res.message);
         history.push('/profile?activeTab=created&actionTab=saved-for-later');
@@ -224,11 +223,13 @@ const TokenEdit = () => {
       setIsLoading(true);
       savedForLater = 0;
       const res = await handleSaveOneNFTAPI();
-      if (res?.status) {
-        const res_contract = await handleSingleMintContract(res.data);
+      const res_contract = await handleSingleMintContract(res.data);
+      if (res_contract?.status) {
         setIsLoading(false);
         toast.success(res.message);
         history.push('/profile?activeTab=created&actionTab=minted');
+      } else {
+        setIsLoading(false);
       }
     } catch (err) {
       console.log('Error TokenEdit : ', err.message);
@@ -247,6 +248,7 @@ const TokenEdit = () => {
       let nftTokenId = events?.TokenCreated?.returnValues?.tokenId;
       const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
       const res = await handleSingleMintAPI(nftTokenId, id, from, to, transactionHash, blockTimeStamp);
+      return res?.data;
     } catch (err) {
       console.log(err);
       toast.error(err?.message);
@@ -255,7 +257,7 @@ const TokenEdit = () => {
 
   const handleSingleMintAPI = async (nftTokenId, id, from, to, transactionHash, blockTimeStamp) => {
     try {
-      await tokenMint(id, {
+      return await tokenMint(id, {
         hash: transactionHash,
         from: to,
         to: from,

@@ -12,14 +12,16 @@ const Created = ({ actionTab = 'listed', handleClickBuy, handleChangeOption, pro
 
   const Minted = () => {
     return (
-      <div className="my-4">
+      <div>
         {mintedTokens?.map((token, index) => (
-          <MintCard
-            handleClick={() => history.push(`/token-detail/${token.id}`)}
-            token={token}
-            userInfo={profile}
-            key={index}
-          />
+          <div className="my-4" key={index}>
+            <MintCard
+              handleClick={() => history.push(`/token-detail/${token.id}`)}
+              token={token}
+              userInfo={profile}
+              key={index}
+            />
+          </div>
         ))}
       </div>
     );
@@ -27,7 +29,7 @@ const Created = ({ actionTab = 'listed', handleClickBuy, handleChangeOption, pro
 
   const Listed = () => {
     return (
-      <div className="my-4">
+      <div>
         <BoostPost handleClickBuy={handleClickBuy} onChange={handleChangeOption} />
         <div className="row gx-5 my-4">
           {[0, 1, 2].map(index => (
@@ -46,15 +48,17 @@ const Created = ({ actionTab = 'listed', handleClickBuy, handleChangeOption, pro
 
   const SavedForLater = () => {
     return (
-      <div className="my-4">
+      <div>
         {savedForLaterTokens?.map((token, index) => (
-          <MintCard
-            handleClick={() => {}}
-            token={token}
-            userInfo={profile}
-            key={index}
-            handleClickEdit={() => history.push(`/token-detail/${token.id}/edit`)}
-          />
+          <div className="my-4" key={index}>
+            <MintCard
+              handleClick={() => {}}
+              token={token}
+              userInfo={profile}
+              key={index}
+              handleClickEdit={() => history.push(`/token-detail/${token.id}/edit`)}
+            />
+          </div>
         ))}
       </div>
     );

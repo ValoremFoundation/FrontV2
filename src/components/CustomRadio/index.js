@@ -9,7 +9,7 @@ const CustomRadio = ({ label, value, onChange, variable }) => {
         <input
           id="custom-radio-id"
           value={value}
-          name="person"
+          // name="person"
           type={'radio'}
           onChange={onChange}
           checked={value === variable}

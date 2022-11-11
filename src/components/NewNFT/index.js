@@ -23,7 +23,7 @@ const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT, ed
 
   return (
     <Accordian
-      title={itemNFT?.name ? itemNFT?.name : `New NFT #${index}`}
+      title={itemNFT?.name ? itemNFT?.name : `New NFT #${index + 1}`}
       active={statusOpen}
       toogleAccordian={() => {
         setStatusOpen(!statusOpen);

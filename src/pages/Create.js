@@ -39,7 +39,7 @@ const Create = () => {
   const [createdArrayToken, setCreatedArrayToken] = useState([]);
   const [arrayNFT, setArrayNFT] = useState([
     {
-      imageUrl: '/img/default-avatar.png',
+      imageUrl: '/img/blank-image.jpg',
       fileName: '',
       type: 'image',
       name: '',
@@ -174,7 +174,7 @@ const Create = () => {
     setArrayNFT([
       ...arrayNFT,
       {
-        imageUrl: '/img/default-avatar.png',
+        imageUrl: '/img/blank-image.jpg',
         fileName: '',
         type: 'image',
         name: '',
@@ -227,14 +227,16 @@ const Create = () => {
 
     try {
       setIsLoading(true);
-      const newNFTs = await handleSaveNFTAPI();
-      setCreatedArrayToken(newNFTs);
-      const tokenURIs = newNFTs.map(item => item.uri);
-      const tokenIds = newNFTs.map(item => item.id);
-      const res = await handleMultiMintContract(tokenURIs, tokenIds);
-      toast.success('Successfully minted!');
+      // const newNFTs = await handleSaveNFTAPI();
+      // const tokenURIs = newNFTs.map(item => item.uri);
+      // const tokenIds = newNFTs.map(item => item.id);
+      // const res = await handleMultiMintContract(tokenURIs, tokenIds);
+      const res = await handleMultiMintContract();
+      if (res?.length > 0) {
+        toast.success('Successfully minted!');
+        history.push('/profile?activeTab=created&actionTab=minted');
+      }
       setIsLoading(false);
-      history.push('/profile?activeTab=created&actionTab=minted');
     } catch (err) {
       console.log('Error Create : ', err.message);
       toast.error(err?.message);
@@ -242,8 +244,10 @@ const Create = () => {
     }
   };
 
-  const handleMultiMintContract = async (tokenURIs, tokenIds) => {
+  const handleMultiMintContract = async () => {
     try {
+      const tokenURIs = arrayNFT.map(item => item.imageUrl);
+
       const gasPrice = await web3.eth.getGasPrice();
       const { from, to, transactionHash, blockNumber, events } = await nftContract.methods
         .createMultiToken(tokenURIs)
@@ -255,12 +259,17 @@ const Create = () => {
         nftTokenIds.push(events?.TokenCreated?.returnValues?.tokenId);
       }
       const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
+
+      const newNFTs = await handleSaveNFTAPI();
+      const tokenIds = newNFTs.map(item => item.id);
+
       const res = await Promise.all(
         nftTokenIds.map(
           async (nftTokenId, index) =>
             await handleSingleMintAPI(nftTokenId, tokenIds[index], from, to, transactionHash, blockTimeStamp)
         )
       );
+      return res;
     } catch (err) {
       console.log(err);
       toast.error(err?.message);
@@ -269,7 +278,7 @@ const Create = () => {
 
   const handleSingleMintAPI = async (nftTokenId, id, from, to, transactionHash, blockTimeStamp) => {
     try {
-      await tokenMint(id, {
+      return await tokenMint(id, {
         hash: transactionHash,
         from: to,
         to: from,
