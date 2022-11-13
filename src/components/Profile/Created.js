@@ -16,7 +16,7 @@ const Created = ({ actionTab = 'listed', handleClickBuy, handleChangeOption, pro
         {mintedTokens?.map((token, index) => (
           <div className="my-4" key={index}>
             <MintCard
-              handleClick={() => history.push(`/token-detail/${token.id}`)}
+              handleClick={() => history.push(`/activate-listing/${token.id}`)}
               token={token}
               userInfo={profile}
               key={index}

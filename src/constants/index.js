@@ -144,3 +144,52 @@ export const profileNumberNameData = [
     name: 'Floor Price',
   },
 ];
+
+export const user1InfoListing = {
+  info: {
+    name: 'Sarah',
+    role: 'Creator',
+    avatar: '/img/avatar-1.png',
+    dotColor: '#111827',
+  },
+  gift: [],
+};
+export const user2InfoListing = {
+  info: {
+    name: 'John',
+    role: 'Client/Reseller',
+    avatar: '/img/avatar-1.png',
+    dotColor: '#96F2A4',
+  },
+  gift: [],
+};
+export const user3InfoListing = {
+  info: {
+    name: 'Jane',
+    role: 'Client/Reseller',
+    avatar: '/img/avatar-1.png',
+    dotColor: '#96F2A4',
+  },
+  gift: [],
+};
+export const user4InfoListing = {
+  info: {
+    name: 'Tom',
+    role: 'Client/Reseller',
+    avatar: '/img/avatar-1.png',
+    dotColor: '',
+  },
+};
+
+export const step1Listing = {
+  description: 'sells web design service to john for',
+  amount: '',
+};
+export const step2Listing = {
+  description: 'resells service to Jane for ',
+  amount: '',
+};
+export const step3Listing = {
+  description: 'resells web design service to Tom for',
+  amount: '',
+};

@@ -5,7 +5,7 @@ import BackgroundButton from '../BackgroundButton';
 import ShowRoleInfo from '../ShowRoleInfo';
 import TextInput from '../TextInput';
 
-const ActivateListingCard = ({ onClick }) => {
+const ActivateListingCard = ({ handleClickList, handleClickBurn, handleClickTransfer, price, handleChangePrice }) => {
   return (
     <div className="activate-listing-card">
       <div className="poppins-24-600 my-2">Activating your listing</div>
@@ -16,7 +16,7 @@ const ActivateListingCard = ({ onClick }) => {
         <div className="col-12 col-lg-5 mb-4">
           <div className="poppins-14-600">Set your price</div>
           <div className="poppins-12-500">*1 VLR = $1</div>
-          <TextInput label={''} type={'text'} />
+          <TextInput label={''} type={'text'} value={price} onChange={handleChangePrice} />
         </div>
         <div className="col-12 col-lg-7 mb-4">
           <div className="poppins-12-400" style={{ padding: '28px 24px', background: '#F2E9BA' }}>
@@ -57,8 +57,10 @@ const ActivateListingCard = ({ onClick }) => {
       </div>
       <div className="poppins-12-400 my-1">*Burn Fee</div>
       <div className="poppins-12-400 my-1">*Advalorem transaction fee</div>
-      <div className="global-flex-end">
-        <BackgroundButton label={'Activate'} color={'#000000'} bgColor={'#96F2A4'} onClick={onClick} />
+      <div className="global-flex-end gap-2">
+        <BackgroundButton label={'List'} color={'#000000'} bgColor={'#96F2A4'} onClick={handleClickList} />
+        <BackgroundButton label={'Burn'} color={'#000000'} bgColor={'#96F2A4'} onClick={handleClickBurn} />
+        <BackgroundButton label={'Transfer'} color={'#000000'} bgColor={'#96F2A4'} onClick={handleClickTransfer} />
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ import React from 'react';
 import 'src/styles/components/BenefitCard.scss';
 import 'src/styles/Global.scss';
 import SendIcon from 'src/assets/images/send-green-icon.svg';
-import PolygonIcon from 'src/assets/images/polygon-icon.svg';
+import PolygonIcon from 'src/assets/images/polygon-icon.png';
 import DistributionItem from '../DistributionItem';
 import BackgroundButton from '../BackgroundButton';
 

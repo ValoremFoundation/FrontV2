@@ -12,26 +12,26 @@ import NFTDivideLine from 'src/components/NFTDivideLine';
 import StarString from '../StarString';
 import { SYMBOL } from 'src/constants';
 
-const NFTCard = ({ onClick, token, profileInfo }) => {
+const NFTCard = ({ onClick, token, profile, price = 0 }) => {
   return (
     <div className="nft-card-container" onClick={onClick}>
       <img
         alt="alt"
         src={token?.uri || '/img/blank-image.jpg'}
-        style={{ width: '100%', borderRadius: 5, objectFit: 'cover', objectPosition: 'center' }}
+        style={{ width: '100%', maxHeight: '300px', borderRadius: 5, objectFit: 'cover', objectPosition: 'center' }}
       />
       <div className="global-flex-between my-3">
         <div className="global-flex-center">
           <div>
             <img
               alt="alt"
-              src={profileInfo?.avatar || '/img/default-avatar.png'}
+              src={profile?.avatar || '/img/default-avatar.png'}
               style={{ width: 55, height: 55, borderRadius: 50 }}
             />
             <img alt="alt" src={BlueCheck} style={{ width: 20, height: 20, marginTop: -50 }} />
           </div>
           <div>
-            <div className="nft-card-name">{profileInfo?.name}</div>
+            <div className="nft-card-name">{profile?.name}</div>
             <div className="global-flex-start">
               <img alt="alt" src={Position} style={{ width: 13, height: 21 }} />
               <div className="nft-card-position ms-1 mt-1">{token?.location}</div>
@@ -51,20 +51,22 @@ const NFTCard = ({ onClick, token, profileInfo }) => {
       </div>
       <div className="global-flex-between my-3">
         <div className="d-flex justify-content-start">
-          <div className="nft-card-matic-number">10 {SYMBOL}</div>
+          <div className="nft-card-matic-number">
+            {profile?.price ? profile?.price : price} {SYMBOL}
+          </div>
           <div className="nft-card-usd-number">($20 usd)</div>
         </div>
         <div className="nft-card-up-percent">+5%</div>
       </div>
       <div className="d-flex flex-wrap justify-content-between my-3">
         <div style={{ width: '46%' }} className="my-1">
-          <NFTCardButton label={'Web design'} bgColor={'#F4F5FB'} color={'#000000'} />
+          <NFTCardButton label={token?.hashtag1} bgColor={'#F4F5FB'} color={'#000000'} />
         </div>
         <div style={{ width: '46%' }} className="my-1">
-          <NFTCardButton label={'SEO'} bgColor={'#F4F5FB'} color={'#000000'} />
+          <NFTCardButton label={token?.hashtag2} bgColor={'#F4F5FB'} color={'#000000'} />
         </div>
         <div style={{ width: '46%' }} className="my-1">
-          <NFTCardButton label={'Graphic Design'} bgColor={'#F4F5FB'} color={'#000000'} />
+          <NFTCardButton label={token?.hashtag3} bgColor={'#F4F5FB'} color={'#000000'} />
         </div>
       </div>
       <NFTDivideLine />

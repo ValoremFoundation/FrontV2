@@ -64,3 +64,7 @@ export const tokenById = async (tokenId, header) => {
 export const tokenUpdate = async data => {
   return await axios.put(`${process.env.REACT_APP_BACKEND_BASE_URL}/tokens`, data);
 };
+
+export const tokenList = async (tokenId, data) => {
+  return await axios.post(`${process.env.REACT_APP_BACKEND_BASE_URL}/tokens/${tokenId}/list`, data);
+};
