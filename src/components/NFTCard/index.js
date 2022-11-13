@@ -18,7 +18,7 @@ const NFTCard = ({ onClick, token, profile, price = 0 }) => {
       <img
         alt="alt"
         src={token?.uri || '/img/blank-image.jpg'}
-        style={{ width: '100%', maxHeight: '300px', borderRadius: 5, objectFit: 'cover', objectPosition: 'center' }}
+        style={{ width: '100%', maxHeight: '260px', borderRadius: 5, objectFit: 'cover', objectPosition: 'center' }}
       />
       <div className="global-flex-between my-3">
         <div className="global-flex-center">
@@ -52,7 +52,7 @@ const NFTCard = ({ onClick, token, profile, price = 0 }) => {
       <div className="global-flex-between my-3">
         <div className="d-flex justify-content-start">
           <div className="nft-card-matic-number">
-            {profile?.price ? profile?.price : price} {SYMBOL}
+            {token?.price ? token?.price : price} {SYMBOL}
           </div>
           <div className="nft-card-usd-number">($20 usd)</div>
         </div>

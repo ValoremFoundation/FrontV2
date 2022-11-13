@@ -9,7 +9,8 @@ const Created = ({ actionTab = 'listed', handleClickBuy, handleChangeOption, pro
   const history = useHistory();
   const mintedTokens = profile?.tokens?.minted;
   const savedForLaterTokens = profile?.tokens?.saved;
-
+  const listedTokens = profile?.tokens?.listed;
+  console.log('>>>>>>>>>>>>>>>>> ', listedTokens);
   const Minted = () => {
     return (
       <div>
@@ -32,9 +33,9 @@ const Created = ({ actionTab = 'listed', handleClickBuy, handleChangeOption, pro
       <div>
         <BoostPost handleClickBuy={handleClickBuy} onChange={handleChangeOption} />
         <div className="row gx-5 my-4">
-          {[0, 1, 2].map(index => (
+          {listedTokens?.map((item, index) => (
             <div key={index} className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 my-3">
-              <NFTCard onClick={() => history.push(`/token-detail/${index}`)} />
+              <NFTCard onClick={() => history.push(`/token-detail/${index}`)} profile={profile} token={item} />
             </div>
           ))}
         </div>
