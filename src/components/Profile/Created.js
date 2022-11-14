@@ -35,7 +35,7 @@ const Created = ({ actionTab = 'listed', handleClickBuy, handleChangeOption, pro
         <div className="row gx-5 my-4">
           {listedTokens?.map((item, index) => (
             <div key={index} className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 my-3">
-              <NFTCard onClick={() => history.push(`/token-detail/${index}`)} profile={profile} token={item} />
+              <NFTCard onClick={() => history.push(`/token-detail/${item?.id}`)} profile={profile} token={item} />
             </div>
           ))}
         </div>

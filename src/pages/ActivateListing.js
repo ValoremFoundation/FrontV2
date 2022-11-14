@@ -112,7 +112,7 @@ const ActivateListing = () => {
         timestamp: blockTimeStamp,
       });
       setIsLoading(false);
-      history.push('/profile?activeTab=created&actionTab=listed');
+      history.push(`/token-detail/${nftData?.id}`);
       // await getTokenDetail();
       toast.success('Listed for sale success');
     } catch (err) {

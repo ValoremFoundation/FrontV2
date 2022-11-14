@@ -76,3 +76,7 @@ export const tokenBurn = async (tokenId, data) => {
 export const tokenTransfer = async (tokenId, data) => {
   return await axios.post(`${process.env.REACT_APP_BACKEND_BASE_URL}/tokens/${tokenId}/transfer`, data);
 };
+
+export const tokenDelist = async (tokenId, data) => {
+  return await axios.post(`${process.env.REACT_APP_BACKEND_BASE_URL}/tokens/${tokenId}/delist`, data);
+};

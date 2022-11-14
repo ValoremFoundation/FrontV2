@@ -19,3 +19,15 @@ export const numberWithCommas = num => {
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   return parts.join('.');
 };
+
+export const dateWithTimestamp = unix_timestamp => {
+  const date = new Date(unix_timestamp);
+  const hours = date.getHours();
+  const minutes = '0' + date.getMinutes();
+  const seconds = '0' + date.getSeconds();
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+  const formattedTime = day + '/' + month + '/' + year;
+  return formattedTime;
+};
