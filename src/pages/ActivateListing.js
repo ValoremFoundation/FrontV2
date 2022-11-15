@@ -97,7 +97,7 @@ const ActivateListing = () => {
       const { itemId } = events.MarketItemCreated.returnValues;
 
       const { from, to, transactionHash, blockNumber } = await marketplaceContract.methods
-        .sellMarketItem(nftData.token_id, Web3.utils.toWei(price))
+        .sellMarketItem(itemId, Web3.utils.toWei(price))
         .send({ from: account, gasPrice: gasPrice * 5 });
 
       const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
@@ -117,6 +117,7 @@ const ActivateListing = () => {
       toast.success('Listed for sale success');
     } catch (err) {
       console.log('Error listing : ', err?.message);
+      toast.error(err?.message);
       setIsLoading(false);
     }
   };

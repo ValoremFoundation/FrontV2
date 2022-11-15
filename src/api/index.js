@@ -80,3 +80,11 @@ export const tokenTransfer = async (tokenId, data) => {
 export const tokenDelist = async (tokenId, data) => {
   return await axios.post(`${process.env.REACT_APP_BACKEND_BASE_URL}/tokens/${tokenId}/delist`, data);
 };
+
+export const getTokensByFilters = async filters => {
+  return await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/tokens${filters ? `?${filters}` : ''}`);
+};
+
+export const tokenBuy = async (tokenId, data) => {
+  return await axios.post(`${process.env.REACT_APP_BACKEND_BASE_URL}/tokens/${tokenId}/buy`, data);
+};

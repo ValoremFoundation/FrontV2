@@ -11,13 +11,13 @@ import BenefitCard from 'src/components/BenefitCard';
 import StarString from 'src/components/StarString';
 import TokenDetailComment from 'src/components/TokenDetailComment';
 import RoundBorderButton from 'src/components/RoundBorderButton';
-import ReactMapGL, { /* Marker, Popup, */ NavigationControl, GeolocateControl, FlyToInterpolator } from 'react-map-gl';
+import ReactMapGL, { Marker, /* Popup, */ NavigationControl, GeolocateControl, FlyToInterpolator } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { isMobile } from 'react-device-detect';
 import NFTDivideLine from 'src/components/NFTDivideLine';
 import { useParams } from 'react-router';
 import { useWeb3React } from '@web3-react/core';
-import { tokenById, tokenDelist } from 'src/api';
+import { tokenBuy, tokenById, tokenDelist } from 'src/api';
 import LoadingPage from 'src/components/LoadingPage';
 import toast from 'react-hot-toast';
 import Web3 from 'web3';
@@ -41,6 +41,7 @@ const TokenDetail = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const categories = useSelector(state => state.categories.items.items);
+  const [qrImage, setQRImage] = useState('/image/blank-image.jpg');
   const mapStyleLight = 'mapbox://styles/thyjames/ckyj5984oa25w14o1hnuexh2a';
   const [viewport, setViewport] = useState({
     latitude: 38.57,
@@ -80,7 +81,19 @@ const TokenDetail = () => {
     } = await tokenById(tokenId, {
       Authorization: `Bearer ${authToken}`,
     });
+    setViewport({
+      latitude: token?.position?.latitude || 38.57,
+      longitude: token?.position?.longitude || -121.47,
+      width: '100%',
+      height: '351px',
+      zoom: 1,
+    });
     setNftData(token);
+    setQRImage(
+      token?.user?.id
+        ? `${process.env.REACT_APP_RESOURCE_URL}/images/qr-${token?.user?.id}.png`
+        : '/image/blank-image.jpg'
+    );
     setIsLoading(false);
   };
 
@@ -117,14 +130,61 @@ const TokenDetail = () => {
       // await getTokenDetail()
     } catch (err) {
       console.log(err.message);
+      toast.error(err.message);
       setIsLoading(false);
     }
   };
 
-  const handleClickBuy = () => {};
+  const handleClickBuy = async () => {
+    try {
+      setIsLoading(true);
+      const { market_item_id: marketItemId, id, price, token_id, user } = nftData;
+      const gasPrice = await web3.eth.getGasPrice();
+      const { from, to, transactionHash, blockNumber } = await marketplaceContract.methods
+        .buyMarketItem(marketItemId)
+        .send({ from: account, gasPrice: gasPrice * 5 });
+
+      window.gtag('event', 'Token Buy', { tokenId: nftData.id });
+      window.gtag('event', 'conversion', { send_to: 'AW-826595197/5zZSCPWMvMIDEP2uk4oD' });
+      const impactClickId = localStorage.getItem('Impact_ClickId');
+
+      const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
+      await tokenBuy(id, {
+        hash: transactionHash,
+        from,
+        to,
+        method: 'sale',
+        timestamp: blockTimeStamp,
+        price,
+        token_id,
+        user_id: user.id,
+        impactClickId: impactClickId === 'null' ? null : impactClickId,
+      });
+      setIsLoading(false);
+      // await getTokenDetail()
+    } catch (err) {
+      console.log('Error Buy : ', err?.message);
+      toast.error(err?.message);
+      setIsLoading(false);
+    }
+  };
 
   const handleClickDiscord = () => {
     window.open(categories[nftData?.category_id - 1]?.discord);
+  };
+
+  const renderMarkers = () => {
+    if (nftData?.position?.latitude)
+      return (
+        <Marker latitude={nftData?.position?.latitude} longitude={nftData?.position?.longitude}>
+          <div>
+            <img
+              src="https://cdn.discordapp.com/attachments/930281959047958589/933009976325210202/Valorem-map-pin.png"
+              alt="marker"
+            />
+          </div>
+        </Marker>
+      );
   };
 
   return (
@@ -222,6 +282,7 @@ const TokenDetail = () => {
                 transitionDuration={500}
                 transitionInterpolator={new FlyToInterpolator()}
               >
+                {renderMarkers()}
                 <div style={navStyle}>
                   <NavigationControl />
                 </div>
@@ -234,36 +295,8 @@ const TokenDetail = () => {
             </div>
           </div>
           <div className="col-12 col-lg-5 my-4">
-            <div className="poppins-20-700-gray">Description</div>
-            <div className="row gx-2 mt-2">
-              <div className="col-12 col-lg-6 my-2">
-                <img alt="alt" src={BarCode} />
-              </div>
-              <div className="col-12 col-lg-6 my-2">
-                <div className="poppins-16-500">
-                  i came up with this during a enlightening SCAD schitzaphrenia session done with Windows xp pad and
-                  original is on real Drawing paper..with archival ink, so ya know im O.G. with it...
-                </div>
-              </div>
-              <div className="col-12 col-lg-6 my-2">
-                <div className="poppins-16-700">10% Creator royalties</div>
-              </div>
-              <div className="col-12 col-lg-6 my-2">
-                <div className="poppins-16-700">Artstore Collection</div>
-              </div>
-              <NFTDivideLine color={'#D4D4D5'} />
-              <div className="global-flex-between">
-                <div className="poppins-16-700-gray w-50">Url</div>
-                <div style={{ wordBreak: 'break-all' }} className="w-50 poppins-16-400">
-                  https://nft.advalorem.io/tokens/73
-                </div>
-              </div>
-              <div className="global-flex-between">
-                <div className="poppins-16-700">IPFS Image URL</div>
-                <div style={{ wordBreak: 'break-all' }} className="w-50 poppins-16-400">
-                  https://ipfs.io/ipfs/Qme6QQW82fJtxZQsrZRa1y1PwS3vDL8v4crPatqJ8MLZGh
-                </div>
-              </div>
+            <div className="global-flex-center">
+              <img alt="alt" src={qrImage} style={{ maxWidth: '300px' }} />
             </div>
           </div>
         </div>

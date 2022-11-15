@@ -10,7 +10,7 @@ const Created = ({ actionTab = 'listed', handleClickBuy, handleChangeOption, pro
   const mintedTokens = profile?.tokens?.minted;
   const savedForLaterTokens = profile?.tokens?.saved;
   const listedTokens = profile?.tokens?.listed;
-  console.log('>>>>>>>>>>>>>>>>> ', listedTokens);
+
   const Minted = () => {
     return (
       <div>
