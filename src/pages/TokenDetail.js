@@ -27,6 +27,7 @@ import nftABI from 'src/assets/abis/nftAdValorem.json';
 import royaltyPoolABI from 'src/assets/abis/royaltyPool.json';
 import vlrTokenABI from 'src/assets/abis/adValoremToken.json';
 import { useHistory } from 'react-router-dom';
+import { fetchAllCategories } from 'src/actions/categories';
 
 const { REACT_APP_MARKETPLACE_CONTRACT_ADDRESS, REACT_APP_NFT_CONTRACT_ADDRESS, REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS } =
   process.env;
@@ -38,6 +39,8 @@ const zeroAddress = '0x0000000000000000000000000000000000000000';
 
 const TokenDetail = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
+  const categories = useSelector(state => state.categories.items.items);
   const mapStyleLight = 'mapbox://styles/thyjames/ckyj5984oa25w14o1hnuexh2a';
   const [viewport, setViewport] = useState({
     latitude: 38.57,
@@ -65,6 +68,10 @@ const TokenDetail = () => {
   const authToken = useSelector(state => state.auth.token);
   const [isLoading, setIsLoading] = useState(false);
   const [nftData, setNftData] = useState();
+
+  useEffect(() => {
+    dispatch(fetchAllCategories());
+  }, []);
 
   const getTokenDetail = async () => {
     setIsLoading(true);
@@ -116,6 +123,10 @@ const TokenDetail = () => {
 
   const handleClickBuy = () => {};
 
+  const handleClickDiscord = () => {
+    window.open(categories[nftData?.category_id - 1]?.discord);
+  };
+
   return (
     <>
       {isLoading && <LoadingPage />}
@@ -145,7 +156,9 @@ const TokenDetail = () => {
             </div>
           </div>
           <div className="col-12 col-lg-5 my-4">
-            <div className="poppins-20-700">{nftData?.description}</div>
+            <div className="poppins-20-700">
+              {categories?.length > 0 ? categories[nftData?.category_id - 1]?.name : ''}
+            </div>
             <div className={isMobile ? 'poppins-24-700' : 'poppins-36-700'}>{nftData?.name}</div>
             <div className="global-flex-start my-3">
               <div className="global-flex-start me-3">
@@ -194,6 +207,7 @@ const TokenDetail = () => {
               bgColor={'#FFFFFF'}
               icon={DiscodIcon}
               fullWidth={true}
+              onClick={handleClickDiscord}
             />
           </div>
         </div>

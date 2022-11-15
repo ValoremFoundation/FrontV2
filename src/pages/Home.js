@@ -36,14 +36,12 @@ const Home = () => {
             </div>
             <div className="home-top-text-middle">Get creative. Get paid. Get royalties.</div>
             <div className="global-flex-start my-4">
-              <BackgroundButton label={'Create'} color={'#2A212E'} bgColor={'#96F2A4'} />
+              <BackgroundButton label={'Create'} color={'#2A212E'} bgColor={'#96F2A4'} onClick={openModal} />
               <div className="ms-3">
                 <BackgroundButton label={'Discover'} color={'#ffffff'} bgColor={'#000000'} />
               </div>
             </div>
-            <div className="home-top-text-bottom" onClick={openModal}>
-              How it works?
-            </div>
+            <div className="home-top-text-bottom">How it works?</div>
           </div>
         </div>
       </div>

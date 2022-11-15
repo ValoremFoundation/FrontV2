@@ -30,6 +30,7 @@ const Create = () => {
   const history = useHistory();
   const { account, chainId } = useWeb3React();
   const dispatch = useDispatch();
+  const categories = useSelector(state => state.categories.items.items);
   const [bannerSource, setBannerSource] = useState('/img/default-banner.png');
   const [avatarSource, setAvatarSource] = useState('/img/default-avatar.png');
   const [isLoading, setIsLoading] = useState(false);
@@ -159,6 +160,9 @@ const Create = () => {
         if (status !== 200) return;
         tmpArrNFT[index]['imageUrl'] = `https://ipfs.io/ipfs/${IpfsHash}`;
       } else {
+        if (key === 'category') {
+          tmpArrNFT[index]['discord'] = categories[e.target.value - 1]?.discord;
+        }
         tmpArrNFT[index][key] = e.target.value;
       }
       setArrayNFT(tmpArrNFT);

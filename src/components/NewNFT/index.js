@@ -122,10 +122,11 @@ const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT, ed
           </div>
           <div className="col-12 col-lg-4 my-2">
             <TextInput
-              label={'Dicord'}
+              label={'Discord'}
               type={'text'}
               onChange={e => handleChangeArrayNFT(e, 'discord', index)}
               value={itemNFT?.discord}
+              disabled={true}
             />
           </div>
         </div>

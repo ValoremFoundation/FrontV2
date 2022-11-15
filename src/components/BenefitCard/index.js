@@ -11,7 +11,7 @@ const BenefitCard = ({ nftData, isOwner, handleClickBuy, handleClickDelist }) =>
   return (
     <div className="benefit-card-container">
       <div className="benefit-card-header">
-        <div className="poppins-16-500">Unique Benefits</div>
+        <div className="poppins-16-500">{nftData?.tell_us}</div>
       </div>
       <div className="benefit-card-content">
         <div className="global-flex-between my-2">
@@ -23,34 +23,25 @@ const BenefitCard = ({ nftData, isOwner, handleClickBuy, handleClickDelist }) =>
         </div>
         <div className="my-2">
           <div className="poppins-16-400">
-            <li>unlimitted access</li>
-          </div>
-          <div className="poppins-16-400">
-            <li>example</li>
-          </div>
-          <div className="poppins-16-400">
-            <li>example</li>
-          </div>
-          <div className="poppins-16-400">
-            <li>example</li>
+            <li>{nftData?.description}</li>
           </div>
         </div>
         <div className="global-flex-end">
           <div className="global-flex-center">
             <div className="me-4">
-              <div className="poppins-14-500">{'Seller'}</div>
+              <div className="poppins-14-500">{'Creator'}</div>
               <div className="poppins-14-600" style={{ color: '#4ECB71' }}>
                 {nftData?.creator}%
               </div>
             </div>
             <div className="me-4">
-              <div className="poppins-14-500">{'Seller'}</div>
+              <div className="poppins-14-500">{'Reseller'}</div>
               <div className="poppins-14-600" style={{ color: '#4ECB71' }}>
                 {nftData?.reseller}%
               </div>
             </div>
             <div className="me-4">
-              <div className="poppins-14-500">{'Seller'}</div>
+              <div className="poppins-14-500">{'Royalty Pool'}</div>
               <div className="poppins-14-600" style={{ color: '#4ECB71' }}>
                 {nftData?.royalty_pool}%
               </div>
