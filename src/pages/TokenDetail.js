@@ -28,6 +28,7 @@ import royaltyPoolABI from 'src/assets/abis/royaltyPool.json';
 import vlrTokenABI from 'src/assets/abis/adValoremToken.json';
 import { useHistory } from 'react-router-dom';
 import { fetchAllCategories } from 'src/actions/categories';
+import { ethers } from 'ethers';
 
 const { REACT_APP_MARKETPLACE_CONTRACT_ADDRESS, REACT_APP_NFT_CONTRACT_ADDRESS, REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS } =
   process.env;
@@ -139,7 +140,18 @@ const TokenDetail = () => {
     try {
       setIsLoading(true);
       const { market_item_id: marketItemId, id, price, token_id, user } = nftData;
+
       const gasPrice = await web3.eth.getGasPrice();
+      const allowance = await vlrTokenContract.methods
+        .allowance(account, process.env.REACT_APP_MARKETPLACE_CONTRACT_ADDRESS)
+        .call();
+
+      if (web3.utils.fromWei(allowance) > ethers.utils.parseEther('1000000')) {
+        await vlrTokenContract.methods
+          .approve(process.env.REACT_APP_MARKETPLACE_CONTRACT_ADDRESS, ethers.constants.MaxUint256)
+          .send({ from: account });
+      }
+
       const { from, to, transactionHash, blockNumber } = await marketplaceContract.methods
         .buyMarketItem(marketItemId)
         .send({ from: account, gasPrice: gasPrice * 5 });
@@ -160,6 +172,7 @@ const TokenDetail = () => {
         user_id: user.id,
         impactClickId: impactClickId === 'null' ? null : impactClickId,
       });
+      history.push('/profile?activeTab=created&actionTab=minted');
       setIsLoading(false);
       // await getTokenDetail()
     } catch (err) {

@@ -75,11 +75,19 @@ const ActivateListing = () => {
       const tokenPrice = Web3.utils.toWei(price);
       const approvedAddress = await nftContract.methods.getApproved(nftData.token_id).call();
       const gasPrice = await web3.eth.getGasPrice();
-      if (approvedAddress === zeroAddress) {
+      const approvedAll = await nftContract.methods
+        .isApprovedForAll(account, process.env.REACT_APP_MARKETPLACE_CONTRACT_ADDRESS)
+        .call();
+      if (!approvedAll) {
         await nftContract.methods
-          .approve(process.env.REACT_APP_MARKETPLACE_CONTRACT_ADDRESS, nftData.token_id)
-          .send({ from: account, gasPrice: gasPrice * 5 });
+          .setApprovalForAll(process.env.REACT_APP_MARKETPLACE_CONTRACT_ADDRESS, true)
+          .send({ from: account });
       }
+      // if (approvedAddress === zeroAddress) {
+      //   await nftContract.methods
+      //     .approve(process.env.REACT_APP_MARKETPLACE_CONTRACT_ADDRESS, nftData.token_id)
+      //     .send({ from: account, gasPrice: gasPrice * 5 });
+      // }
 
       const { events } = await marketplaceContract.methods
         .createMarketItem(
