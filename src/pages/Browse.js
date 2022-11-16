@@ -1,60 +1,36 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 import 'src/styles/Browse.scss';
 import 'src/styles/Global.scss';
 import { isMobile } from 'react-device-detect';
-import CustomBlackRadio from 'src/components/CustomBlackRadio';
 import { useState } from 'react';
 import NFTCard from 'src/components/NFTCard';
 import { getTokensByFilters } from 'src/api';
 import LoadingPage from 'src/components/LoadingPage';
+import CustomRadio from 'src/components/CustomRadio';
+import { fetchAllCategories } from 'src/actions/categories';
 import { useSelector, useDispatch } from 'react-redux';
+import SelectInput from 'src/components/SelectInput';
 
 const Browse = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
+  const categories = useSelector(state => state.categories.items.items);
   const profile = useSelector(state => state.profile);
   const [isLoading, setIsLoading] = useState(false);
   const [nftData, setNftData] = useState();
-  const handleChangeOption = event => {
-    console.log('>>>>>>>>>>>>>>>>>> : ', event.target.value);
-  };
-  const categoryTabList = [
-    {
-      id: 0,
-      label: 'On the rise',
-    },
-    {
-      id: 1,
-      label: 'Artists',
-    },
-    {
-      id: 2,
-      label: 'Content Creator',
-    },
-    {
-      id: 3,
-      label: 'Video Editing',
-    },
-    {
-      id: 4,
-      label: 'UX Design',
-    },
-    {
-      id: 5,
-      label: 'Social Media',
-    },
-    {
-      id: 6,
-      label: 'Video Explainer',
-    },
-  ];
+  const [remotePerson, setRemotePerson] = useState('remote');
+  const [category, setCategory] = useState(0);
+
+  useEffect(() => {
+    dispatch(fetchAllCategories());
+  }, []);
 
   const getAllTokens = async () => {
     setIsLoading(true);
     let {
       data: { data: token },
     } = await getTokensByFilters();
-    console.log('>>>>>>>>>>>>>>>>> all tokens ', token);
     setNftData(token);
     setIsLoading(false);
   };
@@ -63,7 +39,23 @@ const Browse = () => {
     getAllTokens();
   }, []);
 
-  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  const filteredData = useMemo(
+    () =>
+      nftData?.filter(item =>
+        parseInt(category) === 0
+          ? item?.remote_person === remotePerson
+          : item?.remote_person === remotePerson && item?.category_id === parseInt(category)
+      ),
+    [nftData, category, remotePerson]
+  );
+
+  const handleChangeRemotePerson = e => {
+    setRemotePerson(e.target.value);
+  };
+
+  const handleChangeCategory = e => {
+    setCategory(e.target.value);
+  };
 
   return (
     <>
@@ -75,76 +67,40 @@ const Browse = () => {
         </div>
         <div className="global-flex-start flex-wrap my-4">
           <div className="me-3 my-1">
-            <CustomBlackRadio label={'Digital Creators'} value={'digital'} onChange={handleChangeOption} />
+            <CustomRadio
+              label={'Remote'}
+              value={'remote'}
+              variable={remotePerson}
+              onChange={handleChangeRemotePerson}
+            />
           </div>
           <div className="me-3 my-1">
-            <CustomBlackRadio label={'Brick & Mortar Creators'} value={'brick'} onChange={handleChangeOption} />
+            <CustomRadio
+              label={'In Person'}
+              value={'person'}
+              variable={remotePerson}
+              onChange={handleChangeRemotePerson}
+            />
           </div>
         </div>
-        <div className="global-flex-lg-start-sm-center">
-          {categoryTabList.map((item, index) =>
-            item.id === selectedTabIndex ? (
-              <div
-                key={index}
-                className="poppins-16-600 browser-selected-tab-text me-5 my-1"
-                onClick={() => setSelectedTabIndex(item.id)}
-              >
-                {item.label}
-              </div>
-            ) : (
-              <div
-                key={index}
-                className="poppins-16-600  browser-tab-text me-5 my-1"
-                onClick={() => setSelectedTabIndex(item.id)}
-              >
-                {item.label}
-              </div>
-            )
-          )}
+        <div style={{ maxWidth: '350px' }}>
+          <SelectInput
+            label={'Category'}
+            placeFolder={'Select Category'}
+            value={category}
+            options={categories}
+            onChange={handleChangeCategory}
+          />
         </div>
-        <div className="my-4">
-          {selectedTabIndex === 0 && (
-            <div className="row gx-5">
-              {nftData?.map((token, index) => (
-                <div key={index} className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 my-3">
-                  <NFTCard onClick={() => history.push(`/token-detail/${token?.id}`)} token={token} profile={profile} />
-                </div>
-              ))}
-            </div>
-          )}
-          {selectedTabIndex === 1 && (
-            <div className="row gx-5">
-              {[0, 1, 2].map(index => (
-                <div key={index} className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 my-3">
-                  <NFTCard onClick={() => history.push(`/token-detail/${index}`)} />
-                </div>
-              ))}
-            </div>
-          )}
-          {selectedTabIndex === 2 && (
-            <div>
-              <div className="poppins-20-600">Content Creator page</div>
-            </div>
-          )}
-          {selectedTabIndex === 3 && (
-            <div>
-              <div className="poppins-20-600">Video Editing page</div>
-            </div>
-          )}
-          {selectedTabIndex === 4 && (
-            <div>
-              <div className="poppins-20-600">UX Design page</div>
-            </div>
-          )}
-          {selectedTabIndex === 5 && (
-            <div>
-              <div className="poppins-20-600">Social Media page</div>
-            </div>
-          )}
-          {selectedTabIndex === 6 && (
-            <div>
-              <div className="poppins-20-600">Video Explainer page</div>
-            </div>
+        <div className="row gx-5 my-4">
+          {filteredData?.length > 0 ? (
+            filteredData.map((item, index) => (
+              <div key={index} className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 my-3">
+                <NFTCard onClick={() => history.push(`/token-detail/${item?.id}`)} profile={profile} token={item} />
+              </div>
+            ))
+          ) : (
+            <div className="poppins-20-600 text-center">No Data</div>
           )}
         </div>
       </div>

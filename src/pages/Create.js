@@ -210,7 +210,12 @@ const Create = () => {
       toast.error('Please connect wallet!');
       return;
     }
+    if (!seenVideo) {
+      toast.error('Please see Video');
+      return;
+    }
     let requireToast = false;
+    let requirePercent = false;
     var BreakException = {};
     try {
       arrayNFT.forEach((element, index) => {
@@ -220,15 +225,22 @@ const Create = () => {
             throw BreakException;
           }
         });
+        if (parseInt(element.creator) + parseInt(element.reseller) + parseInt(element.royaltyPool) !== 100) {
+          requirePercent = true;
+          throw BreakException;
+        }
       });
     } catch (e) {
       if (e !== BreakException) throw e;
+    }
+    if (requirePercent) {
+      toast.error('All sums of creator, reseller and royalty must equal 100%!');
+      return;
     }
     if (requireToast) {
       toast.error('Please input all field!');
       return;
     }
-
     try {
       setIsLoading(true);
       // const newNFTs = await handleSaveNFTAPI();

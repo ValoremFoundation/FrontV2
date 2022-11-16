@@ -3,7 +3,7 @@ import 'src/styles/components/BoostPost.scss';
 import 'src/styles/Global.scss';
 import BoostPostIcon from 'src/assets/images/boost.svg';
 import BackgroundButton from '../BackgroundButton';
-import CustomBlackRadio from '../CustomBlackRadio';
+import CustomRadio from '../CustomRadio';
 
 const BoostPost = ({ onClick, onChange }) => {
   return (
@@ -15,16 +15,16 @@ const BoostPost = ({ onClick, onChange }) => {
       <div className="boost-post-section mt-2">
         <div className="row gx-4">
           <div className="col-6 col-lg-3 my-2" style={{ minWidth: '130px' }}>
-            <CustomBlackRadio label={'14 days'} value={'14'} onChange={onChange} />
+            <CustomRadio label={'14 days'} value={'14'} onChange={onChange} />
           </div>
           <div className="col-6 col-lg-3 my-2" style={{ minWidth: '130px' }}>
-            <CustomBlackRadio label={'30 days'} value={'30'} onChange={onChange} />
+            <CustomRadio label={'30 days'} value={'30'} onChange={onChange} />
           </div>
           <div className="col-6 col-lg-3 my-2" style={{ minWidth: '130px' }}>
-            <CustomBlackRadio label={'45 days'} value={'45'} onChange={onChange} />
+            <CustomRadio label={'45 days'} value={'45'} onChange={onChange} />
           </div>
           <div className="col-6 col-lg-3 my-2" style={{ minWidth: '130px' }}>
-            <CustomBlackRadio label={'60 days'} value={'60'} onChange={onChange} />
+            <CustomRadio label={'60 days'} value={'60'} onChange={onChange} />
           </div>
         </div>
         <div className="mt-2">
