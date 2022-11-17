@@ -10,7 +10,7 @@ const Created = ({ actionTab = 'listed', handleClickBuy, handleChangeOption, pro
   const mintedTokens = profile?.tokens?.minted;
   const savedForLaterTokens = profile?.tokens?.saved;
   const listedTokens = profile?.tokens?.listed;
-
+  const soldTokens = profile?.tokens?.sold;
   const Minted = () => {
     return (
       <div>
@@ -52,7 +52,19 @@ const Created = ({ actionTab = 'listed', handleClickBuy, handleChangeOption, pro
   };
 
   const Sold = () => {
-    return <div>Sold Page</div>;
+    return (
+      <div className="row gx-5 my-4">
+        {soldTokens?.length > 0 ? (
+          soldTokens?.map((item, index) => (
+            <div key={index} className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 my-3">
+              <NFTCard onClick={() => history.push(`/token-detail/${item?.id}`)} profile={profile} token={item} />
+            </div>
+          ))
+        ) : (
+          <div className="poppins-20-600 text-center">No Data</div>
+        )}
+      </div>
+    );
   };
 
   const SavedForLater = () => {
@@ -86,9 +98,9 @@ const Created = ({ actionTab = 'listed', handleClickBuy, handleChangeOption, pro
         <Tab active={actionTab === 'listed'} path="/profile?activeTab=created&actionTab=listed">
           Listed
         </Tab>
-        {/* <Tab active={actionTab === 'sold'} path="/profile?activeTab=created&actionTab=sold">
+        <Tab active={actionTab === 'sold'} path="/profile?activeTab=created&actionTab=sold">
           Sold
-        </Tab> */}
+        </Tab>
         <Tab active={actionTab === 'saved-for-later'} path="/profile?activeTab=created&actionTab=saved-for-later">
           Saved for Later
         </Tab>

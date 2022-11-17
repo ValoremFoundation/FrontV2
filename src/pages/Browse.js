@@ -55,10 +55,6 @@ const Browse = () => {
     setRemotePerson(e.target.value);
   };
 
-  const handleChangeCategory = e => {
-    setCategory(e.target.value);
-  };
-
   return (
     <>
       {isLoading && <LoadingPage />}
