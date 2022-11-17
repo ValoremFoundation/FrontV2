@@ -10,7 +10,7 @@ import LoadingPage from 'src/components/LoadingPage';
 import CustomRadio from 'src/components/CustomRadio';
 import { fetchAllCategories } from 'src/actions/categories';
 import { useSelector, useDispatch } from 'react-redux';
-import SelectInput from 'src/components/SelectInput';
+import Tabs, { Tab } from 'src/components/Browse/LineTab';
 
 const Browse = () => {
   const history = useHistory();
@@ -20,7 +20,7 @@ const Browse = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [nftData, setNftData] = useState();
   const [remotePerson, setRemotePerson] = useState('remote');
-  const [category, setCategory] = useState(0);
+  const [category, setCategory] = useState(1);
 
   useEffect(() => {
     dispatch(fetchAllCategories());
@@ -49,6 +49,8 @@ const Browse = () => {
     [nftData, category, remotePerson]
   );
 
+  const sortedCategories = useMemo(() => categories?.sort((a, b) => (a.name > b.name ? 1 : -1)), [categories]);
+
   const handleChangeRemotePerson = e => {
     setRemotePerson(e.target.value);
   };
@@ -68,7 +70,7 @@ const Browse = () => {
         <div className="global-flex-start flex-wrap my-4">
           <div className="me-3 my-1">
             <CustomRadio
-              label={'Remote'}
+              label={'Digital Creators'}
               value={'remote'}
               variable={remotePerson}
               onChange={handleChangeRemotePerson}
@@ -76,22 +78,20 @@ const Browse = () => {
           </div>
           <div className="me-3 my-1">
             <CustomRadio
-              label={'In Person'}
+              label={'Brick & Mortar Creators'}
               value={'person'}
               variable={remotePerson}
               onChange={handleChangeRemotePerson}
             />
           </div>
         </div>
-        <div style={{ maxWidth: '350px' }}>
-          <SelectInput
-            label={'Category'}
-            placeFolder={'Select Category'}
-            value={category}
-            options={categories}
-            onChange={handleChangeCategory}
-          />
-        </div>
+        <Tabs>
+          {sortedCategories?.map((item, index) => (
+            <Tab key={index} active={category === item.id} onClick={() => setCategory(item.id)}>
+              {item.name}
+            </Tab>
+          ))}
+        </Tabs>
         <div className="row gx-5 my-4">
           {filteredData?.length > 0 ? (
             filteredData.map((item, index) => (
