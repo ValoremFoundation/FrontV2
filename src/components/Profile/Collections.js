@@ -3,19 +3,38 @@ import { useHistory } from 'react-router-dom';
 import Tabs, { Tab } from 'src/components/SubLineTab';
 import RedeemedCard from 'src/components/RedeemedCard';
 import NotRedeemedCard from 'src/components/NotRedeemedCard';
+import { useMemo } from 'react';
+import { useState } from 'react';
 
-const Collections = ({ actionTab = 'redeemed', handleClickRedeem, handleClickAccept, handleClickDeny }) => {
+const Collections = ({
+  actionTab = 'redeemed',
+  handleClickRedeem,
+  handleClickAccept,
+  handleClickDeny,
+  profile,
+  transactions,
+  account,
+}) => {
   const history = useHistory();
+  const requestedTokens = profile?.tokens?.requestRedeemed;
+  const soldTokens = profile?.tokens?.sold;
+  const redeemTokens = soldTokens?.map(token => {
+    if (token.minted && !token.for_sale) {
+      const mintedSoldNotlistTransaction = transactions.find(
+        transaction => transaction.method === 'mint' && transaction.token_id === token.token_id
+      );
+      if (mintedSoldNotlistTransaction?.to.toLowerCase() !== account.toLowerCase()) {
+        return { ...token, redeemAddress: mintedSoldNotlistTransaction?.to };
+      }
+    }
+  });
 
   const Redeemed = () => {
     return (
       <div>
-        {[0, 1, 2].map(index => (
+        {redeemTokens?.map((token, index) => (
           <div className="my-4" key={index}>
-            <RedeemedCard
-              handleClickRedeem={() => handleClickRedeem(index)}
-              handleClick={() => history.push(`/token-detail/${index}`)}
-            />
+            <RedeemedCard handleClickRedeem={() => handleClickRedeem(token)} token={token} profile={profile} />
           </div>
         ))}
       </div>
@@ -25,12 +44,13 @@ const Collections = ({ actionTab = 'redeemed', handleClickRedeem, handleClickAcc
   const NotRedeemed = () => {
     return (
       <div>
-        {[0, 1, 2].map(index => (
+        {requestedTokens?.map((token, index) => (
           <div className="my-4" key={index}>
             <NotRedeemedCard
-              handleClickAccept={() => handleClickAccept(index)}
-              handleClickDeny={() => handleClickDeny(index)}
-              handleClick={() => history.push(`/token-detail/${index}`)}
+              handleClickAccept={() => handleClickAccept(token)}
+              handleClickDeny={() => handleClickDeny(token.id)}
+              token={token}
+              profile={profile}
             />
           </div>
         ))}

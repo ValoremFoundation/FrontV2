@@ -12,7 +12,7 @@ import NFTCardButton from '../NFTCardButton';
 import BackgroundButton from '../BackgroundButton';
 import DistributionItem from '../DistributionItem';
 
-const MintCard = ({ handleClickRedeem, handleClick, token, userInfo, handleClickEdit }) => {
+const MintCard = ({ handleClick, token, userInfo, handleClickEdit }) => {
   return (
     <div className="listing-card-container global-pointer">
       <div className="row gx-4">
@@ -23,7 +23,7 @@ const MintCard = ({ handleClickRedeem, handleClick, token, userInfo, handleClick
               src={token?.uri || '/img/blank-image.jpg'}
               style={{
                 maxWidth: '250px',
-                width: '250px',
+                width: '100%',
                 height: '170px',
                 borderRadius: 5,
                 objectFit: 'cover',

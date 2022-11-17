@@ -8,7 +8,14 @@ import NotRedeemedCard from 'src/components/NotRedeemedCard';
 import BoostPost from 'src/components/BoostPost';
 import NFTCard from 'src/components/NFTCard';
 import EditIcon from 'src/assets/images/editIcon.svg';
-import { getProfile, updateProfile, uploadFile } from 'src/api';
+import {
+  getProfile,
+  getTransactionForAllToken,
+  tokenRedeem,
+  tokenRedeemUpdate,
+  updateProfile,
+  uploadFile,
+} from 'src/api';
 import { useSelector } from 'react-redux';
 import LoadingPage from 'src/components/LoadingPage';
 import { profileNumberNameData } from 'src/constants';
@@ -20,9 +27,25 @@ import RoyaltyPool from 'src/components/Profile/RoyaltyPool';
 import EarnLiquidityRewards from 'src/components/Profile/EarnLiquidityRewards';
 import BuyMatic from 'src/components/Profile/BuyMatic';
 import BuyVLR from 'src/components/Profile/BuyVLR';
+import { useWeb3React } from '@web3-react/core';
+import toast from 'react-hot-toast';
+import Web3 from 'web3';
+import marketplaceABI from 'src/assets/abis/nftMarketplace.json';
+import nftABI from 'src/assets/abis/nftAdValorem.json';
+import royaltyPoolABI from 'src/assets/abis/royaltyPool.json';
+import vlrTokenABI from 'src/assets/abis/adValoremToken.json';
+
+const { REACT_APP_MARKETPLACE_CONTRACT_ADDRESS, REACT_APP_NFT_CONTRACT_ADDRESS, REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS } =
+  process.env;
+const web3 = new Web3(window.ethereum);
+const marketplaceContract = new web3.eth.Contract(marketplaceABI, REACT_APP_MARKETPLACE_CONTRACT_ADDRESS);
+const nftContract = new web3.eth.Contract(nftABI, REACT_APP_NFT_CONTRACT_ADDRESS);
+const vlrTokenContract = new web3.eth.Contract(vlrTokenABI, REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS);
+const zeroAddress = '0x0000000000000000000000000000000000000000';
 
 const Profile = () => {
   const { search } = useLocation();
+  const { account } = useWeb3React();
   const query = new URLSearchParams(search);
   const activeTab = query.get('activeTab');
   const actionTab = query.get('actionTab');
@@ -38,39 +61,130 @@ const Profile = () => {
   const [userName, setUserName] = useState('');
   const [header, setHeader] = useState('');
   const [description, setDescription] = useState('');
+  const [transactions, setTransactions] = useState([]);
+
+  const getProfileData = async () => {
+    try {
+      if (!authToken) return;
+      setIsLoading(true);
+      const {
+        data: { data: profileInfo },
+      } = await getProfile({
+        Authorization: `Bearer ${authToken}`,
+      });
+      setProfile(profileInfo);
+      setAvatarSource(profileInfo?.avatar || '/img/default-avatar.png');
+      setBannerSource(profileInfo?.cover_photo || '/img/default-banner.png');
+      setUserName(profileInfo?.name);
+      setHeader(profileInfo?.header);
+      setDescription(profileInfo?.description);
+      setIsLoading(false);
+    } catch (err) {
+      console.log('Error Profile : ', err);
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const getProfileData = async () => {
-      try {
-        if (!authToken) return;
-        setIsLoading(true);
-        const {
-          data: { data: profileInfo },
-        } = await getProfile({
-          Authorization: `Bearer ${authToken}`,
-        });
-        setProfile(profileInfo);
-        setAvatarSource(profileInfo?.avatar || '/img/default-avatar.png');
-        setBannerSource(profileInfo?.cover_photo || '/img/default-banner.png');
-        setUserName(profileInfo?.name);
-        setHeader(profileInfo?.header);
-        setDescription(profileInfo?.description);
-        setIsLoading(false);
-      } catch (err) {
-        console.log('Error Profile : ', err);
-        setIsLoading(false);
-      }
-    };
     getProfileData();
   }, [authToken]);
 
-  const handleClickRedeem = index => {
-    console.log('>>>>>>>>>>>>>>>>>> handleClickRedeem : ', index);
-    history.push(`/activate-listing/${index}`);
+  useEffect(() => {
+    const getAllTransaction = async () => {
+      const {
+        data: { data: transactions },
+      } = await getTransactionForAllToken();
+      setTransactions(transactions);
+    };
+
+    getAllTransaction();
+  }, [account]);
+
+  const handleClickRedeem = async token => {
+    try {
+      setIsLoading(true);
+      if (!Web3.utils.isAddress(token?.redeemAddress)) return;
+      const approvedAddress = await nftContract.methods.getApproved(token?.token_id).call();
+      if (approvedAddress === zeroAddress) {
+        await nftContract.methods.approve(token?.redeemAddress, token.token_id).send({ from: account });
+      }
+
+      const res = await tokenRedeemUpdate(token?.id, {
+        redeem_from: account,
+        redeem_to: token?.redeemAddress,
+        redeem_status: 'request',
+      });
+      if (res?.data.status) {
+        toast.success(res?.data?.message);
+        getProfileData();
+      } else {
+        toast.error('Not redeemed');
+      }
+      setIsLoading(false);
+    } catch (err) {
+      console.log('Error Profile Update Redeem :', err.message);
+      toast.error(err?.message);
+      setIsLoading(false);
+    }
   };
 
-  const handleClickAccept = index => {};
-  const handleClickDeny = index => {};
+  const handleClickAccept = async token => {
+    try {
+      setIsLoading(true);
+      if (!Web3.utils.isAddress(token?.redeem_from)) return;
+      const { transactionHash, blockNumber } = await nftContract.methods
+        .safeTransferFrom(token?.redeem_from, account, token?.token_id)
+        .send({ from: account });
+      const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
+
+      await tokenRedeem(token?.id, {
+        hash: transactionHash,
+        from: token?.redeem_from,
+        to: account,
+        method: 'redeem',
+        timestamp: blockTimeStamp,
+      });
+
+      const res = await tokenRedeemUpdate(token?.id, {
+        redeem_from: '',
+        redeem_to: '',
+        redeem_status: 'accept',
+      });
+      if (res?.data.status) {
+        toast.success('Accepted redeem successfully');
+        getProfileData();
+      } else {
+        toast.error('Not redeemed');
+      }
+      setIsLoading(false);
+    } catch (err) {
+      console.log('Error Profile Update Redeem :', err.message);
+      toast.error(err?.message);
+      setIsLoading(false);
+    }
+  };
+
+  const handleClickDeny = async tokenId => {
+    try {
+      setIsLoading(true);
+      const res = await tokenRedeemUpdate(tokenId, {
+        redeem_from: '',
+        redeem_to: '',
+        redeem_status: 'deny',
+      });
+      if (res?.data.status) {
+        toast.success('Denyed redeem successfully');
+        getProfileData();
+      } else {
+        toast.error('Not redeemed');
+      }
+      setIsLoading(false);
+    } catch (err) {
+      console.log('Error Profile Update Redeem :', err.message);
+      toast.error(err?.message);
+      setIsLoading(false);
+    }
+  };
   const handleChangeOption = event => {
     console.log('>>>>>>>>>>>>>>>>>> : ', event.target.value);
   };
@@ -235,6 +349,9 @@ const Profile = () => {
                   handleClickRedeem={handleClickRedeem}
                   handleClickAccept={handleClickAccept}
                   handleClickDeny={handleClickDeny}
+                  profile={profile}
+                  transactions={transactions}
+                  account={account}
                 />
               )}
               {activeTab === 'transactions' && <Transactions />}

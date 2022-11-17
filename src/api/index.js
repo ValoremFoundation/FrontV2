@@ -88,3 +88,15 @@ export const getTokensByFilters = async filters => {
 export const tokenBuy = async (tokenId, data) => {
   return await axios.post(`${process.env.REACT_APP_BACKEND_BASE_URL}/tokens/${tokenId}/buy`, data);
 };
+
+export const getTransactionForAllToken = async () => {
+  return await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/transactions`);
+};
+
+export const tokenRedeem = async (tokenId, data) => {
+  return await axios.post(`${process.env.REACT_APP_BACKEND_BASE_URL}/tokens/${tokenId}/redeem`, data);
+};
+
+export const tokenRedeemUpdate = async (tokenId, data) => {
+  return await axios.post(`${process.env.REACT_APP_BACKEND_BASE_URL}/tokens/${tokenId}/redeemupdate`, data);
+};
