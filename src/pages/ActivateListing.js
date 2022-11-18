@@ -244,6 +244,7 @@ const ActivateListing = () => {
                     handleClickTransfer={() => setOpenTransfer(true)}
                     price={price}
                     handleChangePrice={handleChangePrice}
+                    token={nftData}
                   />
                 </div>
               </div>

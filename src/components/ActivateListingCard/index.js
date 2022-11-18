@@ -5,7 +5,14 @@ import BackgroundButton from '../BackgroundButton';
 import ShowRoleInfo from '../ShowRoleInfo';
 import TextInput from '../TextInput';
 
-const ActivateListingCard = ({ handleClickList, handleClickBurn, handleClickTransfer, price, handleChangePrice }) => {
+const ActivateListingCard = ({
+  handleClickList,
+  handleClickBurn,
+  handleClickTransfer,
+  price,
+  handleChangePrice,
+  token,
+}) => {
   return (
     <div className="activate-listing-card">
       <div className="poppins-24-600 my-2">Activating your listing</div>
@@ -31,26 +38,26 @@ const ActivateListingCard = ({ handleClickList, handleClickBurn, handleClickTran
             <div className="poppins-14-600 my-2">Token Distributions</div>
             <div className="global-flex-start">
               <div className="me-3">
-                <ShowRoleInfo value={120} role={'Creator'} unit={'VLR'} />
+                <ShowRoleInfo value={(token?.creator * price) / 100} role={'Creator'} unit={'VLR'} />
               </div>
               <div className="me-3">
-                <ShowRoleInfo value={60} role={'Reseller'} unit={'VLR'} />
+                <ShowRoleInfo value={(token?.reseller * price) / 100} role={'Reseller'} unit={'VLR'} />
               </div>
               <div className="me-3">
-                <ShowRoleInfo value={20} role={'Royalty Pool'} unit={'VLR'} />
+                <ShowRoleInfo value={(token?.royalty_pool * price) / 100} role={'Royalty Pool'} unit={'VLR'} />
               </div>
             </div>
           </div>
           <div className="my-2">
             <div className="poppins-14-600 my-2">Royalty pool breakdowns</div>
             <div className="my-1">
-              <ShowRoleInfo value={60} role={'Creator'} unit={'%'} />
+              <ShowRoleInfo value={token?.creator} role={'Creator'} unit={'%'} />
             </div>
             <div className="my-1">
-              <ShowRoleInfo value={30} role={'Reseller'} unit={'%'} />
+              <ShowRoleInfo value={token?.reseller} role={'Reseller'} unit={'%'} />
             </div>
             <div className="my-1">
-              <ShowRoleInfo value={10} role={'Royalty'} unit={'%'} />
+              <ShowRoleInfo value={token?.royalty_pool} role={'Royalty'} unit={'%'} />
             </div>
           </div>
         </div>

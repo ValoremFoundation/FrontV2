@@ -220,7 +220,7 @@ const Create = () => {
     try {
       arrayNFT.forEach((element, index) => {
         Object.values(element).forEach((item, index) => {
-          if (item === '') {
+          if (item === '' || item === '/img/blank-image.jpg') {
             requireToast = true;
             throw BreakException;
           }

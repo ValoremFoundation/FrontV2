@@ -1,10 +1,7 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useMemo } from 'react';
 import Tabs, { Tab } from 'src/components/SubLineTab';
 import RedeemedCard from 'src/components/RedeemedCard';
 import NotRedeemedCard from 'src/components/NotRedeemedCard';
-import { useMemo } from 'react';
-import { useState } from 'react';
 
 const Collections = ({
   actionTab = 'redeemed',
@@ -15,7 +12,6 @@ const Collections = ({
   transactions,
   account,
 }) => {
-  const history = useHistory();
   const requestedTokens = profile?.tokens?.requestRedeemed;
   const soldTokens = profile?.tokens?.sold;
 
@@ -43,11 +39,15 @@ const Collections = ({
   const Redeemed = () => {
     return (
       <div>
-        {redeemTokens?.map((token, index) => (
-          <div className="my-4" key={index}>
-            <RedeemedCard handleClickRedeem={() => handleClickRedeem(token)} token={token} profile={profile} />
-          </div>
-        ))}
+        {redeemTokens?.length > 0 ? (
+          redeemTokens?.map((token, index) => (
+            <div className="my-4" key={index}>
+              <RedeemedCard handleClickRedeem={() => handleClickRedeem(token)} token={token} profile={profile} />
+            </div>
+          ))
+        ) : (
+          <div className="poppins-20-600 text-center">No Data</div>
+        )}
       </div>
     );
   };
@@ -55,16 +55,20 @@ const Collections = ({
   const NotRedeemed = () => {
     return (
       <div>
-        {requestedTokens?.map((token, index) => (
-          <div className="my-4" key={index}>
-            <NotRedeemedCard
-              handleClickAccept={() => handleClickAccept(token)}
-              handleClickDeny={() => handleClickDeny(token.id)}
-              token={token}
-              profile={profile}
-            />
-          </div>
-        ))}
+        {requestedTokens?.length > 0 ? (
+          requestedTokens?.map((token, index) => (
+            <div className="my-4" key={index}>
+              <NotRedeemedCard
+                handleClickAccept={() => handleClickAccept(token)}
+                handleClickDeny={() => handleClickDeny(token.id)}
+                token={token}
+                profile={profile}
+              />
+            </div>
+          ))
+        ) : (
+          <div className="poppins-20-600 text-center">No Data</div>
+        )}
       </div>
     );
   };
