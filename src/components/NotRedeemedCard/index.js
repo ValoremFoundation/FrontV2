@@ -18,7 +18,7 @@ const NotRedeemedCard = ({ handleClickAccept, handleClickDeny, token, profile })
           <div className="global-flex-center">
             <img
               alt="alt"
-              src={token?.uri || '/image/blank-image.jpg'}
+              src={token?.uri || '/img/blank-image.jpg'}
               style={{
                 // maxWidth: '250px',
                 width: '250px',

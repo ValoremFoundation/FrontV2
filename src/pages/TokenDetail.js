@@ -42,7 +42,7 @@ const TokenDetail = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const categories = useSelector(state => state.categories.items.items);
-  const [qrImage, setQRImage] = useState('/image/blank-image.jpg');
+  const [qrImage, setQRImage] = useState('/img/blank-image.jpg');
   const mapStyleLight = 'mapbox://styles/thyjames/ckyj5984oa25w14o1hnuexh2a';
   const [viewport, setViewport] = useState({
     latitude: 38.57,
@@ -93,7 +93,7 @@ const TokenDetail = () => {
     setQRImage(
       token?.user?.id
         ? `${process.env.REACT_APP_RESOURCE_URL}/images/qr-${token?.user?.id}.png`
-        : '/image/blank-image.jpg'
+        : '/img/blank-image.jpg'
     );
     setIsLoading(false);
   };

@@ -18,16 +18,27 @@ const Collections = ({
   const history = useHistory();
   const requestedTokens = profile?.tokens?.requestRedeemed;
   const soldTokens = profile?.tokens?.sold;
-  const redeemTokens = soldTokens?.map(token => {
-    if (token.minted && !token.for_sale) {
-      const mintedSoldNotlistTransaction = transactions.find(
-        transaction => transaction.method === 'mint' && transaction.token_id === token.token_id
-      );
-      if (mintedSoldNotlistTransaction?.to.toLowerCase() !== account.toLowerCase()) {
-        return { ...token, redeemAddress: mintedSoldNotlistTransaction?.to };
-      }
+
+  const redeemTokens = useMemo(() => {
+    let result = [];
+    if (soldTokens) {
+      soldTokens.map(token => {
+        if (token.minted && !token.for_sale) {
+          const mintedSoldNotlistTransaction = transactions.find(
+            transaction => transaction.method === 'mint' && transaction.token_id === token.token_id
+          );
+          if (
+            mintedSoldNotlistTransaction?.to &&
+            mintedSoldNotlistTransaction?.to.toLowerCase() !== account.toLowerCase()
+          ) {
+            result.push({ ...token, redeemAddress: mintedSoldNotlistTransaction?.to });
+          }
+        }
+      });
     }
-  });
+
+    return result;
+  }, [soldTokens]);
 
   const Redeemed = () => {
     return (
