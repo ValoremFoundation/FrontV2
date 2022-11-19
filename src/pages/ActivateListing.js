@@ -89,23 +89,22 @@ const ActivateListing = () => {
       //     .send({ from: account, gasPrice: gasPrice * 5 });
       // }
 
-      const { events } = await marketplaceContract.methods
-        .createMarketItem(
-          process.env.REACT_APP_NFT_CONTRACT_ADDRESS,
-          nftData.token_id,
-          nftData.creator * 100,
-          nftData.reseller * 100,
-          nftData.royalty_pool * 100
-        )
-        .send({ from: account, gasPrice: gasPrice * 5 });
+      // const { events } = await marketplaceContract.methods
+      //   .createMarketItem(
+      //     process.env.REACT_APP_NFT_CONTRACT_ADDRESS,
+      //     nftData.token_id,
+      //     nftData.creator * 100,
+      //     nftData.reseller * 100,
+      //     nftData.royalty_pool * 100
+      //   )
+      //   .send({ from: account, gasPrice: gasPrice * 5 });
+      // const { itemId } = events.MarketItemCreated.returnValues;
 
       window.gtag('event', 'Token List', { tokenId: nftData.id });
       window.gtag('event', 'conversion', { send_to: 'AW-826595197/Xd_8CPKMvMIDEP2uk4oD' });
 
-      const { itemId } = events.MarketItemCreated.returnValues;
-
       const { from, to, transactionHash, blockNumber } = await marketplaceContract.methods
-        .sellMarketItem(itemId, Web3.utils.toWei(price))
+        .sellMarketItem(nftData?.market_item_id, Web3.utils.toWei(price))
         .send({ from: account, gasPrice: gasPrice * 5 });
 
       const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
@@ -115,7 +114,7 @@ const ActivateListing = () => {
         from: to,
         to: from,
         method: 'list',
-        marketItemId: itemId,
+        // marketItemId: itemId,
         price: price,
         timestamp: blockTimeStamp,
       });

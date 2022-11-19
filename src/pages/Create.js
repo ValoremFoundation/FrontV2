@@ -21,9 +21,14 @@ import { addDays } from 'date-fns';
 import Web3 from 'web3';
 import { useWeb3React } from '@web3-react/core';
 import nftABI from 'src/assets/abis/nftAdValorem.json';
+import marketplaceABI from 'src/assets/abis/nftMarketplace.json';
+
+const { REACT_APP_MARKETPLACE_CONTRACT_ADDRESS, REACT_APP_NFT_CONTRACT_ADDRESS, REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS } =
+  process.env;
 
 const web3 = new Web3(window.ethereum);
-const nftContract = new web3.eth.Contract(nftABI, process.env.REACT_APP_NFT_CONTRACT_ADDRESS);
+const marketplaceContract = new web3.eth.Contract(marketplaceABI, REACT_APP_MARKETPLACE_CONTRACT_ADDRESS);
+const nftContract = new web3.eth.Contract(nftABI, REACT_APP_NFT_CONTRACT_ADDRESS);
 const impactClickId = localStorage.getItem('Impact_ClickId');
 
 const Create = () => {
@@ -37,7 +42,6 @@ const Create = () => {
   const authToken = useSelector(state => state.auth.token);
   const [seenVideo, setSeenVideo] = useState(false);
   let savedForLater = 0;
-  const [createdArrayToken, setCreatedArrayToken] = useState([]);
   const [arrayNFT, setArrayNFT] = useState([
     {
       imageUrl: '/img/blank-image.jpg',
@@ -123,8 +127,7 @@ const Create = () => {
     try {
       setIsLoading(true);
       savedForLater = 1;
-      const newNFTs = await handleSaveNFTAPI();
-      setCreatedArrayToken(newNFTs);
+      const newNFTs = await handleSaveNFTAPI(arrayNFT);
       toast.success('Successfully saved!');
       setIsLoading(false);
       history.push('/profile?activeTab=created&actionTab=saved-for-later');
@@ -265,18 +268,55 @@ const Create = () => {
       const tokenURIs = arrayNFT.map(item => item.imageUrl);
 
       const gasPrice = await web3.eth.getGasPrice();
-      const { from, to, transactionHash, blockNumber, events } = await nftContract.methods
-        .createMultiToken(tokenURIs)
-        .send({ from: account, gasPrice: gasPrice * 5 });
+      const {
+        from,
+        to,
+        transactionHash,
+        blockNumber,
+        events: mintEvent,
+      } = await nftContract.methods.createMultiToken(tokenURIs).send({ from: account, gasPrice: gasPrice * 5 });
       let nftTokenIds = [];
-      if (events?.TokenCreated?.length > 0) {
-        nftTokenIds = events?.TokenCreated?.map(item => item?.returnValues?.tokenId);
+      if (mintEvent?.TokenCreated?.length > 0) {
+        nftTokenIds = mintEvent?.TokenCreated?.map(item => item?.returnValues?.tokenId);
       } else {
-        nftTokenIds.push(events?.TokenCreated?.returnValues?.tokenId);
+        nftTokenIds.push(mintEvent?.TokenCreated?.returnValues?.tokenId);
       }
       const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
+      console.log('>>>>>>>>>>>>>>>>>> createMultiToken mintEvent : ', mintEvent);
 
-      const newNFTs = await handleSaveNFTAPI();
+      const pmarketItem = [];
+      arrayNFT.forEach((item, index) => {
+        pmarketItem.push({
+          nftContract: REACT_APP_NFT_CONTRACT_ADDRESS,
+          tokenId: nftTokenIds[index],
+          businessOwnerPercent: item.creator * 100,
+          sellerPercent: item.reseller * 100,
+          royaltyPercent: item.royaltyPool * 100,
+        });
+      });
+      console.log('>>>>>>>>>>>>>>>>>> 111111111111111111q : ', pmarketItem);
+
+      const { events: marketEvent } = await marketplaceContract.methods
+        .createMultiMarketItem(pmarketItem)
+        .send({ from: account, gasPrice: gasPrice * 5 });
+
+      let marketItems = [];
+      console.log('>>>>>>>>>>>>>>>>>> createMultiMarketItem marketEvent : ', marketEvent);
+      if (marketEvent?.MarketItemCreated?.length > 0) {
+        marketItems = marketEvent?.MarketItemCreated?.map(item => item?.returnValues?.itemId);
+      } else {
+        marketItems.push(marketEvent?.MarketItemCreated?.returnValues?.itemId);
+      }
+      console.log('>>>>>>>>>>>>>>>>>> 2222222222 createMultiMarketItem : ', marketItems);
+
+      const tmpArrNFT = [];
+      arrayNFT.forEach((item, index) => {
+        tmpArrNFT.push({ ...item, marketItemId: marketItems[index] });
+      });
+
+      console.log('>>>>>>>>>>>>>>>>>> 33333333333333 arrayNFT : ', tmpArrNFT);
+
+      const newNFTs = await handleSaveNFTAPI(tmpArrNFT);
       const tokenIds = newNFTs.map(item => item.id);
 
       const res = await Promise.all(
@@ -307,9 +347,9 @@ const Create = () => {
     }
   };
 
-  const handleSaveNFTAPI = async () => {
+  const handleSaveNFTAPI = async _arrayNFT => {
     try {
-      const res = await Promise.all(arrayNFT.map(async item => await handleSaveOneNFTAPI(item)));
+      const res = await Promise.all(_arrayNFT.map(async item => await handleSaveOneNFTAPI(item)));
       return res;
     } catch (err) {
       console.log('Error Create : ', err.message);
@@ -332,6 +372,7 @@ const Create = () => {
 
       const resp = await tokenCreate(
         {
+          marketItemId: nftData.marketItemId,
           uri: nftData.imageUrl,
           mediaType: nftData.type,
           name: nftData.name,

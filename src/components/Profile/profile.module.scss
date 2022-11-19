@@ -1,0 +1,29 @@
+.tableContainer {
+  width: 100%;
+  max-width: calc(100vw - 40px);
+  position: relative;
+  max-height: calc(100vh - 165px);;
+  overflow: auto;
+
+  @media screen and (max-width: 768px) {
+    width: calc(100vw - 32px);
+    max-width: calc(100vw - 32px);
+  } 
+}
+
+.tableWrapper {
+  width: 100%;
+  border-collapse: collapse;
+
+  tr, td, th, thead {
+    border-bottom: 1px solid #b7b7b7;
+    padding: 18px 0px;
+  }
+}
+
+.tableThWrap {
+  th, td {
+    white-space: nowrap;
+    padding: 18px 8px;
+  }
+}

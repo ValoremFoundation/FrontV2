@@ -145,8 +145,9 @@ const TokenDetail = () => {
       const allowance = await vlrTokenContract.methods
         .allowance(account, process.env.REACT_APP_MARKETPLACE_CONTRACT_ADDRESS)
         .call();
-
-      if (web3.utils.fromWei(allowance) > ethers.utils.parseEther('1000000')) {
+      console.log('>>>>>>>>>>>>>>> allowance : ', allowance);
+      if (web3.utils.fromWei(allowance) < ethers.utils.parseEther('1000000')) {
+        console.log('>>>>>>>>>>>>>>>  allowance 111111111111111111111111  : ');
         await vlrTokenContract.methods
           .approve(process.env.REACT_APP_MARKETPLACE_CONTRACT_ADDRESS, ethers.constants.MaxUint256)
           .send({ from: account });

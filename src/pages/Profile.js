@@ -11,6 +11,7 @@ import EditIcon from 'src/assets/images/editIcon.svg';
 import {
   getProfile,
   getTransactionForAllToken,
+  getTransactionForWallet,
   tokenRedeem,
   tokenRedeemUpdate,
   updateProfile,
@@ -62,6 +63,7 @@ const Profile = () => {
   const [header, setHeader] = useState('');
   const [description, setDescription] = useState('');
   const [transactions, setTransactions] = useState([]);
+  const [allTransactions, setAllTransactions] = useState([]);
 
   const getProfileData = async () => {
     try {
@@ -90,15 +92,26 @@ const Profile = () => {
   }, [authToken]);
 
   useEffect(() => {
-    const getAllTransaction = async () => {
+    const fecthData = async () => {
+      if (!account) return;
       const {
-        data: { data: transactions },
-      } = await getTransactionForAllToken();
-      setTransactions(transactions);
+        data: { data },
+      } = await getTransactionForWallet(account);
+      setTransactions(data);
     };
-
-    getAllTransaction();
+    fecthData();
   }, [account]);
+
+  useEffect(() => {
+    const fecthData = async () => {
+      if (!account) return;
+      const {
+        data: { data },
+      } = await getTransactionForAllToken();
+      setAllTransactions(data);
+    };
+    fecthData();
+  }, [account, activeTab]);
 
   const handleClickRedeem = async token => {
     try {
@@ -350,11 +363,11 @@ const Profile = () => {
                   handleClickAccept={handleClickAccept}
                   handleClickDeny={handleClickDeny}
                   profile={profile}
-                  transactions={transactions}
+                  transactions={allTransactions}
                   account={account}
                 />
               )}
-              {activeTab === 'transactions' && <Transactions />}
+              {activeTab === 'transactions' && <Transactions transactions={transactions} />}
               {activeTab === 'royalty-pool' && <RoyaltyPool />}
               {activeTab === 'earn-liquidity-rewards' && <EarnLiquidityRewards />}
               {activeTab === 'buy-matic' && <BuyMatic />}

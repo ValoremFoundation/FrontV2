@@ -17,6 +17,7 @@ import {
   pinFileToIPFS,
   tokenById,
   tokenCreate,
+  tokenMarketItem,
   tokenMint,
   tokenUpdate,
 } from 'src/api';
@@ -28,11 +29,15 @@ import LoadingPage from 'src/components/LoadingPage';
 import { addDays } from 'date-fns';
 import Web3 from 'web3';
 import { useWeb3React } from '@web3-react/core';
+import marketplaceABI from 'src/assets/abis/nftMarketplace.json';
 import nftABI from 'src/assets/abis/nftAdValorem.json';
 import { useParams } from 'react-router';
 
+const { REACT_APP_MARKETPLACE_CONTRACT_ADDRESS, REACT_APP_NFT_CONTRACT_ADDRESS, REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS } =
+  process.env;
 const web3 = new Web3(window.ethereum);
-const nftContract = new web3.eth.Contract(nftABI, process.env.REACT_APP_NFT_CONTRACT_ADDRESS);
+const marketplaceContract = new web3.eth.Contract(marketplaceABI, REACT_APP_MARKETPLACE_CONTRACT_ADDRESS);
+const nftContract = new web3.eth.Contract(nftABI, REACT_APP_NFT_CONTRACT_ADDRESS);
 const impactClickId = localStorage.getItem('Impact_ClickId');
 
 const TokenEdit = () => {
@@ -239,7 +244,7 @@ const TokenEdit = () => {
   };
 
   const handleSingleMintContract = async data => {
-    const { uri, id } = data;
+    const { uri, id, token_id, creator, reseller, royalty_pool } = data;
     try {
       const gasPrice = await web3.eth.getGasPrice();
       const { from, to, transactionHash, blockNumber, events } = await nftContract.methods
@@ -247,6 +252,13 @@ const TokenEdit = () => {
         .send({ from: account, gasPrice: gasPrice * 5 });
       let nftTokenId = events?.TokenCreated?.returnValues?.tokenId;
       const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
+
+      const { events: marketEvent } = await marketplaceContract.methods
+        .createMarketItem(REACT_APP_NFT_CONTRACT_ADDRESS, token_id, creator * 100, reseller * 100, royalty_pool * 100)
+        .send({ from: account, gasPrice: gasPrice * 5 });
+      const { itemId: marketItemId } = marketEvent?.MarketItemCreated?.returnValues;
+      await tokenMarketItem(id, { marketItemId });
+
       const res = await handleSingleMintAPI(nftTokenId, id, from, to, transactionHash, blockTimeStamp);
       return res?.data;
     } catch (err) {
