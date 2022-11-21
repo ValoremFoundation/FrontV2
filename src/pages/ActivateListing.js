@@ -28,12 +28,17 @@ import royaltyPoolABI from 'src/assets/abis/royaltyPool.json';
 import vlrTokenABI from 'src/assets/abis/adValoremToken.json';
 import TransferModal from 'src/components/TransferModal';
 
-const { REACT_APP_MARKETPLACE_CONTRACT_ADDRESS, REACT_APP_NFT_CONTRACT_ADDRESS, REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS } =
-  process.env;
+const {
+  REACT_APP_MARKETPLACE_CONTRACT_ADDRESS,
+  REACT_APP_NFT_CONTRACT_ADDRESS,
+  REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS,
+  REACT_APP_ROYALTY_POOL_CONTRACT_ADDRESS,
+} = process.env;
 const web3 = new Web3(window.ethereum);
 const marketplaceContract = new web3.eth.Contract(marketplaceABI, REACT_APP_MARKETPLACE_CONTRACT_ADDRESS);
 const nftContract = new web3.eth.Contract(nftABI, REACT_APP_NFT_CONTRACT_ADDRESS);
 const vlrTokenContract = new web3.eth.Contract(vlrTokenABI, REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS);
+const royaltyContract = new web3.eth.Contract(royaltyPoolABI, REACT_APP_ROYALTY_POOL_CONTRACT_ADDRESS);
 const zeroAddress = '0x0000000000000000000000000000000000000000';
 
 const ActivateListing = () => {
@@ -48,6 +53,9 @@ const ActivateListing = () => {
   const [price, setPrice] = useState(0);
   const [openTransfer, setOpenTransfer] = useState(false);
   const [transferAddress, setTransferAddress] = useState('');
+  const [businessOwnerPercent, setBusinessOwnerPercent] = useState(0);
+  const [buyerPercent, setBuyerPercent] = useState(0);
+  const [marketOwnerPercent, setMarketOwnerPercent] = useState(0);
 
   const getTokenDetail = async () => {
     setIsLoading(true);
@@ -60,10 +68,21 @@ const ActivateListing = () => {
     setIsLoading(false);
   };
 
+  const getRoyaltyInfo = async () => {
+    setBusinessOwnerPercent((await royaltyContract.methods.businessOwnerPercent().call()) / 100);
+    setBuyerPercent((await royaltyContract.methods.buyerPercent().call()) / 100);
+    setMarketOwnerPercent((await royaltyContract.methods.marketOwnerPercent().call()) / 100);
+  };
+
   useEffect(() => {
-    getTokenDetail();
+    try {
+      getTokenDetail();
+      getRoyaltyInfo();
+    } catch (err) {
+      console.log('Error ActivateListing : ', err.message);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params]);
+  }, [params, account]);
 
   const handleClickList = async () => {
     if (price < 0.5) {
@@ -201,6 +220,7 @@ const ActivateListing = () => {
       {isLoading && <LoadingPage />}
       {openTransfer && (
         <TransferModal
+          title={'Do you wish to transfer this NFT?'}
           modalIsOpen={openTransfer}
           closeModal={() => setOpenTransfer(false)}
           address={transferAddress}
@@ -244,6 +264,9 @@ const ActivateListing = () => {
                     price={price}
                     handleChangePrice={handleChangePrice}
                     token={nftData}
+                    businessOwnerPercent={businessOwnerPercent}
+                    buyerPercent={buyerPercent}
+                    marketOwnerPercent={marketOwnerPercent}
                   />
                 </div>
               </div>

@@ -5,9 +5,9 @@ import SendIcon from 'src/assets/images/send-green-icon.svg';
 import PolygonIcon from 'src/assets/images/polygon-icon.png';
 import DistributionItem from '../DistributionItem';
 import BackgroundButton from '../BackgroundButton';
-import { dateWithTimestamp } from 'src/utils/formartString';
+import { dateWithTimestamp } from 'src/utils/formartUtils';
 
-const BenefitCard = ({ nftData, isOwner, handleClickBuy, handleClickDelist }) => {
+const BenefitCard = ({ nftData, isOwner, handleClickBuy, handleClickDelist, handleClickGift }) => {
   return (
     <div className="benefit-card-container">
       <div className="benefit-card-header">
@@ -16,10 +16,19 @@ const BenefitCard = ({ nftData, isOwner, handleClickBuy, handleClickDelist }) =>
       <div className="benefit-card-content">
         <div className="global-flex-between my-2">
           <div className="poppins-16-500-gray">Expiration {dateWithTimestamp(nftData?.expiration)}</div>
-          <div className="global-flex-center">
-            <div className="poppins-14-500 me-2">Gift VLR</div>
-            <img alt="alt" src={SendIcon} width={20} height={20} className="global-pointer" />
-          </div>
+          {!isOwner && (
+            <div className="global-flex-center">
+              <div className="poppins-14-500 me-2">Gift VLR</div>
+              <img
+                alt="alt"
+                src={SendIcon}
+                width={20}
+                height={20}
+                className="global-pointer"
+                onClick={handleClickGift}
+              />
+            </div>
+          )}
         </div>
         <div className="my-2">
           <div className="poppins-16-400">

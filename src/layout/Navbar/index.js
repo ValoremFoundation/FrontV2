@@ -9,7 +9,7 @@ import { useWeb3React } from '@web3-react/core';
 import { injected, networkItem } from 'src/utils/connector';
 import toast from 'react-hot-toast';
 import SwitchNetworkModal from 'src/components/SwitchNetworkModal';
-import { truncateAddress } from 'src/utils/formartString';
+import { truncateAddress } from 'src/utils/formartUtils';
 import { setWalletAddress } from 'src/actions/wallet';
 import { setProfile } from 'src/actions/profile';
 import { useDispatch, useSelector } from 'react-redux';

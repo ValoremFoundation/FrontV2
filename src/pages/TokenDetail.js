@@ -17,7 +17,7 @@ import { isMobile } from 'react-device-detect';
 import NFTDivideLine from 'src/components/NFTDivideLine';
 import { useParams } from 'react-router';
 import { useWeb3React } from '@web3-react/core';
-import { tokenBuy, tokenById, tokenDelist } from 'src/api';
+import { newTransaction, tokenBuy, tokenById, tokenDelist } from 'src/api';
 import LoadingPage from 'src/components/LoadingPage';
 import toast from 'react-hot-toast';
 import Web3 from 'web3';
@@ -29,6 +29,8 @@ import vlrTokenABI from 'src/assets/abis/adValoremToken.json';
 import { useHistory } from 'react-router-dom';
 import { fetchAllCategories } from 'src/actions/categories';
 import { ethers } from 'ethers';
+import TransferModal from 'src/components/TransferModal';
+import { toFixedTail } from 'src/utils/formartUtils';
 
 const { REACT_APP_MARKETPLACE_CONTRACT_ADDRESS, REACT_APP_NFT_CONTRACT_ADDRESS, REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS } =
   process.env;
@@ -70,6 +72,9 @@ const TokenDetail = () => {
   const authToken = useSelector(state => state.auth.token);
   const [isLoading, setIsLoading] = useState(false);
   const [nftData, setNftData] = useState();
+  const [openTransfer, setOpenTransfer] = useState(false);
+  const [vlrAmount, setVlrAmount] = useState('');
+  const [vlrBalance, setVlrBalance] = useState(0);
 
   useEffect(() => {
     dispatch(fetchAllCategories());
@@ -95,13 +100,19 @@ const TokenDetail = () => {
         ? `${process.env.REACT_APP_RESOURCE_URL}/images/qr-${token?.user?.id}.png`
         : '/img/blank-image.jpg'
     );
+
+    if (Web3.utils.isAddress(account)) {
+      const bal = await vlrTokenContract.methods.balanceOf(account).call();
+      setVlrBalance(Number(toFixedTail(web3.utils.fromWei(bal, 'ether'), 4)));
+    }
+
     setIsLoading(false);
   };
 
   useEffect(() => {
     getTokenDetail();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params]);
+  }, [params, account]);
 
   const isOwner = useMemo(() => {
     if (!nftData) return false;
@@ -140,6 +151,10 @@ const TokenDetail = () => {
     try {
       setIsLoading(true);
       const { market_item_id: marketItemId, id, price, token_id, user } = nftData;
+      if (vlrBalance < price) {
+        toast.error("You don't have enough VLR token!");
+        return;
+      }
 
       const gasPrice = await web3.eth.getGasPrice();
       const allowance = await vlrTokenContract.methods
@@ -187,6 +202,57 @@ const TokenDetail = () => {
     window.open(categories[nftData?.category_id - 1]?.discord);
   };
 
+  const handleClickGift = () => {
+    setOpenTransfer(true);
+  };
+
+  const handleChangeAmount = e => {
+    setVlrAmount(e.target.value);
+  };
+
+  const handleClickTransfer = async () => {
+    if (!Web3.utils.isAddress(nftData?.user?.walletAddress)) {
+      toast.error('Please input valid address.');
+      return;
+    }
+    if (vlrAmount < 1 || vlrAmount > vlrBalance) {
+      toast.error('Please input valid amount.');
+      return;
+    }
+
+    try {
+      setOpenTransfer(false);
+      setIsLoading(true);
+      const amount = web3.utils.toWei(vlrAmount.toString());
+      const gasPrice = await web3.eth.getGasPrice();
+      const { transactionHash, blockNumber, status } = await vlrTokenContract.methods
+        .transfer(nftData?.user?.walletAddress, amount)
+        .send({ from: account, gasPrice: gasPrice * 5 });
+      const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
+
+      if (status) {
+        const dbRes = await newTransaction({
+          hash: transactionHash,
+          from: account,
+          to: nftData.user.walletAddress,
+          token_id: nftData?.token_id,
+          price: vlrAmount,
+          method: 'vlrTransfer',
+          timestamp: blockTimeStamp,
+        });
+        if (dbRes.status) {
+          getTokenDetail();
+          setIsLoading(false);
+          toast.success('Successfully transfered!');
+        }
+      }
+    } catch (e) {
+      console.log('Error ', e);
+      setIsLoading(false);
+      toast.error(e?.message ? e.message : e);
+    }
+  };
+
   const renderMarkers = () => {
     if (nftData?.position?.latitude)
       return (
@@ -204,6 +270,18 @@ const TokenDetail = () => {
   return (
     <>
       {isLoading && <LoadingPage />}
+      {openTransfer && (
+        <TransferModal
+          title={'Do you wish to transfer VLR token?'}
+          modalIsOpen={openTransfer}
+          closeModal={() => setOpenTransfer(false)}
+          amount={vlrAmount}
+          handleChangeAmount={handleChangeAmount}
+          handleCancel={() => setOpenTransfer(false)}
+          handleConfirm={handleClickTransfer}
+          type={'vlrTransfer'}
+        />
+      )}
       <div className="token-detail-container">
         <div className="row gx-5">
           <div className="col-12 col-lg-7 my-4">
@@ -249,6 +327,7 @@ const TokenDetail = () => {
               isOwner={isOwner}
               handleClickBuy={handleClickBuy}
               handleClickDelist={handleClickDelist}
+              handleClickGift={handleClickGift}
             />
           </div>
         </div>

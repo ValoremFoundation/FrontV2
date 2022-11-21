@@ -139,7 +139,7 @@ const Create = () => {
   };
 
   const handleChangeSeenVideo = event => {
-    setSeenVideo(event.target.value);
+    setSeenVideo(!seenVideo);
   };
 
   const handleChangeArrayNFT = async (e, key, index) => {

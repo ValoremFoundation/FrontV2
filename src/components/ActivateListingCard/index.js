@@ -12,6 +12,9 @@ const ActivateListingCard = ({
   price,
   handleChangePrice,
   token,
+  businessOwnerPercent,
+  buyerPercent,
+  marketOwnerPercent,
 }) => {
   return (
     <div className="activate-listing-card">
@@ -41,7 +44,7 @@ const ActivateListingCard = ({
                 <ShowRoleInfo value={(token?.creator * price) / 100} role={'Creator'} unit={'VLR'} />
               </div>
               <div className="me-3">
-                <ShowRoleInfo value={(token?.reseller * price) / 100} role={'Reseller'} unit={'VLR'} />
+                <ShowRoleInfo value={(token?.reseller * price) / 100} role={'Buyer'} unit={'VLR'} />
               </div>
               <div className="me-3">
                 <ShowRoleInfo value={(token?.royalty_pool * price) / 100} role={'Royalty Pool'} unit={'VLR'} />
@@ -51,13 +54,13 @@ const ActivateListingCard = ({
           <div className="my-2">
             <div className="poppins-14-600 my-2">Royalty pool breakdowns</div>
             <div className="my-1">
-              <ShowRoleInfo value={token?.creator} role={'Creator'} unit={'%'} />
+              <ShowRoleInfo value={businessOwnerPercent} role={'Creator'} unit={'%'} />
             </div>
             <div className="my-1">
-              <ShowRoleInfo value={token?.reseller} role={'Reseller'} unit={'%'} />
+              <ShowRoleInfo value={buyerPercent} role={'Buyer'} unit={'%'} />
             </div>
             <div className="my-1">
-              <ShowRoleInfo value={token?.royalty_pool} role={'Royalty'} unit={'%'} />
+              <ShowRoleInfo value={marketOwnerPercent} role={'AdValorem'} unit={'%'} />
             </div>
           </div>
         </div>

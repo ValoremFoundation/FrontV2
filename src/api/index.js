@@ -108,3 +108,7 @@ export const getTransactionForAllToken = async () => {
 export const getTransactionForWallet = async wallet => {
   return await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/transactions?wallet=${wallet}`);
 };
+
+export const newTransaction = async data => {
+  return await axios.post(`${process.env.REACT_APP_BACKEND_BASE_URL}/transactions`, data);
+};

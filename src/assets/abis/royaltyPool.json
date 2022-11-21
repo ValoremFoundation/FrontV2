@@ -90,7 +90,7 @@
   },
   {
     "inputs": [],
-    "name": "buyerPecent",
+    "name": "buyerPercent",
     "outputs": [
       {
         "internalType": "uint256",
