@@ -187,7 +187,7 @@ const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT, ed
           <div className="col-12 col-lg-3 my-2">
             <SelectInput
               label={'Expiration'}
-              placeFolder={'Days to Auto-Burn'}
+              placeFolder={'Never'}
               options={giftCardOptions}
               onChange={e => handleChangeArrayNFT(e, 'expiration', index)}
               value={itemNFT?.expiration}
