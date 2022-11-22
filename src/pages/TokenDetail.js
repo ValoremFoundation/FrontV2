@@ -95,9 +95,14 @@ const TokenDetail = () => {
       zoom: 1,
     });
     setNftData(token);
+    // setQRImage(
+    //   token?.user?.id
+    //     ? `${process.env.REACT_APP_RESOURCE_URL}/images/qr-${token?.user?.id}.png`
+    //     : '/img/blank-image.jpg'
+    // );
     setQRImage(
-      token?.user?.id
-        ? `${process.env.REACT_APP_RESOURCE_URL}/images/qr-${token?.user?.id}.png`
+      token?.id && token?.token_id
+        ? `${process.env.REACT_APP_RESOURCE_URL}/images/qr-${token?.id}-${token?.token_id}.png`
         : '/img/blank-image.jpg'
     );
 
@@ -389,7 +394,7 @@ const TokenDetail = () => {
           </div>
           <div className="col-12 col-lg-5 my-4">
             <div className="global-flex-center">
-              <img alt="alt" src={qrImage} style={{ maxWidth: '300px' }} />
+              <img alt="QR Image" src={qrImage} style={{ maxWidth: '300px' }} />
             </div>
           </div>
         </div>
