@@ -16,3 +16,14 @@
   align-items: center;
   background: linear-gradient(270deg, #FBBC05 30.21%, #F2E9BA 100%);
 }
+
+.token-detail-rate {
+  border: 1px solid #ffffff;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+
+  &:hover {
+    opacity: 0.6;
+  }
+}

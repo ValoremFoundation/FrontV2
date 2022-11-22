@@ -112,3 +112,16 @@ export const getTransactionForWallet = async wallet => {
 export const newTransaction = async data => {
   return await axios.post(`${process.env.REACT_APP_BACKEND_BASE_URL}/transactions`, data);
 };
+
+export const getComments = async tokenId => {
+  return await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/tokens/${tokenId}/comments`);
+};
+
+export const createComment = async (tokenId, userWallet, starCount, comment, avatar) => {
+  return await axios.post(`${process.env.REACT_APP_BACKEND_BASE_URL}/tokens/${tokenId}/comments`, {
+    userWallet,
+    starCount,
+    comment,
+    avatar,
+  });
+};

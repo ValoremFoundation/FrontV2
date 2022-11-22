@@ -1,16 +1,21 @@
 import React from 'react';
 import 'src/styles/components/TokenDetailComment.scss';
 import 'src/styles/Global.scss';
-import Avatar2 from 'src/assets/images/avatar-1.png';
+import TextInput from '../TextInput';
 
-const TokenDetailComment = () => {
+const TokenDetailComment = ({ commentText, setCommentText, handleClickComment, avatar }) => {
   return (
     <div className="global-flex-between" style={{ height: '76px' }}>
-      <img alt="alt" src={Avatar2} style={{ width: 106, height: 76 }} />
-      <div className="global-flex-start" style={{ background: '#F4F5FB', flex: 1, height: '100%' }}>
-        <div className="poppins-16-500-gray ps-5">They do great work!</div>
+      <img alt="alt" src={avatar || '/img/default-avatar.png'} style={{ width: 106, height: 76 }} />
+      <div style={{ background: '#F3F3F3', flex: 1, padding: '16px 4px' }}>
+        <TextInput
+          type={'text'}
+          value={commentText}
+          onChange={e => setCommentText(e.target.value)}
+          placeholder="Comment"
+        />
       </div>
-      <div className="global-flex-center" style={{ background: '#D9D9D9' }}>
+      <div className="global-flex-center global-pointer" style={{ background: '#D9D9D9' }} onClick={handleClickComment}>
         <div className="poppins-14-600 px-4">Comment</div>
       </div>
     </div>

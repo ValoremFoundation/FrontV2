@@ -2,7 +2,7 @@ import React from 'react';
 import 'src/styles/components/TextInput.scss';
 import 'src/styles/Global.scss';
 
-const TextInput = ({ label, type = 'text', value = '', onChange = () => {}, disabled = false }) => {
+const TextInput = ({ label, type = 'text', value = '', onChange = () => {}, disabled = false, placeholder }) => {
   return (
     <div>
       <div className="poppins-14-500">{label}</div>
@@ -15,6 +15,7 @@ const TextInput = ({ label, type = 'text', value = '', onChange = () => {}, disa
             onChange={onChange}
             disabled={disabled}
             className="custom-text-input"
+            placeholder={placeholder || ''}
           />
         </div>
       ) : (

@@ -6,9 +6,7 @@ import DiscodIcon from 'src/assets/images/discord-blue.svg';
 import TokenImage from 'src/assets/images/nft-card.png';
 import FavoriteBlackIcon from 'src/assets/images/favorite-black-icon.svg';
 import EyeIcon from 'src/assets/images/eye-icon.svg';
-import BarCode from 'src/assets/images/barcode.svg';
 import BenefitCard from 'src/components/BenefitCard';
-import StarString from 'src/components/StarString';
 import TokenDetailComment from 'src/components/TokenDetailComment';
 import RoundBorderButton from 'src/components/RoundBorderButton';
 import ReactMapGL, { Marker, /* Popup, */ NavigationControl, GeolocateControl, FlyToInterpolator } from 'react-map-gl';
@@ -17,7 +15,7 @@ import { isMobile } from 'react-device-detect';
 import NFTDivideLine from 'src/components/NFTDivideLine';
 import { useParams } from 'react-router';
 import { useWeb3React } from '@web3-react/core';
-import { newTransaction, tokenBuy, tokenById, tokenDelist } from 'src/api';
+import { createComment, getComments, newTransaction, tokenBuy, tokenById, tokenDelist } from 'src/api';
 import LoadingPage from 'src/components/LoadingPage';
 import toast from 'react-hot-toast';
 import Web3 from 'web3';
@@ -31,6 +29,7 @@ import { fetchAllCategories } from 'src/actions/categories';
 import { ethers } from 'ethers';
 import TransferModal from 'src/components/TransferModal';
 import { toFixedTail } from 'src/utils/formartUtils';
+import Star from 'src/assets/images/star.svg';
 
 const { REACT_APP_MARKETPLACE_CONTRACT_ADDRESS, REACT_APP_NFT_CONTRACT_ADDRESS, REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS } =
   process.env;
@@ -44,6 +43,7 @@ const TokenDetail = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const categories = useSelector(state => state.categories.items.items);
+  const profile = useSelector(state => state.profile);
   const [qrImage, setQRImage] = useState('/img/blank-image.jpg');
   const mapStyleLight = 'mapbox://styles/thyjames/ckyj5984oa25w14o1hnuexh2a';
   const [viewport, setViewport] = useState({
@@ -75,6 +75,9 @@ const TokenDetail = () => {
   const [openTransfer, setOpenTransfer] = useState(false);
   const [vlrAmount, setVlrAmount] = useState('');
   const [vlrBalance, setVlrBalance] = useState(0);
+  const [commentStarCount, setCommentStarCount] = useState(-1);
+  const [commentText, setCommentText] = useState('');
+  const [tokenComments, setTokenComments] = useState([]);
 
   useEffect(() => {
     dispatch(fetchAllCategories());
@@ -87,6 +90,12 @@ const TokenDetail = () => {
     } = await tokenById(tokenId, {
       Authorization: `Bearer ${authToken}`,
     });
+
+    const {
+      data: { comments },
+    } = await getComments(tokenId);
+    setTokenComments(comments);
+
     setViewport({
       latitude: token?.position?.latitude || 38.57,
       longitude: token?.position?.longitude || -121.47,
@@ -272,6 +281,29 @@ const TokenDetail = () => {
       );
   };
 
+  const handleClickComment = async () => {
+    if (commentText === '' || commentStarCount === -1) {
+      toast.error('Please rate and comment information!');
+      return;
+    }
+    try {
+      setIsLoading(true);
+      await createComment(tokenId, account, commentStarCount + 1, commentText, profile?.avatar);
+      const {
+        data: { comments },
+      } = await getComments(tokenId);
+      setCommentStarCount(-1);
+      setCommentText('');
+      setTokenComments(comments);
+      toast.success('Successfully commented');
+      setIsLoading(false);
+    } catch (err) {
+      console.log('Error TokenDetail Comment : ', err?.message);
+      setIsLoading(false);
+      toast.error(err?.message);
+    }
+  };
+
   return (
     <>
       {isLoading && <LoadingPage />}
@@ -301,15 +333,30 @@ const TokenDetail = () => {
                 objectPosition: 'center',
               }}
             />
-            <div className="global-flex-start">
-              <div className="mt-4">
-                <div className="poppins-14-600-gray me-3">Comments</div>
-                <StarString lable={5} />
-              </div>
-              <div className="global-flex-start">
-                <img alt="alt" src={Avatar2} style={{ width: 48, height: 40 }} className="me-2" />
-                <div className="poppins-14-400">Excellent Work!</div>
-              </div>
+            <div className="my-1">
+              {tokenComments?.map((item, index) => (
+                <div className="global-flex-start my-1" key={index}>
+                  <div style={{ minWidth: '120px' }}>
+                    <div className="poppins-14-600-gray me-3">Comments</div>
+                    <div className="global-flex-start gap-1" key={index}>
+                      {Array(item?.star_count)
+                        .fill(0)
+                        .map(index => (
+                          <img alt="alt" src={Star} width={20} height={20} />
+                        ))}
+                    </div>
+                  </div>
+                  <div className="global-flex-start">
+                    <img
+                      alt="alt"
+                      src={item?.writer?.avatar || '/img/default-avatar.png'}
+                      style={{ width: 48, height: 40 }}
+                      className="me-2"
+                    />
+                    <div className="poppins-14-400">{item?.comment}</div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
           <div className="col-12 col-lg-5 my-4">
@@ -345,8 +392,9 @@ const TokenDetail = () => {
                   {[1, 2, 3, 4, 5].map((item, index) => (
                     <div
                       key={index}
-                      className="poppins-16-500 global-flex-center"
-                      style={{ border: '1px solid #ffffff', width: '50px', height: '50px', textAlign: 'center' }}
+                      className="poppins-16-500 token-detail-rate global-flex-center global-pointer"
+                      style={index === commentStarCount ? { background: '#96F2A4' } : {}}
+                      onClick={() => setCommentStarCount(index)}
                     >
                       {item}
                     </div>
@@ -354,7 +402,12 @@ const TokenDetail = () => {
                 </div>
               </div>
               <div className="my-4">
-                <TokenDetailComment />
+                <TokenDetailComment
+                  commentText={commentText}
+                  setCommentText={setCommentText}
+                  handleClickComment={handleClickComment}
+                  avatar={nftData?.user?.avatar}
+                />
               </div>
             </div>
           </div>
