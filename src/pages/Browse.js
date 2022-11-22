@@ -11,6 +11,7 @@ import CustomRadio from 'src/components/CustomRadio';
 import { fetchAllCategories } from 'src/actions/categories';
 import { useSelector, useDispatch } from 'react-redux';
 import Tabs, { Tab } from 'src/components/Browse/LineTab';
+import RoundBorderButton from 'src/components/RoundBorderButton';
 
 const Browse = () => {
   const history = useHistory();
@@ -21,6 +22,7 @@ const Browse = () => {
   const [nftData, setNftData] = useState();
   const [remotePerson, setRemotePerson] = useState('remote');
   const [category, setCategory] = useState(1);
+  const [searchAll, setSearchAll] = useState('');
 
   useEffect(() => {
     dispatch(fetchAllCategories());
@@ -39,20 +41,19 @@ const Browse = () => {
     getAllTokens();
   }, []);
 
-  const filteredData = useMemo(
-    () =>
-      nftData?.filter(item =>
-        parseInt(category) === 0
-          ? item?.remote_person === remotePerson
-          : item?.remote_person === remotePerson && item?.category_id === parseInt(category)
-      ),
-    [nftData, category, remotePerson]
-  );
+  const filteredData = useMemo(() => {
+    if (searchAll === 'all') {
+      return nftData;
+    } else {
+      return nftData?.filter(item => item.remote_person === remotePerson && item?.category_id === parseInt(category));
+    }
+  }, [nftData, category, remotePerson, searchAll]);
 
   const sortedCategories = useMemo(() => categories?.sort((a, b) => (a.name > b.name ? 1 : -1)), [categories]);
 
   const handleChangeRemotePerson = e => {
     setRemotePerson(e.target.value);
+    setSearchAll('');
   };
 
   return (
@@ -63,27 +64,45 @@ const Browse = () => {
         <div className={isMobile ? 'poppins-16-600-gray' : 'poppins-20-400-gray'}>
           Learn how you can make money on services your purchase?
         </div>
-        <div className="global-flex-start flex-wrap my-4">
-          <div className="me-3 my-1">
-            <CustomRadio
-              label={'Digital Creators'}
-              value={'remote'}
-              variable={remotePerson}
-              onChange={handleChangeRemotePerson}
-            />
+        <div className="global-flex-between flex-wrap my-4">
+          <div className="global-flex-start flex-wrap">
+            <div className="me-3 my-1">
+              <CustomRadio
+                label={'Digital Creators'}
+                value={'remote'}
+                variable={remotePerson}
+                onChange={handleChangeRemotePerson}
+              />
+            </div>
+            <div className="me-3 my-1">
+              <CustomRadio
+                label={'Brick & Mortar Creators'}
+                value={'person'}
+                variable={remotePerson}
+                onChange={handleChangeRemotePerson}
+              />
+            </div>
           </div>
-          <div className="me-3 my-1">
-            <CustomRadio
-              label={'Brick & Mortar Creators'}
-              value={'person'}
-              variable={remotePerson}
-              onChange={handleChangeRemotePerson}
-            />
-          </div>
+          <RoundBorderButton
+            label={'Search All'}
+            color={searchAll === 'all' ? '#2DC015' : '#202020'}
+            onClick={() => {
+              setSearchAll('all');
+              setCategory(-1);
+              setRemotePerson('');
+            }}
+          />
         </div>
         <Tabs>
           {sortedCategories?.map((item, index) => (
-            <Tab key={index} active={category === item.id} onClick={() => setCategory(item.id)}>
+            <Tab
+              key={index}
+              active={category === item.id}
+              onClick={() => {
+                setCategory(item.id);
+                setSearchAll('');
+              }}
+            >
               {item.name}
             </Tab>
           ))}
