@@ -35,6 +35,7 @@ import marketplaceABI from 'src/assets/abis/nftMarketplace.json';
 import nftABI from 'src/assets/abis/nftAdValorem.json';
 import royaltyPoolABI from 'src/assets/abis/royaltyPool.json';
 import vlrTokenABI from 'src/assets/abis/adValoremToken.json';
+import { _fetchData } from 'ethers/lib/utils';
 
 const { REACT_APP_MARKETPLACE_CONTRACT_ADDRESS, REACT_APP_NFT_CONTRACT_ADDRESS, REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS } =
   process.env;
@@ -91,27 +92,29 @@ const Profile = () => {
     getProfileData();
   }, [authToken]);
 
-  useEffect(() => {
-    const fecthData = async () => {
-      if (!account) return;
-      const {
-        data: { data },
-      } = await getTransactionForWallet(account);
-      setTransactions(data);
-    };
-    fecthData();
-  }, [account]);
+  const getTransactionByWallet = async () => {
+    if (!account) return;
+    const {
+      data: { data },
+    } = await getTransactionForWallet(account);
+    setTransactions(data);
+  };
 
   useEffect(() => {
-    const fecthData = async () => {
-      if (!account) return;
-      const {
-        data: { data },
-      } = await getTransactionForAllToken();
-      setAllTransactions(data);
-    };
-    fecthData();
+    getTransactionByWallet();
   }, [account, activeTab]);
+
+  const getTransactionAll = async () => {
+    if (!account) return;
+    const {
+      data: { data },
+    } = await getTransactionForAllToken(account);
+    setAllTransactions(data);
+  };
+
+  useEffect(() => {
+    getTransactionAll();
+  }, [account]);
 
   const handleClickRedeem = async token => {
     try {
@@ -130,6 +133,7 @@ const Profile = () => {
       if (res?.data.status) {
         toast.success(res?.data?.message);
         getProfileData();
+        getTransactionByWallet();
       } else {
         toast.error('Not redeemed');
       }
@@ -145,15 +149,22 @@ const Profile = () => {
     try {
       setIsLoading(true);
       if (!Web3.utils.isAddress(token?.redeem_from)) return;
-      const { transactionHash, blockNumber } = await nftContract.methods
+      const {
+        transactionHash,
+        blockNumber,
+        events: redeemEvents,
+      } = await nftContract.methods
         .safeTransferFrom(token?.redeem_from, account, token?.token_id)
         .send({ from: account });
       const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
+      console.log('>>>>>>>>>>>>>>>>>> redeemEvents : ', redeemEvents);
+      const from = redeemEvents?.Transfer?.returnValues?.from || '';
+      const to = redeemEvents?.Transfer?.returnValues?.to || '';
 
       await tokenRedeem(token?.id, {
         hash: transactionHash,
-        from: token?.redeem_from,
-        to: account,
+        from: from,
+        to: to,
         method: 'redeem',
         timestamp: blockTimeStamp,
       });

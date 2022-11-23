@@ -21,7 +21,7 @@ const Collections = ({
       soldTokens.map(token => {
         if (token.minted && !token.for_sale) {
           console.log('>>>>>>>>>>>>>>>>>>> transactions = ', transactions);
-          const mintedSoldNotlistTransaction = transactions.find(
+          const mintedSoldNotlistTransaction = transactions?.find(
             transaction => transaction.method === 'mint' && transaction.token_id === token.token_id
           );
           if (

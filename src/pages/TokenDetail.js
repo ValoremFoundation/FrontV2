@@ -139,15 +139,20 @@ const TokenDetail = () => {
       setIsLoading(true);
       const { market_item_id: marketItemId, id } = nftData;
       const gasPrice = await web3.eth.getGasPrice();
-      const { from, to, transactionHash, blockNumber } = await marketplaceContract.methods
-        .cancelSale(marketItemId)
-        .send({ from: account, gasPrice: gasPrice * 5 });
+      const {
+        transactionHash,
+        blockNumber,
+        events: delistEvents,
+      } = await marketplaceContract.methods.cancelSale(marketItemId).send({ from: account, gasPrice: gasPrice * 5 });
       const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
+      console.log('>>>>>>>>>>>>>>>>>> delistEvents : ', delistEvents);
+      let from = web3.eth.abi.decodeParameter('address', delistEvents[1]?.raw?.topics[1]);
+      let to = web3.eth.abi.decodeParameter('address', delistEvents[1]?.raw?.topics[2]);
 
       await tokenDelist(id, {
         hash: transactionHash,
-        from: to,
-        to: from,
+        from: from,
+        to: to,
         method: 'delist',
         timestamp: blockTimeStamp,
       });
@@ -182,15 +187,20 @@ const TokenDetail = () => {
           .send({ from: account });
       }
 
-      const { from, to, transactionHash, blockNumber } = await marketplaceContract.methods
-        .buyMarketItem(marketItemId)
-        .send({ from: account, gasPrice: gasPrice * 5 });
+      const {
+        transactionHash,
+        blockNumber,
+        events: buyEvents,
+      } = await marketplaceContract.methods.buyMarketItem(marketItemId).send({ from: account, gasPrice: gasPrice * 5 });
+      const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
+      console.log('>>>>>>>>>>>>>>>>>> buyEvents : ', buyEvents);
+      let from = web3.eth.abi.decodeParameter('address', buyEvents[20]?.raw?.topics[1]);
+      let to = web3.eth.abi.decodeParameter('address', buyEvents[20]?.raw?.topics[2]);
 
       window.gtag('event', 'Token Buy', { tokenId: nftData.id });
       window.gtag('event', 'conversion', { send_to: 'AW-826595197/5zZSCPWMvMIDEP2uk4oD' });
       const impactClickId = localStorage.getItem('Impact_ClickId');
 
-      const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
       await tokenBuy(id, {
         hash: transactionHash,
         from,
@@ -239,16 +249,24 @@ const TokenDetail = () => {
       setIsLoading(true);
       const amount = web3.utils.toWei(vlrAmount.toString());
       const gasPrice = await web3.eth.getGasPrice();
-      const { transactionHash, blockNumber, status } = await vlrTokenContract.methods
+      const {
+        transactionHash,
+        blockNumber,
+        status,
+        events: transferEvents,
+      } = await vlrTokenContract.methods
         .transfer(nftData?.user?.walletAddress, amount)
         .send({ from: account, gasPrice: gasPrice * 5 });
       const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
+      console.log('>>>>>>>>>>>>>>>>>> transferEvents : ', transferEvents);
+      const from = transferEvents?.Transfer[0]?.returnValues?.from || '';
+      const to = transferEvents?.Transfer[0]?.returnValues?.to || '';
 
       if (status) {
         const dbRes = await newTransaction({
           hash: transactionHash,
-          from: account,
-          to: nftData.user.walletAddress,
+          from: from,
+          to: to,
           token_id: nftData?.token_id,
           price: vlrAmount,
           method: 'vlrTransfer',
@@ -327,18 +345,18 @@ const TokenDetail = () => {
               src={nftData?.uri || '/img/blank-image.jpg'}
               style={{
                 width: '100%',
-                maxHeight: '350px',
+                height: '350px',
                 borderRadius: 5,
                 objectFit: 'cover',
                 objectPosition: 'center',
               }}
             />
             <div className="my-1">
-              {tokenComments?.map((item, index) => (
-                <div className="global-flex-start my-1" key={index}>
+              {tokenComments?.map((item, idx) => (
+                <div className="global-flex-start my-1" key={idx}>
                   <div style={{ minWidth: '120px' }}>
                     <div className="poppins-14-600-gray me-3">Comments</div>
-                    <div className="global-flex-start gap-1" key={index}>
+                    <div className="global-flex-start gap-1">
                       {Array(item?.star_count)
                         .fill(0)
                         .map(index => (

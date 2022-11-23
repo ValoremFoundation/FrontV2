@@ -18,7 +18,7 @@ const NFTCard = ({ onClick, token, profile, price = 0 }) => {
       <img
         alt="alt"
         src={token?.uri || '/img/blank-image.jpg'}
-        style={{ width: '100%', maxHeight: '260px', borderRadius: 5, objectFit: 'cover', objectPosition: 'center' }}
+        style={{ width: '100%', height: '260px', borderRadius: 5, objectFit: 'cover', objectPosition: 'center' }}
       />
       <div className="global-flex-between my-3">
         <div className="global-flex-center">
@@ -69,7 +69,7 @@ const NFTCard = ({ onClick, token, profile, price = 0 }) => {
           <NFTCardButton label={token?.hashtag3} bgColor={'#F4F5FB'} color={'#000000'} />
         </div>
       </div>
-      <NFTDivideLine />
+      {/* <NFTDivideLine />
       <div className="global-flex-between my-3">
         <div className="nft-card-name">Top Comments</div>
         <StarString label={1} />
@@ -77,7 +77,7 @@ const NFTCard = ({ onClick, token, profile, price = 0 }) => {
       <div className="global-flex-start">
         <img alt="alt" src={Avatar1} style={{ width: 48, height: 40 }} />
         <div className="nft-card-position ms-1">Excellent Work!</div>
-      </div>
+      </div> */}
     </div>
   );
 };

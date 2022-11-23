@@ -18,7 +18,7 @@ const BenefitCard = ({ nftData, isOwner, handleClickBuy, handleClickDelist, hand
           <div className="poppins-16-500-gray">Expiration {dateWithTimestamp(nftData?.expiration)}</div>
           {!isOwner && (
             <div className="global-flex-center">
-              <div className="poppins-14-500 me-2">Gift VLR</div>
+              <div className="poppins-14-500 me-2">Send VLR</div>
               <img
                 alt="alt"
                 src={SendIcon}

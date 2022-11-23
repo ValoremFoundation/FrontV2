@@ -269,13 +269,23 @@ const Create = () => {
 
       const gasPrice = await web3.eth.getGasPrice();
       const {
-        from,
-        to,
         transactionHash,
         blockNumber,
         events: mintEvent,
       } = await nftContract.methods.createMultiToken(tokenURIs).send({ from: account, gasPrice: gasPrice * 5 });
       let nftTokenIds = [];
+      // mintEvent?.Transfer?.returnValues?.from
+      // mintEvent?.Transfer?.returnValues?.to
+      let from = '';
+      let to = '';
+      if (mintEvent?.Transfer.length > 0) {
+        from = mintEvent?.Transfer[0]?.returnValues?.from;
+        to = mintEvent?.Transfer[0]?.returnValues?.to;
+      } else {
+        from = mintEvent?.Transfer?.returnValues?.from;
+        to = mintEvent?.Transfer?.returnValues?.to;
+      }
+
       if (mintEvent?.TokenCreated?.length > 0) {
         nftTokenIds = mintEvent?.TokenCreated?.map(item => item?.returnValues?.tokenId);
       } else {
@@ -336,8 +346,8 @@ const Create = () => {
     try {
       return await tokenMint(id, {
         hash: transactionHash,
-        from: to,
-        to: from,
+        from: from,
+        to: to,
         timestamp: blockTimeStamp,
         tokenId: nftTokenId,
         impactClickId,

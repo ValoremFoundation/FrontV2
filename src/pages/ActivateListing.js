@@ -122,16 +122,22 @@ const ActivateListing = () => {
       window.gtag('event', 'Token List', { tokenId: nftData.id });
       window.gtag('event', 'conversion', { send_to: 'AW-826595197/Xd_8CPKMvMIDEP2uk4oD' });
 
-      const { from, to, transactionHash, blockNumber } = await marketplaceContract.methods
+      const {
+        transactionHash,
+        blockNumber,
+        events: listEvents,
+      } = await marketplaceContract.methods
         .sellMarketItem(nftData?.market_item_id, Web3.utils.toWei(price))
         .send({ from: account, gasPrice: gasPrice * 5 });
-
       const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
+      console.log('>>>>>>>>>>>>>>>>>> listEvents : ', listEvents);
+      let from = web3.eth.abi.decodeParameter('address', listEvents[1]?.raw?.topics[1]);
+      let to = web3.eth.abi.decodeParameter('address', listEvents[1]?.raw?.topics[2]);
 
       await tokenList(nftData.id, {
         hash: transactionHash,
-        from: to,
-        to: from,
+        from: from,
+        to: to,
         method: 'list',
         // marketItemId: itemId,
         price: price,
@@ -153,15 +159,20 @@ const ActivateListing = () => {
       setIsLoading(true);
       const { token_id, id } = nftData;
       const gasPrice = await web3.eth.getGasPrice();
-      const { from, to, transactionHash, blockNumber } = await nftContract.methods
-        .burn(token_id)
-        .send({ from: account, gasPrice: gasPrice * 5 });
+      const {
+        transactionHash,
+        blockNumber,
+        events: burnEvents,
+      } = await nftContract.methods.burn(token_id).send({ from: account, gasPrice: gasPrice * 5 });
       const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
+      console.log('>>>>>>>>>>>>>>> burnEvents : ', burnEvents);
+      const from = burnEvents?.Transfer?.returnValues?.from;
+      const to = burnEvents?.Transfer?.returnValues?.to;
 
       await tokenBurn(id, {
         hash: transactionHash,
-        from: to,
-        to: from,
+        from: from,
+        to: to,
         method: 'burn',
         timestamp: blockTimeStamp,
       });
@@ -184,15 +195,22 @@ const ActivateListing = () => {
     setIsLoading(true);
     const gasPrice = await web3.eth.getGasPrice();
     try {
-      const { from, transactionHash, blockNumber } = await nftContract.methods
+      const {
+        transactionHash,
+        blockNumber,
+        events: transferEvents,
+      } = await nftContract.methods
         .safeTransferFrom(account, transferAddress, tokenId)
         .send({ from: account, gasPrice: gasPrice * 5 });
       const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
+      const from = transferEvents?.Transfer?.returnValues?.from;
+      const to = transferEvents?.Transfer?.returnValues?.to;
 
+      console.log('>>>>>>>>>>>>>>>>> 111111111111 transferEvents :', transferEvents);
       await tokenTransfer(id, {
         hash: transactionHash,
         from,
-        to: transferAddress,
+        to,
         method: 'transfer',
         timestamp: blockTimeStamp,
       });

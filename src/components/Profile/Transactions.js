@@ -28,8 +28,8 @@ const Transactions = ({ transactions }) => {
                 >{`${item?.hash.slice(0, 5)}...${item?.hash.slice(item?.hash.length - 5, item?.hash.length)}`}</a>
               </td>
               <td>{item?.method}</td>
-              <td>{`${item?.to.slice(0, 5)}...${item?.to.slice(item?.to.length - 5, item?.to.length)}`}</td>
               <td>{`${item?.from.slice(0, 5)}...${item?.from.slice(item?.from.length - 5, item?.from.length)}`}</td>
+              <td>{`${item?.to.slice(0, 5)}...${item?.to.slice(item?.to.length - 5, item?.to.length)}`}</td>
               <td>{format(new Date(item?.created_at), 'MM dd, yyyy')}</td>
             </tr>
           ))}
