@@ -25,13 +25,13 @@ const NFTCard = ({ onClick, token, profile, price = 0 }) => {
           <div>
             <img
               alt="alt"
-              src={profile?.avatar || '/img/default-avatar.png'}
+              src={token?.user?.avatar || '/img/default-avatar.png'}
               style={{ width: 55, height: 55, borderRadius: 50 }}
             />
             <img alt="alt" src={BlueCheck} style={{ width: 20, height: 20, marginTop: -50 }} />
           </div>
           <div>
-            <div className="nft-card-name">{profile?.name}</div>
+            <div className="nft-card-name">{token?.user?.name}</div>
             <div className="global-flex-start">
               <img alt="alt" src={Position} style={{ width: 13, height: 21 }} />
               <div className="nft-card-position ms-1 mt-1">{token?.location}</div>
