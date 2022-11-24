@@ -194,8 +194,8 @@ const TokenDetail = () => {
       } = await marketplaceContract.methods.buyMarketItem(marketItemId).send({ from: account, gasPrice: gasPrice * 5 });
       const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
       console.log('>>>>>>>>>>>>>>>>>> buyEvents : ', buyEvents);
-      let from = web3.eth.abi.decodeParameter('address', buyEvents[20]?.raw?.topics[1]);
-      let to = web3.eth.abi.decodeParameter('address', buyEvents[20]?.raw?.topics[2]);
+      let from = web3.eth.abi.decodeParameter('address', buyEvents[28]?.raw?.topics[1]);
+      let to = web3.eth.abi.decodeParameter('address', buyEvents[28]?.raw?.topics[2]);
 
       window.gtag('event', 'Token Buy', { tokenId: nftData.id });
       window.gtag('event', 'conversion', { send_to: 'AW-826595197/5zZSCPWMvMIDEP2uk4oD' });

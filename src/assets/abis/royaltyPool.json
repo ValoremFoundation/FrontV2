@@ -9,6 +9,44 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "Claimed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "EmergencyWithdraw",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "uint8",
         "name": "version",
         "type": "uint8"
@@ -47,6 +85,44 @@
       }
     ],
     "name": "RewardTokenDeposited",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "WithDraw",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "WithdrawRewardToken",
     "type": "event"
   },
   {
@@ -102,34 +178,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "claimPendingReward",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -138,6 +186,13 @@
       }
     ],
     "name": "depositRewardToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "emergencyWithdraw",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -196,6 +251,11 @@
         "internalType": "address",
         "name": "_vlrTokenContract",
         "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_marketPlaceContract",
+        "type": "address"
       }
     ],
     "name": "initialize",
@@ -231,12 +291,44 @@
   },
   {
     "inputs": [],
+    "name": "marketPlaceContract",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "owner",
     "outputs": [
       {
         "internalType": "address",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      }
+    ],
+    "name": "pendingReward",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -343,6 +435,11 @@
         "internalType": "uint256",
         "name": "timeDeposited",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "timeClaimed",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -363,7 +460,14 @@
   },
   {
     "inputs": [],
-    "name": "withdrawRoyalty",
+    "name": "withdraw",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "withdrawRewardToken",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

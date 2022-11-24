@@ -35,14 +35,18 @@ import marketplaceABI from 'src/assets/abis/nftMarketplace.json';
 import nftABI from 'src/assets/abis/nftAdValorem.json';
 import royaltyPoolABI from 'src/assets/abis/royaltyPool.json';
 import vlrTokenABI from 'src/assets/abis/adValoremToken.json';
-import { _fetchData } from 'ethers/lib/utils';
 
-const { REACT_APP_MARKETPLACE_CONTRACT_ADDRESS, REACT_APP_NFT_CONTRACT_ADDRESS, REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS } =
-  process.env;
+const {
+  REACT_APP_MARKETPLACE_CONTRACT_ADDRESS,
+  REACT_APP_NFT_CONTRACT_ADDRESS,
+  REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS,
+  REACT_APP_ROYALTY_POOL_CONTRACT_ADDRESS,
+} = process.env;
 const web3 = new Web3(window.ethereum);
 const marketplaceContract = new web3.eth.Contract(marketplaceABI, REACT_APP_MARKETPLACE_CONTRACT_ADDRESS);
 const nftContract = new web3.eth.Contract(nftABI, REACT_APP_NFT_CONTRACT_ADDRESS);
 const vlrTokenContract = new web3.eth.Contract(vlrTokenABI, REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS);
+const royaltyContract = new web3.eth.Contract(royaltyPoolABI, REACT_APP_ROYALTY_POOL_CONTRACT_ADDRESS);
 const zeroAddress = '0x0000000000000000000000000000000000000000';
 
 const Profile = () => {
@@ -100,8 +104,20 @@ const Profile = () => {
     setTransactions(data);
   };
 
+  const [apr, setApr] = useState(0);
+  const [lockDuration, setLockDuration] = useState(0);
+
+  const getRoyaltyPoolInfo = async () => {
+    if (!account) return;
+    const _apr = await royaltyContract.methods.apr().call();
+    const _lockDuration = await royaltyContract.methods.lockDuration().call();
+    setApr(_apr);
+    setLockDuration(_lockDuration);
+  };
+
   useEffect(() => {
     getTransactionByWallet();
+    getRoyaltyPoolInfo();
   }, [account, activeTab]);
 
   const getTransactionAll = async () => {
@@ -274,6 +290,16 @@ const Profile = () => {
     }
   };
 
+  const handleClickHarvest = async () => {
+    console.log('>>>>>>>>>>>>>>>>>> 111 : handleClickHarvest');
+    if (!account) return;
+  };
+
+  const handleClickWithdraw = async () => {
+    console.log('>>>>>>>>>>>>>>>>>> 222 : handleClickWithdraw');
+    if (!account) return;
+  };
+
   return (
     <>
       {isLoading && <LoadingPage />}
@@ -343,9 +369,9 @@ const Profile = () => {
                 <Tab active={activeTab === 'royalty-pool'} path="/profile?activeTab=royalty-pool">
                   Royalty Pool
                 </Tab>
-                <Tab active={activeTab === 'earn-liquidity-rewards'} path="/profile?activeTab=earn-liquidity-rewards">
+                {/* <Tab active={activeTab === 'earn-liquidity-rewards'} path="/profile?activeTab=earn-liquidity-rewards">
                   Earn Liquidity Rewards
-                </Tab>
+                </Tab> */}
                 <Tab active={activeTab === 'buy-matic'} path="/profile?activeTab=buy-matic">
                   Buy Matic
                 </Tab>
@@ -379,8 +405,15 @@ const Profile = () => {
                 />
               )}
               {activeTab === 'transactions' && <Transactions transactions={transactions} />}
-              {activeTab === 'royalty-pool' && <RoyaltyPool />}
-              {activeTab === 'earn-liquidity-rewards' && <EarnLiquidityRewards />}
+              {activeTab === 'royalty-pool' && (
+                <RoyaltyPool
+                  apr={apr}
+                  lockDuration={lockDuration}
+                  handleClickHarvest={handleClickHarvest}
+                  handleClickWithdraw={handleClickWithdraw}
+                />
+              )}
+              {/* {activeTab === 'earn-liquidity-rewards' && <EarnLiquidityRewards />} */}
               {activeTab === 'buy-matic' && <BuyMatic />}
               {activeTab === 'buy-vlr' && <BuyVLR />}
             </div>
