@@ -36,7 +36,7 @@ const Created = ({ actionTab = 'listed', handleClickBuy, handleChangeOption, pro
   const Listed = () => {
     return (
       <div>
-        <BoostPost handleClickBuy={handleClickBuy} onChange={handleChangeOption} />
+        {/* <BoostPost handleClickBuy={handleClickBuy} onChange={handleChangeOption} /> */}
         <div className="row gx-5 my-4">
           {listedTokens?.length > 0 ? (
             listedTokens?.map((item, index) => (

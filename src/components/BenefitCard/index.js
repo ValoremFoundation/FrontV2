@@ -2,8 +2,6 @@ import React from 'react';
 import 'src/styles/components/BenefitCard.scss';
 import 'src/styles/Global.scss';
 import SendIcon from 'src/assets/images/send-green-icon.svg';
-import PolygonIcon from 'src/assets/images/polygon-icon.png';
-import DistributionItem from '../DistributionItem';
 import BackgroundButton from '../BackgroundButton';
 import { dateWithTimestamp } from 'src/utils/formartUtils';
 
@@ -59,7 +57,7 @@ const BenefitCard = ({ nftData, isOwner, handleClickBuy, handleClickDelist, hand
         </div>
         <div className="poppins-14-600-gray">Current Price</div>
         <div className="global-flex-start">
-          <img alt="alt" src={PolygonIcon} width={30} height={30} className="global-pointer me-3" />
+          <img alt="alt" src={'/img/logo.png'} width={30} height={30} className="global-pointer me-3" />
           <div className="poppins-36-700 me-3">{nftData?.price} VLR</div>
           <div className="poppins-16-500 mt-3">$0.25 USD</div>
         </div>

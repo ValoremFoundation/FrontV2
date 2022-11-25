@@ -394,11 +394,11 @@ const Profile = () => {
                   <p className="cursor-pointer poppins-16-500">{description}</p>
                 </div>
               </div>
-              <div className="d-flex justify-conent-start align-items-center flex-wrap">
+              {/* <div className="d-flex justify-conent-start align-items-center flex-wrap">
                 {profileNumberNameData.map((item, index) => (
                   <ProfileNumberName data={item} key={index} />
                 ))}
-              </div>
+              </div> */}
               <Tabs>
                 <Tab active={activeTab === 'created'} path="/profile?activeTab=created&actionTab=listed">
                   Created
