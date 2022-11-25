@@ -38,7 +38,7 @@ const RoyaltyPool = ({
       </div>
       <div className="global-flex-start gap-2 mt-2">
         <RoundBorderButton label={'Harvest'} color={'#2A212E'} bgColor={'#FFFFFF'} onClick={handleClickHarvest} />
-        <RoundBorderButton label={'Withdraw'} color={'#2A212E'} bgColor={'#FFFFFF'} onClick={handleClickWithdraw} />
+        <RoundBorderButton label={'Withdraw'} color={'#E75B2E'} bgColor={'#FFFFFF'} onClick={handleClickWithdraw} />
       </div>
     </div>
   );

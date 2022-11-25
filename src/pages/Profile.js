@@ -35,6 +35,7 @@ import marketplaceABI from 'src/assets/abis/nftMarketplace.json';
 import nftABI from 'src/assets/abis/nftAdValorem.json';
 import royaltyPoolABI from 'src/assets/abis/royaltyPool.json';
 import vlrTokenABI from 'src/assets/abis/adValoremToken.json';
+import { dateWithTimestamp } from 'src/utils/formartUtils';
 
 const {
   REACT_APP_MARKETPLACE_CONTRACT_ADDRESS,
@@ -306,9 +307,10 @@ const Profile = () => {
     try {
       setIsLoading(true);
       const res = await royaltyContract.methods.harvest().send({ from: account });
-      console.log('>>>>>>>>>>>>>>>>>> 111 : handleClickHarvest', res);
-      getRoyaltyPoolInfo();
-      toast.success('Successfully harvested!');
+      if (res.status) {
+        getRoyaltyPoolInfo();
+        toast.success('Successfully harvested!');
+      }
       setIsLoading(false);
     } catch (err) {
       console.log('Error Profile Harvest : ', err?.message);
@@ -318,8 +320,28 @@ const Profile = () => {
   };
 
   const handleClickWithdraw = async () => {
-    console.log('>>>>>>>>>>>>>>>>>> 222 : handleClickWithdraw');
     if (!account) return;
+
+    try {
+      setIsLoading(true);
+      const currentTimestamp = Date.now() / 1000;
+      const unlockedTimestamp = parseInt(userPoolInfo.timeDeposited) + parseInt(lockDuration);
+      const unlockDate = dateWithTimestamp((parseInt(userPoolInfo?.timeDeposited) + parseInt(lockDuration)) * 1000);
+      if (currentTimestamp < unlockedTimestamp) {
+        toast.error(`Please can withdraw on ${unlockDate}!`);
+        return;
+      }
+      const res = await royaltyContract.methods.withdraw().send({ from: account });
+      if (res.status) {
+        getRoyaltyPoolInfo();
+        toast.success('Successfully withdrawed!');
+      }
+      setIsLoading(false);
+    } catch (err) {
+      console.log('Error Profile withdraw : ', err?.message);
+      toast.error(err?.message);
+      setIsLoading(false);
+    }
   };
 
   return (
