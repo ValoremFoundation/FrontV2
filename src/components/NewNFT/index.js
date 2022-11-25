@@ -23,7 +23,7 @@ const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT, ed
 
   return (
     <Accordian
-      title={itemNFT?.name ? itemNFT?.name : `New NFT #${index + 1}`}
+      title={itemNFT?.name.value ? itemNFT?.name.value : `New NFT #${index + 1}`}
       active={statusOpen}
       toogleAccordian={() => {
         setStatusOpen(!statusOpen);
@@ -33,11 +33,14 @@ const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT, ed
         <div className="global-flex-between flex-wrap my-4">
           <div className="global-flex-start my-4">
             <MultipleNFTCard
-              src={itemNFT?.imageUrl}
+              src={itemNFT?.imageUrl.value}
               style={{ width: 100, height: 100, borderRadius: 64, objectFit: 'cover', objectPosition: 'center' }}
               mediaType={itemNFT?.type}
             />
-            <div className="poppins-14-400 ms-2">{itemNFT?.fileName}</div>
+            <div className="poppins-14-400 ms-2">
+              {itemNFT?.fileName.value}
+              <span className="err-text">{itemNFT?.fileName.error && '**require**'}</span>
+            </div>
           </div>
 
           <div className="my-2">
@@ -56,7 +59,8 @@ const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT, ed
               <TextInput
                 label={'Name of service'}
                 type={'text'}
-                value={itemNFT?.name}
+                value={itemNFT?.name.value}
+                require={itemNFT?.name.error}
                 onChange={e => handleChangeArrayNFT(e, 'name', index)}
               />
             </div>
@@ -64,7 +68,8 @@ const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT, ed
               <SelectInput
                 label={'Category'}
                 placeFolder={'Select Category'}
-                value={itemNFT?.category}
+                value={itemNFT?.category.value}
+                require={itemNFT?.category.error}
                 options={categories}
                 onChange={e => handleChangeArrayNFT(e, 'category', index)}
               />
@@ -74,7 +79,8 @@ const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT, ed
             <TextInput
               label={'Tell us about your services'}
               type={'textarea'}
-              value={itemNFT?.tellUs}
+              value={itemNFT?.tellUs.value}
+              require={itemNFT?.tellUs.error}
               onChange={e => handleChangeArrayNFT(e, 'tellUs', index)}
             />
           </div>
@@ -83,7 +89,8 @@ const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT, ed
               label={'Describe your service'}
               type={'text'}
               onChange={e => handleChangeArrayNFT(e, 'description', index)}
-              value={itemNFT?.description}
+              value={itemNFT?.description.value}
+              require={itemNFT?.description.error}
             />
           </div>
         </div>
@@ -91,14 +98,14 @@ const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT, ed
           <CustomRadio
             label={'Remote'}
             value={'remote'}
-            variable={itemNFT?.remotePerson}
+            variable={itemNFT?.remotePerson.value}
             onChange={e => handleChangeArrayNFT(e, 'remotePerson', index)}
           />
           <div className="ms-5">
             <CustomRadio
               label={'In Person'}
               value={'person'}
-              variable={itemNFT?.remotePerson}
+              variable={itemNFT?.remotePerson.value}
               onChange={e => handleChangeArrayNFT(e, 'remotePerson', index)}
             />
           </div>
@@ -109,7 +116,8 @@ const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT, ed
               label={'Location'}
               type={'text'}
               onChange={e => handleChangeArrayNFT(e, 'location', index)}
-              value={itemNFT?.location}
+              value={itemNFT?.location.value}
+              require={itemNFT?.location.error}
             />
           </div>
           <div className="col-12 col-lg-4 my-2">
@@ -117,7 +125,8 @@ const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT, ed
               label={'Website'}
               type={'text'}
               onChange={e => handleChangeArrayNFT(e, 'website', index)}
-              value={itemNFT?.website}
+              value={itemNFT?.website.value}
+              require={itemNFT?.website.error}
             />
           </div>
           <div className="col-12 col-lg-4 my-2">
@@ -125,7 +134,7 @@ const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT, ed
               label={'Discord'}
               type={'text'}
               onChange={e => handleChangeArrayNFT(e, 'discord', index)}
-              value={itemNFT?.discord}
+              value={itemNFT?.discord.value}
               disabled={true}
             />
           </div>
@@ -136,7 +145,8 @@ const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT, ed
               label={'Hashtag 1'}
               type={'text'}
               onChange={e => handleChangeArrayNFT(e, 'hashtag1', index)}
-              value={itemNFT?.hashtag1}
+              value={itemNFT?.hashtag1.value}
+              require={itemNFT?.hashtag1.error}
             />
           </div>
           <div className="col-12 col-lg-4 my-2">
@@ -144,7 +154,8 @@ const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT, ed
               label={'Hashtag 2'}
               type={'text'}
               onChange={e => handleChangeArrayNFT(e, 'hashtag2', index)}
-              value={itemNFT?.hashtag2}
+              value={itemNFT?.hashtag2.value}
+              require={itemNFT?.hashtag2.error}
             />
           </div>
           <div className="col-12 col-lg-4 my-2">
@@ -152,7 +163,8 @@ const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT, ed
               label={'Hashtag 3'}
               type={'text'}
               onChange={e => handleChangeArrayNFT(e, 'hashtag3', index)}
-              value={itemNFT?.hashtag3}
+              value={itemNFT?.hashtag3.value}
+              require={itemNFT?.hashtag3.error}
             />
           </div>
         </div>
@@ -165,7 +177,8 @@ const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT, ed
               label={'Creator'}
               type={'text'}
               onChange={e => handleChangeArrayNFT(e, 'creator', index)}
-              value={itemNFT?.creator}
+              value={itemNFT?.creator.value}
+              require={itemNFT?.creator.error}
             />
           </div>
           <div className="col-12 col-lg-3 my-2">
@@ -173,7 +186,8 @@ const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT, ed
               label={'Reseller'}
               type={'text'}
               onChange={e => handleChangeArrayNFT(e, 'reseller', index)}
-              value={itemNFT?.reseller}
+              value={itemNFT?.reseller.value}
+              require={itemNFT?.reseller.error}
             />
           </div>
           <div className="col-12 col-lg-3 my-2">
@@ -181,7 +195,8 @@ const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT, ed
               label={'Royalty Pool'}
               type={'text'}
               onChange={e => handleChangeArrayNFT(e, 'royaltyPool', index)}
-              value={itemNFT?.royaltyPool}
+              value={itemNFT?.royaltyPool.value}
+              require={itemNFT?.royaltyPool.error}
             />
           </div>
           <div className="col-12 col-lg-3 my-2">
@@ -190,7 +205,8 @@ const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT, ed
               placeFolder={'Never'}
               options={giftCardOptions}
               onChange={e => handleChangeArrayNFT(e, 'expiration', index)}
-              value={itemNFT?.expiration}
+              value={itemNFT?.expiration.value}
+              require={itemNFT?.expiration.error}
             />
           </div>
         </div>

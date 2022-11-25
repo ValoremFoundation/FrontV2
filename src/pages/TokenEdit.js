@@ -8,15 +8,12 @@ import StepOrder from 'src/components/StepOrder';
 import BackgroundButton from 'src/components/BackgroundButton';
 import MenuIcon from 'src/assets/images/menu-icon.svg';
 import CustomCheckBox from 'src/components/CustomCheckBox';
-import { isMobile } from 'react-device-detect';
-import MetamaskSigninModal from 'src/components/MetamaskSigninModal';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   getGeoLocationFromIPAddress,
   getProfile,
   pinFileToIPFS,
   tokenById,
-  tokenCreate,
   tokenMarketItem,
   tokenMint,
   tokenUpdate,
@@ -50,28 +47,30 @@ const TokenEdit = () => {
   const [avatarSource, setAvatarSource] = useState('/img/default-avatar.png');
   const [isLoading, setIsLoading] = useState(false);
   const authToken = useSelector(state => state.auth.token);
+  const categories = useSelector(state => state.categories.items.items);
   const [seenVideo, setSeenVideo] = useState(false);
   let savedForLater = 0;
-  const [createdArrayToken, setCreatedArrayToken] = useState([]);
+  const [startRequire, setStartRequire] = useState(false);
   const [nftData, setNftData] = useState({
-    imageUrl: '/img/default-avatar.png',
-    fileName: '',
+    id: -1,
+    imageUrl: { value: '/img/default-avatar.png', error: false },
+    fileName: { value: '', error: false },
     type: 'image',
-    name: '',
-    category: '',
-    tellUs: '',
-    description: '',
-    remotePerson: '',
-    location: '',
-    website: '',
-    discord: '',
-    hashtag1: '',
-    hashtag2: '',
-    hashtag3: '',
-    creator: '',
-    reseller: '',
-    royaltyPool: '',
-    expiration: '',
+    name: { value: '', error: false },
+    category: { value: '', error: false },
+    tellUs: { value: '', error: false },
+    description: { value: '', error: false },
+    remotePerson: { value: '', error: false },
+    location: { value: '', error: false },
+    website: { value: '', error: false },
+    discord: { value: '', error: false },
+    hashtag1: { value: '', error: false },
+    hashtag2: { value: '', error: false },
+    hashtag3: { value: '', error: false },
+    creator: { value: '', error: false },
+    reseller: { value: '', error: false },
+    royaltyPool: { value: '', error: false },
+    expiration: { value: '', error: false },
   });
 
   const getTokenDetail = async () => {
@@ -82,17 +81,29 @@ const TokenEdit = () => {
       Authorization: `Bearer ${authToken}`,
     });
 
-    token = {
-      ...token,
-      imageUrl: token.uri,
-      tellUs: token.tell_us,
-      remotePerson: token.remote_person,
-      royaltyPool: token.royalty_pool,
-      category: token.category_id,
-      expiration: token.expiration_id,
+    const tmpNftData = {
+      id: token.id,
+      imageUrl: { value: token.uri, error: false },
+      fileName: { value: '', error: false },
+      type: token.media_type,
+      name: { value: token.name, error: false },
+      category: { value: token.category_id, error: false },
+      tellUs: { value: token.tell_us, error: false },
+      description: { value: token.description, error: false },
+      remotePerson: { value: token.remote_person, error: false },
+      location: { value: token.location, error: false },
+      website: { value: token.website, error: false },
+      discord: { value: token.discord, error: false },
+      hashtag1: { value: token.hashtag1, error: false },
+      hashtag2: { value: token.hashtag2, error: false },
+      hashtag3: { value: token.hashtag3, error: false },
+      creator: { value: token.creator, error: false },
+      reseller: { value: token.reseller, error: false },
+      royaltyPool: { value: token.royalty_pool, error: false },
+      expiration: { value: token.expiration_id, error: false },
     };
     setSeenVideo(token.seen_video);
-    setNftData(token);
+    setNftData(tmpNftData);
     setIsLoading(false);
   };
 
@@ -128,25 +139,93 @@ const TokenEdit = () => {
     getProfileData();
   }, [authToken]);
 
-  const handleClickSave = async () => {
+  const checkValidation = () => {
     if (!account) {
       toast.error('Please connect wallet!');
-      return;
+      return true;
     }
-    let requireToast = false;
-    var BreakException = {};
-    try {
-      Object.values(nftData).forEach((item, index) => {
-        if (item === '') {
-          requireToast = true;
-          throw BreakException;
-        }
-      });
-    } catch (e) {
-      if (e !== BreakException) throw e;
+    if (!seenVideo) {
+      toast.error('Please watch www.AdValorem.io/tutorial!');
+      return true;
     }
-    if (requireToast) {
-      toast.error('Please input all field!');
+    let error = false;
+    let tmpNftData = { ...nftData };
+
+    if (tmpNftData.imageUrl.value === '' || tmpNftData.imageUrl.value === '/img/blank-image.jpg') {
+      tmpNftData.fileName.error = true;
+      error = true;
+    }
+    if (tmpNftData.name.value === '') {
+      tmpNftData.name.error = true;
+      error = true;
+    }
+    if (tmpNftData.category.value === '') {
+      tmpNftData.category.error = true;
+      error = true;
+    }
+    if (tmpNftData.tellUs.value === '') {
+      tmpNftData.tellUs.error = true;
+      error = true;
+    }
+    if (tmpNftData.description.value === '') {
+      tmpNftData.description.error = true;
+      error = true;
+    }
+    if (tmpNftData.remotePerson.value === '') {
+      tmpNftData.remotePerson.error = true;
+      error = true;
+    }
+    if (tmpNftData.website.value === '') {
+      tmpNftData.website.error = true;
+      error = true;
+    }
+    if (tmpNftData.discord.value === '') {
+      tmpNftData.discord.error = true;
+      error = true;
+    }
+    if (tmpNftData.hashtag1.value === '') {
+      tmpNftData.hashtag1.error = true;
+      error = true;
+    }
+    if (tmpNftData.hashtag2.value === '') {
+      tmpNftData.hashtag2.error = true;
+      error = true;
+    }
+    if (tmpNftData.hashtag3.value === '') {
+      tmpNftData.hashtag3.error = true;
+      error = true;
+    }
+    if (tmpNftData.creator.value === '') {
+      tmpNftData.creator.error = true;
+      error = true;
+    }
+    if (tmpNftData.reseller.value === '') {
+      tmpNftData.reseller.error = true;
+      error = true;
+    }
+    if (tmpNftData.royaltyPool.value === '') {
+      tmpNftData.royaltyPool.error = true;
+      error = true;
+    }
+    if (tmpNftData.creator.value && tmpNftData.reseller.value && tmpNftData.royaltyPool.value) {
+      if (
+        parseInt(tmpNftData.creator.value) +
+          parseInt(tmpNftData.reseller.value) +
+          parseInt(tmpNftData.royaltyPool.value) !==
+        100
+      ) {
+        toast.error('All sums of creator, reseller and royalty must equal 100%!');
+        return true;
+      }
+    }
+    setNftData(tmpNftData);
+    if (error) toast.error('Please input all field!');
+    return error;
+  };
+
+  const handleClickSave = async () => {
+    setStartRequire(true);
+    if (checkValidation()) {
       return;
     }
 
@@ -166,11 +245,11 @@ const TokenEdit = () => {
     }
   };
 
-  const handleChangeSeenVideo = () => {
+  const handleChangeSeenVideo = event => {
     setSeenVideo(!seenVideo);
   };
 
-  const handleChangeNFT = async (e, key, index) => {
+  const handleChangeNFT = async (e, key) => {
     try {
       setIsLoading(true);
       let tmpNftData = { ...nftData };
@@ -189,9 +268,15 @@ const TokenEdit = () => {
           data: { IpfsHash },
         } = await pinFileToIPFS(formData);
         if (status !== 200) return;
-        tmpNftData['imageUrl'] = `https://ipfs.io/ipfs/${IpfsHash}`;
+        tmpNftData['imageUrl'].value = `https://ipfs.io/ipfs/${IpfsHash}`;
+        tmpNftData['imageUrl'].error = false;
+        tmpNftData.fileName.error = false;
       } else {
-        tmpNftData[key] = e.target.value;
+        if (key === 'category') {
+          tmpNftData['discord'].value = categories[e.target.value - 1]?.discord;
+        }
+        tmpNftData[key].value = e.target.value;
+        tmpNftData[key].error = false;
       }
       setNftData(tmpNftData);
       setIsLoading(false);
@@ -203,33 +288,16 @@ const TokenEdit = () => {
   };
 
   const handleCreateNFT = async () => {
-    if (!account) {
-      toast.error('Please connect wallet!');
-      return;
-    }
-    let requireToast = false;
-    var BreakException = {};
-    try {
-      Object.values(nftData).forEach((item, index) => {
-        if (item === '') {
-          requireToast = true;
-          throw BreakException;
-        }
-      });
-    } catch (e) {
-      if (e !== BreakException) throw e;
-    }
-    if (requireToast) {
-      toast.error('Please input all field!');
+    setStartRequire(true);
+    if (checkValidation()) {
       return;
     }
 
     try {
       setIsLoading(true);
       savedForLater = 0;
-      const res = await handleSaveOneNFTAPI();
-      const res_contract = await handleSingleMintContract(res.data);
-      if (res_contract?.status) {
+      const res = await handleSingleMintContract();
+      if (res?.status) {
         setIsLoading(false);
         toast.success(res.message);
         history.push('/profile?activeTab=created&actionTab=minted');
@@ -243,23 +311,32 @@ const TokenEdit = () => {
     }
   };
 
-  const handleSingleMintContract = async data => {
-    const { uri, id, token_id, creator, reseller, royalty_pool } = data;
+  const handleSingleMintContract = async () => {
     try {
       const gasPrice = await web3.eth.getGasPrice();
-      const { from, to, transactionHash, blockNumber, events } = await nftContract.methods
-        .createToken(uri)
-        .send({ from: account, gasPrice: gasPrice * 5 });
-      let nftTokenId = events?.TokenCreated?.returnValues?.tokenId;
+      const {
+        transactionHash,
+        blockNumber,
+        events: mintEvent,
+      } = await nftContract.methods.createToken(nftData.imageUrl.value).send({ from: account, gasPrice: gasPrice * 5 });
+      let nftTokenId = mintEvent?.TokenCreated?.returnValues?.tokenId;
+      let from = mintEvent?.Transfer?.returnValues?.from;
+      let to = mintEvent?.Transfer?.returnValues?.to;
       const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
 
       const { events: marketEvent } = await marketplaceContract.methods
-        .createMarketItem(REACT_APP_NFT_CONTRACT_ADDRESS, token_id, creator * 100, reseller * 100, royalty_pool * 100)
+        .createMarketItem(
+          REACT_APP_NFT_CONTRACT_ADDRESS,
+          nftTokenId,
+          nftData.creator.value * 100,
+          nftData.reseller.value * 100,
+          nftData.royaltyPool.value * 100
+        )
         .send({ from: account, gasPrice: gasPrice * 5 });
       const { itemId: marketItemId } = marketEvent?.MarketItemCreated?.returnValues;
-      await tokenMarketItem(id, { marketItemId });
-
-      const res = await handleSingleMintAPI(nftTokenId, id, from, to, transactionHash, blockTimeStamp);
+      // await tokenMarketItem(id, { marketItemId });
+      await handleSaveOneNFTAPI(marketItemId);
+      const res = await handleSingleMintAPI(nftTokenId, nftData.id, from, to, transactionHash, blockTimeStamp);
       return res?.data;
     } catch (err) {
       console.log(err);
@@ -271,8 +348,8 @@ const TokenEdit = () => {
     try {
       return await tokenMint(id, {
         hash: transactionHash,
-        from: to,
-        to: from,
+        from: from,
+        to: to,
         timestamp: blockTimeStamp,
         tokenId: nftTokenId,
         impactClickId,
@@ -282,7 +359,7 @@ const TokenEdit = () => {
     }
   };
 
-  const handleSaveOneNFTAPI = async () => {
+  const handleSaveOneNFTAPI = async marketItemId => {
     try {
       let geoLocation = {};
       if (nftData.location?.length < 5) {
@@ -296,26 +373,27 @@ const TokenEdit = () => {
 
       const resp = await tokenUpdate(
         {
+          marketItemId: marketItemId,
           id: nftData.id,
-          uri: nftData.imageUrl,
+          uri: nftData.imageUrl.value,
           mediaType: nftData.type,
-          name: nftData.name,
-          category: nftData.category,
-          tellUs: nftData.tellUs,
-          description: nftData.description,
-          remotePerson: nftData.remotePerson,
-          location: nftData.location,
+          name: nftData.name.value,
+          category: nftData.category.value,
+          tellUs: nftData.tellUs.value,
+          description: nftData.description.value,
+          remotePerson: nftData.remotePerson.value,
+          location: nftData.location.value,
           geoLocation: geoLocation,
-          website: nftData.website,
-          discord: nftData.discord,
-          hashtag1: nftData.hashtag1,
-          hashtag2: nftData.hashtag2,
-          hashtag3: nftData.hashtag3,
-          creator: nftData.creator,
-          reseller: nftData.reseller,
-          royaltyPool: nftData.royaltyPool,
-          expirationId: nftData.expiration,
-          expiration: handleExpireTimeChange(nftData.expiration),
+          website: nftData.website.value,
+          discord: nftData.discord.value,
+          hashtag1: nftData.hashtag1.value,
+          hashtag2: nftData.hashtag2.value,
+          hashtag3: nftData.hashtag3.value,
+          creator: nftData.creator.value,
+          reseller: nftData.reseller.value,
+          royaltyPool: nftData.royaltyPool.value,
+          expirationId: nftData.expiration.value,
+          expiration: handleExpireTimeChange(nftData.expiration.value),
           savedForLater: savedForLater,
           seenVideo: seenVideo,
         },
@@ -460,11 +538,20 @@ const TokenEdit = () => {
         <div className="create-middle-background px-2 py-4">
           <div className="create-middle-one-container">
             <div className="create-middle-section">
-              <div className="poppins-24-600 my-3">Have you seen the video?</div>
+              <div className="poppins-20-500 my-3">
+                <span>
+                  Have you watched our
+                  <span className="poppins-20-600"> tutorial video's </span>
+                  (Link: www.AdValorem.io/tutorial) and agree to our
+                  <span className="poppins-20-600"> licensing and distribution agreement </span>
+                  (Link: www.advalorem.io/licensing-agreement) ?
+                </span>
+              </div>
               <CustomCheckBox
                 label={'I have seen the video and understand how the advalorem marketplace works'}
                 onChange={handleChangeSeenVideo}
                 value={seenVideo}
+                require={startRequire && !seenVideo}
               />
             </div>
           </div>

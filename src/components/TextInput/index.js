@@ -2,10 +2,21 @@ import React from 'react';
 import 'src/styles/components/TextInput.scss';
 import 'src/styles/Global.scss';
 
-const TextInput = ({ label, type = 'text', value = '', onChange = () => {}, disabled = false, placeholder }) => {
+const TextInput = ({
+  label,
+  type = 'text',
+  value = '',
+  onChange = () => {},
+  disabled = false,
+  placeholder,
+  require = false,
+}) => {
   return (
     <div>
-      <div className="poppins-14-500">{label}</div>
+      <div className="poppins-14-500">
+        {label}
+        {require && <span className="err-text">**require**</span>}
+      </div>
       {type === 'text' ? (
         <div className="text-input">
           <input

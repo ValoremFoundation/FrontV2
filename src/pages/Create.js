@@ -42,26 +42,28 @@ const Create = () => {
   const authToken = useSelector(state => state.auth.token);
   const [seenVideo, setSeenVideo] = useState(false);
   let savedForLater = 0;
+  const [startRequire, setStartRequire] = useState(false);
+  const [errMsg, setErrMsg] = useState('Please input all field!');
   const [arrayNFT, setArrayNFT] = useState([
     {
-      imageUrl: '/img/blank-image.jpg',
-      fileName: '',
+      imageUrl: { value: '/img/blank-image.jpg', error: false },
+      fileName: { value: '', error: false },
       type: 'image',
-      name: '',
-      category: '',
-      tellUs: '',
-      description: '',
-      remotePerson: '',
-      location: '',
-      website: '',
-      discord: '',
-      hashtag1: '',
-      hashtag2: '',
-      hashtag3: '',
-      creator: '',
-      reseller: '',
-      royaltyPool: '',
-      expiration: '',
+      name: { value: '', error: false },
+      category: { value: '', error: false },
+      tellUs: { value: '', error: false },
+      description: { value: '', error: false },
+      remotePerson: { value: 'remote', error: false },
+      location: { value: '', error: false },
+      website: { value: '', error: false },
+      discord: { value: '', error: false },
+      hashtag1: { value: '', error: false },
+      hashtag2: { value: '', error: false },
+      hashtag3: { value: '', error: false },
+      creator: { value: '', error: false },
+      reseller: { value: '', error: false },
+      royaltyPool: { value: '', error: false },
+      expiration: { value: '', error: false },
     },
   ]);
 
@@ -101,26 +103,8 @@ const Create = () => {
   }, [authToken]);
 
   const handleClickSaveForLater = async () => {
-    if (!account) {
-      toast.error('Please connect wallet!');
-      return;
-    }
-    let requireToast = false;
-    var BreakException = {};
-    try {
-      arrayNFT.forEach((element, index) => {
-        Object.values(element).forEach((item, index) => {
-          if (item === '') {
-            requireToast = true;
-            throw BreakException;
-          }
-        });
-      });
-    } catch (e) {
-      if (e !== BreakException) throw e;
-    }
-    if (requireToast) {
-      toast.error('Please input all field!');
+    setStartRequire(true);
+    if (checkValidation()) {
       return;
     }
 
@@ -149,7 +133,7 @@ const Create = () => {
       if (key === 'file') {
         const file = e.target.files[0];
         const _mediaType = file.type.split('/')[0];
-        tmpArrNFT[index].fileName = file.name;
+        tmpArrNFT[index].fileName.value = file.name;
         tmpArrNFT[index].type = _mediaType;
 
         //upload ipfs
@@ -161,12 +145,15 @@ const Create = () => {
           data: { IpfsHash },
         } = await pinFileToIPFS(formData);
         if (status !== 200) return;
-        tmpArrNFT[index]['imageUrl'] = `https://ipfs.io/ipfs/${IpfsHash}`;
+        tmpArrNFT[index]['imageUrl'].value = `https://ipfs.io/ipfs/${IpfsHash}`;
+        tmpArrNFT[index]['imageUrl'].error = false;
+        tmpArrNFT[index].fileName.error = false;
       } else {
         if (key === 'category') {
-          tmpArrNFT[index]['discord'] = categories[e.target.value - 1]?.discord;
+          tmpArrNFT[index]['discord'].value = categories[e.target.value - 1]?.discord;
         }
-        tmpArrNFT[index][key] = e.target.value;
+        tmpArrNFT[index][key].value = e.target.value;
+        tmpArrNFT[index][key].error = false;
       }
       setArrayNFT(tmpArrNFT);
       setIsLoading(false);
@@ -181,26 +168,106 @@ const Create = () => {
     setArrayNFT([
       ...arrayNFT,
       {
-        imageUrl: '/img/blank-image.jpg',
-        fileName: '',
+        imageUrl: { value: '/img/blank-image.jpg', error: false },
+        fileName: { value: '', error: false },
         type: 'image',
-        name: '',
-        category: '',
-        tellUs: '',
-        description: '',
-        remotePerson: '',
-        location: '',
-        website: '',
-        discord: '',
-        hashtag1: '',
-        hashtag2: '',
-        hashtag3: '',
-        creator: '',
-        reseller: '',
-        royaltyPool: '',
-        expiration: '',
+        name: { value: '', error: false },
+        category: { value: '', error: false },
+        tellUs: { value: '', error: false },
+        description: { value: '', error: false },
+        remotePerson: { value: 'remote', error: false },
+        location: { value: '', error: false },
+        website: { value: '', error: false },
+        discord: { value: '', error: false },
+        hashtag1: { value: '', error: false },
+        hashtag2: { value: '', error: false },
+        hashtag3: { value: '', error: false },
+        creator: { value: '', error: false },
+        reseller: { value: '', error: false },
+        royaltyPool: { value: '', error: false },
+        expiration: { value: '', error: false },
       },
     ]);
+  };
+
+  const checkValidation = () => {
+    if (!account) {
+      toast.error('Please connect wallet!');
+      return true;
+    }
+    if (!seenVideo) {
+      toast.error('Please watch www.AdValorem.io/tutorial!');
+      return true;
+    }
+    let error = false;
+    let tmpArrayNFT = [...arrayNFT];
+    tmpArrayNFT.forEach(item => {
+      if (item.imageUrl.value === '' || item.imageUrl.value === '/img/blank-image.jpg') {
+        item.fileName.error = true;
+        error = true;
+      }
+      if (item.name.value === '') {
+        item.name.error = true;
+        error = true;
+      }
+      if (item.category.value === '') {
+        item.category.error = true;
+        error = true;
+      }
+      if (item.tellUs.value === '') {
+        item.tellUs.error = true;
+        error = true;
+      }
+      if (item.description.value === '') {
+        item.description.error = true;
+        error = true;
+      }
+      if (item.remotePerson.value === '') {
+        item.remotePerson.error = true;
+        error = true;
+      }
+      if (item.website.value === '') {
+        item.website.error = true;
+        error = true;
+      }
+      if (item.discord.value === '') {
+        item.discord.error = true;
+        error = true;
+      }
+      if (item.hashtag1.value === '') {
+        item.hashtag1.error = true;
+        error = true;
+      }
+      if (item.hashtag2.value === '') {
+        item.hashtag2.error = true;
+        error = true;
+      }
+      if (item.hashtag3.value === '') {
+        item.hashtag3.error = true;
+        error = true;
+      }
+      if (item.creator.value === '') {
+        item.creator.error = true;
+        error = true;
+      }
+      if (item.reseller.value === '') {
+        item.reseller.error = true;
+        error = true;
+      }
+      if (item.royaltyPool.value === '') {
+        item.royaltyPool.error = true;
+        error = true;
+      }
+      if (item.creator.value && item.reseller.value && item.royaltyPool.value) {
+        if (parseInt(item.creator.value) + parseInt(item.reseller.value) + parseInt(item.royaltyPool.value) !== 100) {
+          toast.error('All sums of creator, reseller and royalty must equal 100%!');
+          return true;
+        }
+      }
+    });
+    setArrayNFT(tmpArrayNFT);
+    if (error) toast.error('Please input all field!');
+    return error;
   };
 
   const handleRemoveNFT = idx => {
@@ -209,41 +276,11 @@ const Create = () => {
   };
 
   const handleCreateNFT = async () => {
-    if (!account) {
-      toast.error('Please connect wallet!');
+    setStartRequire(true);
+    if (checkValidation()) {
       return;
     }
-    if (!seenVideo) {
-      toast.error('Please see Video');
-      return;
-    }
-    let requireToast = false;
-    let requirePercent = false;
-    var BreakException = {};
-    try {
-      arrayNFT.forEach((element, index) => {
-        Object.values(element).forEach((item, index) => {
-          if (item === '' || item === '/img/blank-image.jpg') {
-            requireToast = true;
-            throw BreakException;
-          }
-        });
-        if (parseInt(element.creator) + parseInt(element.reseller) + parseInt(element.royaltyPool) !== 100) {
-          requirePercent = true;
-          throw BreakException;
-        }
-      });
-    } catch (e) {
-      if (e !== BreakException) throw e;
-    }
-    if (requirePercent) {
-      toast.error('All sums of creator, reseller and royalty must equal 100%!');
-      return;
-    }
-    if (requireToast) {
-      toast.error('Please input all field!');
-      return;
-    }
+
     try {
       setIsLoading(true);
       // const newNFTs = await handleSaveNFTAPI();
@@ -265,7 +302,7 @@ const Create = () => {
 
   const handleMultiMintContract = async () => {
     try {
-      const tokenURIs = arrayNFT.map(item => item.imageUrl);
+      const tokenURIs = arrayNFT.map(item => item.imageUrl.value);
 
       const gasPrice = await web3.eth.getGasPrice();
       const {
@@ -274,8 +311,6 @@ const Create = () => {
         events: mintEvent,
       } = await nftContract.methods.createMultiToken(tokenURIs).send({ from: account, gasPrice: gasPrice * 5 });
       let nftTokenIds = [];
-      // mintEvent?.Transfer?.returnValues?.from
-      // mintEvent?.Transfer?.returnValues?.to
       let from = '';
       let to = '';
       if (mintEvent?.Transfer.length > 0) {
@@ -299,9 +334,9 @@ const Create = () => {
         pmarketItem.push({
           nftContract: REACT_APP_NFT_CONTRACT_ADDRESS,
           tokenId: nftTokenIds[index],
-          businessOwnerPercent: item.creator * 100,
-          sellerPercent: item.reseller * 100,
-          royaltyPercent: item.royaltyPool * 100,
+          businessOwnerPercent: item.creator.value * 100,
+          sellerPercent: item.reseller.value * 100,
+          royaltyPercent: item.royaltyPool.value * 100,
         });
       });
       console.log('>>>>>>>>>>>>>>>>>> 111111111111111111q : ', pmarketItem);
@@ -383,25 +418,25 @@ const Create = () => {
       const resp = await tokenCreate(
         {
           marketItemId: nftData.marketItemId,
-          uri: nftData.imageUrl,
+          uri: nftData.imageUrl.value,
           mediaType: nftData.type,
-          name: nftData.name,
-          category: nftData.category,
-          tellUs: nftData.tellUs,
-          description: nftData.description,
-          remotePerson: nftData.remotePerson,
-          location: nftData.location,
-          geoLocation: geoLocation,
-          website: nftData.website,
-          discord: nftData.discord,
-          hashtag1: nftData.hashtag1,
-          hashtag2: nftData.hashtag2,
-          hashtag3: nftData.hashtag3,
-          creator: nftData.creator,
-          reseller: nftData.reseller,
-          royaltyPool: nftData.royaltyPool,
-          expirationId: nftData.expiration,
-          expiration: handleExpireTimeChange(nftData.expiration),
+          name: nftData.name.value,
+          category: nftData.category.value,
+          tellUs: nftData.tellUs.value,
+          description: nftData.description.value,
+          remotePerson: nftData.remotePerson.value,
+          location: nftData.location.value,
+          geoLocation: geoLocation.value,
+          website: nftData.website.value,
+          discord: nftData.discord.value,
+          hashtag1: nftData.hashtag1.value,
+          hashtag2: nftData.hashtag2.value,
+          hashtag3: nftData.hashtag3.value,
+          creator: nftData.creator.value,
+          reseller: nftData.reseller.value,
+          royaltyPool: nftData.royaltyPool.value,
+          expirationId: nftData.expiration.value,
+          expiration: handleExpireTimeChange(nftData.expiration).value,
           savedForLater: savedForLater,
           seenVideo: seenVideo,
         },
@@ -561,11 +596,20 @@ const Create = () => {
         <div className="create-middle-background px-2 py-4">
           <div className="create-middle-one-container">
             <div className="create-middle-section">
-              <div className="poppins-24-600 my-3">Have you seen the video?</div>
+              <div className="poppins-20-500 my-3">
+                <span>
+                  Have you watched our
+                  <span className="poppins-20-600"> tutorial video's </span>
+                  (Link: www.AdValorem.io/tutorial) and agree to our
+                  <span className="poppins-20-600"> licensing and distribution agreement </span>
+                  (Link: www.advalorem.io/licensing-agreement) ?
+                </span>
+              </div>
               <CustomCheckBox
                 label={'I have seen the video and understand how the advalorem marketplace works'}
                 onChange={handleChangeSeenVideo}
                 value={seenVideo}
+                require={startRequire && !seenVideo}
               />
             </div>
           </div>
