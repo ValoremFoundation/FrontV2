@@ -1,4 +1,5 @@
 import Web3 from 'web3';
+import numbro from 'numbro';
 
 export const truncateAddress = address => {
   if (!address) return 'No Account';
@@ -52,4 +53,11 @@ export const toWei = value => {
 
 export const isAddress = address => {
   return Web3.utils.isAddress(address);
+};
+
+export const numberFormat = (num = 0, fixed = 3) => {
+  return numbro(num).format({
+    thousandSeparated: true,
+    ...(fixed && { mantissa: fixed }), // number of decimals displayed
+  });
 };

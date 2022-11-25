@@ -69,6 +69,10 @@ const Profile = () => {
   const [description, setDescription] = useState('');
   const [transactions, setTransactions] = useState([]);
   const [allTransactions, setAllTransactions] = useState([]);
+  const [apr, setApr] = useState(0);
+  const [lockDuration, setLockDuration] = useState(0);
+  const [userPoolInfo, setUserPoolInfo] = useState({});
+  const [pendingRewardAmount, setPendingRewardAmount] = useState('');
 
   const getProfileData = async () => {
     try {
@@ -104,20 +108,27 @@ const Profile = () => {
     setTransactions(data);
   };
 
-  const [apr, setApr] = useState(0);
-  const [lockDuration, setLockDuration] = useState(0);
-
   const getRoyaltyPoolInfo = async () => {
     if (!account) return;
     const _apr = await royaltyContract.methods.apr().call();
     const _lockDuration = await royaltyContract.methods.lockDuration().call();
-    setApr(_apr);
+    const _userPoolInfo = await royaltyContract.methods.userPoolInfo(account).call();
+    const _pendingRewardAmount = await royaltyContract.methods.pendingReward(account).call();
+    setApr(_apr / 100);
     setLockDuration(_lockDuration);
+    setUserPoolInfo(_userPoolInfo);
+    setPendingRewardAmount(_pendingRewardAmount);
   };
 
   useEffect(() => {
     getTransactionByWallet();
     getRoyaltyPoolInfo();
+
+    const myInterval = setInterval(() => {
+      getRoyaltyPoolInfo();
+    }, 1000);
+
+    return () => clearInterval(myInterval);
   }, [account, activeTab]);
 
   const getTransactionAll = async () => {
@@ -291,8 +302,19 @@ const Profile = () => {
   };
 
   const handleClickHarvest = async () => {
-    console.log('>>>>>>>>>>>>>>>>>> 111 : handleClickHarvest');
     if (!account) return;
+    try {
+      setIsLoading(true);
+      const res = await royaltyContract.methods.harvest().send({ from: account });
+      console.log('>>>>>>>>>>>>>>>>>> 111 : handleClickHarvest', res);
+      getRoyaltyPoolInfo();
+      toast.success('Successfully harvested!');
+      setIsLoading(false);
+    } catch (err) {
+      console.log('Error Profile Harvest : ', err?.message);
+      toast.error(err?.message);
+      setIsLoading(false);
+    }
   };
 
   const handleClickWithdraw = async () => {
@@ -411,6 +433,8 @@ const Profile = () => {
                   lockDuration={lockDuration}
                   handleClickHarvest={handleClickHarvest}
                   handleClickWithdraw={handleClickWithdraw}
+                  userPoolInfo={userPoolInfo}
+                  pendingRewardAmount={pendingRewardAmount}
                 />
               )}
               {/* {activeTab === 'earn-liquidity-rewards' && <EarnLiquidityRewards />} */}
