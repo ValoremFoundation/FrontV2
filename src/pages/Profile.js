@@ -124,7 +124,6 @@ const Profile = () => {
   useEffect(() => {
     getTransactionByWallet();
     getRoyaltyPoolInfo();
-
     const myInterval = setInterval(() => {
       getRoyaltyPoolInfo();
     }, 1000);
@@ -416,10 +415,13 @@ const Profile = () => {
                 {/* <Tab active={activeTab === 'earn-liquidity-rewards'} path="/profile?activeTab=earn-liquidity-rewards">
                   Earn Liquidity Rewards
                 </Tab> */}
-                <Tab active={activeTab === 'buy-matic'} path="/profile?activeTab=buy-matic">
+                <Tab active={activeTab === 'buy-matic'} path="https://www.moonpay.com/buy">
                   Buy Matic
                 </Tab>
-                <Tab active={activeTab === 'buy-vlr'} path="/profile?activeTab=buy-vlr">
+                <Tab
+                  active={activeTab === 'buy-vlr'}
+                  path="https://quickswap.exchange/#/swap?inputCurrency=0xe1b757fc80ca95677da112e3231a571469252710"
+                >
                   Buy VLR
                 </Tab>
               </Tabs>
@@ -460,8 +462,8 @@ const Profile = () => {
                 />
               )}
               {/* {activeTab === 'earn-liquidity-rewards' && <EarnLiquidityRewards />} */}
-              {activeTab === 'buy-matic' && <BuyMatic />}
-              {activeTab === 'buy-vlr' && <BuyVLR />}
+              {/* {activeTab === 'buy-matic' && <BuyMatic />}
+              {activeTab === 'buy-vlr' && <BuyVLR />} */}
             </div>
           </div>
         </div>

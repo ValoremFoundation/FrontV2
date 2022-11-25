@@ -26,13 +26,13 @@ const RoyaltyPool = ({
         <div>
           <p className="poppins-16-600 my-2">Royalty Amount</p>
           <p className="poppins-16-500">
-            {numberFormat(fromWei(userPoolInfo?.amount), fromWei(userPoolInfo?.amount) > 1 ? 4 : 9)}
+            {numberFormat(fromWei(userPoolInfo?.amount), fromWei(userPoolInfo?.amount) > 1 ? 4 : 9)} VLR
           </p>
         </div>
         <div>
           <p className="poppins-16-600 my-2">Pending Reward Amount</p>
           <p className="poppins-16-500">
-            {numberFormat(fromWei(pendingRewardAmount), fromWei(pendingRewardAmount) > 1 ? 4 : 9)}
+            {numberFormat(fromWei(pendingRewardAmount), fromWei(pendingRewardAmount) > 1 ? 4 : 9)} VLR
           </p>
         </div>
       </div>
