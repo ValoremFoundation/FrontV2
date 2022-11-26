@@ -41,7 +41,7 @@ const Created = ({ actionTab = 'listed', handleClickBuy, handleChangeOption, pro
           {listedTokens?.length > 0 ? (
             listedTokens?.map((item, index) => (
               <div key={index} className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 my-3">
-                <NFTCard onClick={() => history.push(`/token-detail/${item?.id}`)} profile={profile} token={item} />
+                <NFTCard onClick={() => history.push(`/token-detail/${item?.id}`)} token={item} />
               </div>
             ))
           ) : (
@@ -58,7 +58,7 @@ const Created = ({ actionTab = 'listed', handleClickBuy, handleChangeOption, pro
         {soldTokens?.length > 0 ? (
           soldTokens?.map((item, index) => (
             <div key={index} className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 my-3">
-              <NFTCard onClick={() => history.push(`/token-detail/${item?.id}`)} profile={profile} token={item} />
+              <NFTCard onClick={() => history.push(`/token-detail/${item?.id}`)} token={item} />
             </div>
           ))
         ) : (

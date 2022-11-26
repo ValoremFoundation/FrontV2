@@ -12,7 +12,7 @@ import NFTDivideLine from 'src/components/NFTDivideLine';
 import StarString from '../StarString';
 import { SYMBOL } from 'src/constants';
 
-const NFTCard = ({ onClick, token, profile, price = 0 }) => {
+const NFTCard = ({ onClick, token, price = 0 }) => {
   return (
     <div className="nft-card-container" onClick={onClick}>
       <img

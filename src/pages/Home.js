@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import BackgroundButton from 'src/components/BackgroundButton';
 import 'src/styles/Home.scss';
@@ -12,10 +12,33 @@ import HomeCateImage3 from 'src/assets/images/home-cate-3.svg';
 import HomeSearchMan from 'src/assets/images/home-search-man.png';
 import HomeSearchInput from 'src/components/HomeSearchInput';
 import GoogleLoginModal from 'src/components/GoogleLoginModal';
+import { useSelector } from 'react-redux';
+import { getProfile, getRandomTokenBuyNum } from 'src/api';
+import LoadingPage from 'src/components/LoadingPage';
 
 const Home = () => {
   const history = useHistory();
+  const [profile, setProfile] = useState([]);
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [randomToken, setRandomToken] = useState([]);
+  const authToken = useSelector(state => state.auth.token);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const params = { num: 3 };
+      const {
+        data: { tokens },
+      } = await getRandomTokenBuyNum(params, {
+        Authorization: `Bearer ${authToken}`,
+      });
+
+      setRandomToken(tokens);
+    };
+
+    fetchData();
+  }, []);
+
   const openModal = () => {
     setIsOpen(true);
   };
@@ -25,6 +48,7 @@ const Home = () => {
 
   return (
     <div>
+      {isLoading && <LoadingPage />}
       <GoogleLoginModal modalIsOpen={modalIsOpen} closeModal={closeModal} redirectUrl={'/create'} />
       <div className="home-top-section">
         <div className="home-top-overlay">
@@ -48,9 +72,9 @@ const Home = () => {
       <div className="home-trending-container">
         <div className="home-trending-title mb-4">Treding Communities</div>
         <div className="row gx-5">
-          {[0, 1, 2].map(index => (
+          {randomToken?.map((item, index) => (
             <div key={index} className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 my-3">
-              <NFTCard onClick={() => history.push(`/token-detail/${index}`)} />
+              <NFTCard onClick={() => history.push(`/token-detail/${item?.id}`)} token={item} />
             </div>
           ))}
         </div>

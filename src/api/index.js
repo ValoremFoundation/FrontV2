@@ -125,3 +125,14 @@ export const createComment = async (tokenId, userWallet, starCount, comment, ava
     avatar,
   });
 };
+
+export const getRandomToken = async () => {
+  return await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/tokens/random`);
+};
+
+export const getRandomTokenBuyNum = async (params, header) => {
+  return await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/tokens/randombynum`, {
+    params,
+    headers: header,
+  });
+};

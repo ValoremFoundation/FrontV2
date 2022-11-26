@@ -272,7 +272,7 @@ const ActivateListing = () => {
             <div className="listing-second-section">
               <div className="row gx-5">
                 <div className="col-12 col-lg-4 my-4">
-                  <NFTCard token={nftData} profile={profile} price={price} />
+                  <NFTCard token={nftData} price={price} />
                 </div>
                 <div className="col-12 col-lg-8 my-4">
                   <ActivateListingCard

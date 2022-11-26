@@ -111,7 +111,7 @@ const Browse = () => {
           {filteredData?.length > 0 ? (
             filteredData.map((item, index) => (
               <div key={index} className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 my-3">
-                <NFTCard onClick={() => history.push(`/token-detail/${item?.id}`)} profile={profile} token={item} />
+                <NFTCard onClick={() => history.push(`/token-detail/${item?.id}`)} token={item} />
               </div>
             ))
           ) : (
