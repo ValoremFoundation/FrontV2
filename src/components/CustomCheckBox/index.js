@@ -4,7 +4,7 @@ import 'src/styles/Global.scss';
 
 const CustomCheckBox = ({ label, onChange, value, require = false }) => {
   return (
-    <div className="global-flex-start">
+    <div className="d-flex justify-content-start">
       <div className="custom-checkbox">
         <input
           id="custom-checkbox-id"
@@ -15,7 +15,7 @@ const CustomCheckBox = ({ label, onChange, value, require = false }) => {
           checked={value}
         />
       </div>
-      <div className="poppins-14-500 ms-3">
+      <div className="poppins-16-500 ms-3">
         {label}
         {require && <span className="err-text">**require**</span>}
       </div>

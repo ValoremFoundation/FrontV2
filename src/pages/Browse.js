@@ -16,8 +16,8 @@ import RoundBorderButton from 'src/components/RoundBorderButton';
 const Browse = () => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const propsCategory = history.location?.category?.data;
   const categories = useSelector(state => state.categories.items.items);
-  const profile = useSelector(state => state.profile);
   const [isLoading, setIsLoading] = useState(false);
   const [nftData, setNftData] = useState();
   const [remotePerson, setRemotePerson] = useState('remote');
@@ -27,6 +27,10 @@ const Browse = () => {
   useEffect(() => {
     dispatch(fetchAllCategories());
   }, []);
+
+  useEffect(() => {
+    if (propsCategory) setSearchAll('all');
+  }, [propsCategory]);
 
   const getAllTokens = async () => {
     setIsLoading(true);

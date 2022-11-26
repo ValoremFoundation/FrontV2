@@ -12,20 +12,37 @@ import HomeCateImage3 from 'src/assets/images/home-cate-3.svg';
 import HomeSearchMan from 'src/assets/images/home-search-man.png';
 import HomeSearchInput from 'src/components/HomeSearchInput';
 import GoogleLoginModal from 'src/components/GoogleLoginModal';
-import { useSelector } from 'react-redux';
-import { getProfile, getRandomTokenBuyNum } from 'src/api';
+import { useDispatch, useSelector } from 'react-redux';
+import { getRandomTokenBuyNum } from 'src/api';
 import LoadingPage from 'src/components/LoadingPage';
+import { fetchAllCategories } from 'src/actions/categories';
 
 const Home = () => {
   const history = useHistory();
-  const [profile, setProfile] = useState([]);
+  const dispatch = useDispatch();
   const [modalIsOpen, setIsOpen] = useState(false);
   const [randomToken, setRandomToken] = useState([]);
   const authToken = useSelector(state => state.auth.token);
+  const categories = useSelector(state => state.categories.items.items);
   const [isLoading, setIsLoading] = useState(false);
+  const [showAll, setShowAll] = useState(false);
+  const [filteredCategories, setFilteredCategories] = useState([]);
+
+  useEffect(() => {
+    dispatch(fetchAllCategories());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (showAll) {
+      setFilteredCategories(categories);
+    } else {
+      setFilteredCategories(categories?.slice(0, 7));
+    }
+  }, [showAll, categories]);
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       const params = { num: 3 };
       const {
         data: { tokens },
@@ -34,13 +51,18 @@ const Home = () => {
       });
 
       setRandomToken(tokens);
+      setIsLoading(false);
     };
 
     fetchData();
   }, []);
 
   const openModal = () => {
-    setIsOpen(true);
+    if (!localStorage.getItem('login-with-google')) {
+      setIsOpen(true);
+    } else {
+      history.push('/create');
+    }
   };
   const closeModal = () => {
     setIsOpen(false);
@@ -62,10 +84,17 @@ const Home = () => {
             <div className="global-flex-start my-4">
               <BackgroundButton label={'Create'} color={'#2A212E'} bgColor={'#96F2A4'} onClick={openModal} />
               <div className="ms-3">
-                <BackgroundButton label={'Discover'} color={'#ffffff'} bgColor={'#000000'} />
+                <BackgroundButton
+                  label={'Discover'}
+                  color={'#ffffff'}
+                  bgColor={'#000000'}
+                  onClick={() => history.push('/browse')}
+                />
               </div>
             </div>
-            <div className="home-top-text-bottom">How it works?</div>
+            <div className="home-top-text-bottom" onClick={() => window.open('https://www.AdValorem.io/tutorial')}>
+              How it works?
+            </div>
           </div>
         </div>
       </div>
@@ -82,13 +111,19 @@ const Home = () => {
       <div className="home-browse-container">
         <div className="home-top-text-title">Browse Communities</div>
         <div className="row text-center">
-          {[1, 2, 3, 4, 5, 6, 7].map((item, index) => (
+          {filteredCategories?.map((item, index) => (
             <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 p-3" key={index}>
-              <NFTCardAvatar />
+              <NFTCardAvatar
+                item={item}
+                onClick={() => history.push({ pathname: '/browse', category: { data: item.id } })}
+              />
             </div>
           ))}
-          <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 p-3 home-trending-title d-flex justify-content-center align-items-center">
-            See all
+          <div
+            className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 p-3 home-trending-title d-flex justify-content-center align-items-center global-pointer"
+            onClick={() => setShowAll(!showAll)}
+          >
+            {showAll ? 'Show less' : 'Show all'}
           </div>
         </div>
       </div>

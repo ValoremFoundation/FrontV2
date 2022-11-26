@@ -596,17 +596,9 @@ const Create = () => {
         <div className="create-middle-background px-2 py-4">
           <div className="create-middle-one-container">
             <div className="create-middle-section">
-              <div className="poppins-20-500 my-3">
-                <span>
-                  Have you watched our
-                  <span className="poppins-20-600"> tutorial video's </span>
-                  (Link: www.AdValorem.io/tutorial) and agree to our
-                  <span className="poppins-20-600"> licensing and distribution agreement </span>
-                  (Link: www.advalorem.io/licensing-agreement) ?
-                </span>
-              </div>
+              <div className="poppins-20-600 my-3">Hava you seen the videos?</div>
               <CustomCheckBox
-                label={'I have seen the video and understand how the advalorem marketplace works'}
+                label={`Have you watched our tutorial video's (Link: www.AdValorem.io/tutorial) and agree to our licensing and distribution agreement (Link: www.advalorem.io/licensing-agreement)`}
                 onChange={handleChangeSeenVideo}
                 value={seenVideo}
                 require={startRequire && !seenVideo}

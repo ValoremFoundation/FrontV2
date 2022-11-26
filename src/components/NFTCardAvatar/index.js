@@ -1,11 +1,10 @@
 import React from 'react';
 import 'src/styles/components/NFTCardAvatar.scss';
-import Avatar1 from 'src/assets/images/nft-card.png';
 
-const NFTCardAvatar = () => {
+const NFTCardAvatar = ({ item, onClick }) => {
   return (
     <div>
-      <img alt="alt" src={Avatar1} className="nft-card-avatar" />
+      <img alt="alt" src={item?.image || '/img/blank-image.jpg'} className="nft-card-avatar" onClick={onClick} />
     </div>
   );
 };
