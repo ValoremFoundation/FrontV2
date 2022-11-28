@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import 'src/styles/TokenDetail.scss';
 import 'src/styles/Global.scss';
 import Avatar2 from 'src/assets/images/avatar-1.png';
@@ -30,6 +30,8 @@ import { ethers } from 'ethers';
 import TransferModal from 'src/components/TransferModal';
 import { toFixedTail } from 'src/utils/formartUtils';
 import Star from 'src/assets/images/star.svg';
+import Zoom from 'react-medium-image-zoom';
+import 'react-medium-image-zoom/dist/styles.css';
 
 const { REACT_APP_MARKETPLACE_CONTRACT_ADDRESS, REACT_APP_NFT_CONTRACT_ADDRESS, REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS } =
   process.env;
@@ -322,6 +324,16 @@ const TokenDetail = () => {
     }
   };
 
+  const [isZoomed, setIsZoomed] = useState(false);
+
+  const handleImgLoad = useCallback(() => {
+    setIsZoomed(true);
+  }, []);
+
+  const handleZoomChange = useCallback(shouldZoom => {
+    setIsZoomed(shouldZoom);
+  }, []);
+
   return (
     <>
       {isLoading && <LoadingPage />}
@@ -340,17 +352,19 @@ const TokenDetail = () => {
       <div className="token-detail-container">
         <div className="row gx-5">
           <div className="col-12 col-lg-7 my-4">
-            <img
-              alt="alt"
-              src={nftData?.uri || '/img/blank-image.jpg'}
-              style={{
-                width: '100%',
-                height: '350px',
-                borderRadius: 5,
-                objectFit: 'cover',
-                objectPosition: 'center',
-              }}
-            />
+            <Zoom>
+              <img
+                alt="alt"
+                src={nftData?.uri || '/img/blank-image.jpg'}
+                style={{
+                  width: '100%',
+                  height: '350px',
+                  borderRadius: 5,
+                  objectFit: 'cover',
+                  objectPosition: 'center',
+                }}
+              />
+            </Zoom>
             <div className="my-1">
               {tokenComments?.map((item, idx) => (
                 <div className="global-flex-start my-1" key={idx}>
