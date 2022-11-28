@@ -61,3 +61,7 @@ export const numberFormat = (num = 0, fixed = 3) => {
     ...(fixed && { mantissa: fixed }), // number of decimals displayed
   });
 };
+
+export const sliceString = (description, letters) => {
+  return description?.length > letters ? description?.slice(0, letters) + ' ...' : description;
+};
