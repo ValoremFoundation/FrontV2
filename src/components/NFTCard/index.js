@@ -11,15 +11,21 @@ import NFTCardButton from 'src/components/NFTCardButton';
 import NFTDivideLine from 'src/components/NFTDivideLine';
 import StarString from '../StarString';
 import { SYMBOL } from 'src/constants';
+import MultipleNFTCard from '../MultipleNFTCard';
 
 const NFTCard = ({ onClick, token, price = 0 }) => {
   return (
     <div className="nft-card-container" onClick={onClick}>
-      <img
+      <MultipleNFTCard
+        src={token?.uri || '/img/blank-image.jpg'}
+        style={{ width: '100%', height: '260px' }}
+        mediaType={token?.media_type}
+      />
+      {/* <img
         alt="alt"
         src={token?.uri || '/img/blank-image.jpg'}
         style={{ width: '100%', height: '260px', borderRadius: 5, objectFit: 'cover', objectPosition: 'center' }}
-      />
+      /> */}
       <div className="global-flex-between my-3">
         <div className="global-flex-center">
           <div>

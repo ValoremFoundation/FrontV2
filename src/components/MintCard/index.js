@@ -11,6 +11,7 @@ import LinkIcon from 'src/assets/images/facebook-icon.svg';
 import NFTCardButton from '../NFTCardButton';
 import BackgroundButton from '../BackgroundButton';
 import DistributionItem from '../DistributionItem';
+import MultipleNFTCard from '../MultipleNFTCard';
 
 const MintCard = ({ handleClick, token, userInfo, handleClickEdit }) => {
   return (
@@ -18,8 +19,7 @@ const MintCard = ({ handleClick, token, userInfo, handleClickEdit }) => {
       <div className="row gx-4">
         <div className="col-12 col-lg-3 p-2" onClick={handleClick}>
           <div className="global-flex-center">
-            <img
-              alt="alt"
+            <MultipleNFTCard
               src={token?.uri || '/img/blank-image.jpg'}
               style={{
                 maxWidth: '250px',
@@ -29,6 +29,7 @@ const MintCard = ({ handleClick, token, userInfo, handleClickEdit }) => {
                 objectFit: 'cover',
                 objectPosition: 'center',
               }}
+              mediaType={token?.media_type}
             />
           </div>
         </div>

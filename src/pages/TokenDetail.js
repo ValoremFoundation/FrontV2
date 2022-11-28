@@ -30,8 +30,10 @@ import { ethers } from 'ethers';
 import TransferModal from 'src/components/TransferModal';
 import { toFixedTail } from 'src/utils/formartUtils';
 import Star from 'src/assets/images/star.svg';
-import Zoom from 'react-medium-image-zoom';
-import 'react-medium-image-zoom/dist/styles.css';
+// import Zoom from 'react-medium-image-zoom';
+// import 'react-medium-image-zoom/dist/styles.css';
+import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
+import MultipleNFTCard from 'src/components/MultipleNFTCard';
 
 const { REACT_APP_MARKETPLACE_CONTRACT_ADDRESS, REACT_APP_NFT_CONTRACT_ADDRESS, REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS } =
   process.env;
@@ -324,15 +326,13 @@ const TokenDetail = () => {
     }
   };
 
-  const [isZoomed, setIsZoomed] = useState(false);
-
-  const handleImgLoad = useCallback(() => {
-    setIsZoomed(true);
-  }, []);
-
-  const handleZoomChange = useCallback(shouldZoom => {
-    setIsZoomed(shouldZoom);
-  }, []);
+  const generateArray = count => {
+    let arr = [];
+    for (let i = 0; i > count; i++) {
+      arr.push(i);
+    }
+    return arr;
+  };
 
   return (
     <>
@@ -352,30 +352,26 @@ const TokenDetail = () => {
       <div className="token-detail-container">
         <div className="row gx-5">
           <div className="col-12 col-lg-7 my-4">
-            <Zoom>
-              <img
-                alt="alt"
-                src={nftData?.uri || '/img/blank-image.jpg'}
-                style={{
-                  width: '100%',
-                  height: '350px',
-                  borderRadius: 5,
-                  objectFit: 'cover',
-                  objectPosition: 'center',
-                }}
-              />
-            </Zoom>
+            <MultipleNFTCard
+              src={nftData?.uri || '/img/blank-image.jpg'}
+              style={{
+                width: '100%',
+                height: '350px',
+                borderRadius: 5,
+                objectFit: 'cover',
+                objectPosition: 'center',
+              }}
+              mediaType={nftData?.media_type}
+            />
             <div className="my-1">
               {tokenComments?.map((item, idx) => (
                 <div className="global-flex-start my-1" key={idx}>
                   <div style={{ minWidth: '120px' }}>
                     <div className="poppins-14-600-gray me-3">Comments</div>
                     <div className="global-flex-start gap-1">
-                      {Array(item?.star_count)
-                        .fill(0)
-                        .map(index => (
-                          <img alt="alt" src={Star} width={20} height={20} />
-                        ))}
+                      {generateArray(item?.star_count).map(index => (
+                        <img alt="alt" src={Star} width={20} height={20} key={index} />
+                      ))}
                     </div>
                   </div>
                   <div className="global-flex-start">

@@ -15,7 +15,7 @@ const CustomCheckBox = ({ label, onChange, value, require = false }) => {
           checked={value}
         />
       </div>
-      <div className="poppins-16-500 ms-3">
+      <div className="poppins-16-500 global-pointer ms-3" onClick={onChange}>
         {label}
         {require && <span className="err-text">**require**</span>}
       </div>

@@ -12,6 +12,7 @@ import {
   getProfile,
   getTransactionForAllToken,
   getTransactionForWallet,
+  newTransaction,
   tokenRedeem,
   tokenRedeemUpdate,
   updateProfile,
@@ -35,7 +36,7 @@ import marketplaceABI from 'src/assets/abis/nftMarketplace.json';
 import nftABI from 'src/assets/abis/nftAdValorem.json';
 import royaltyPoolABI from 'src/assets/abis/royaltyPool.json';
 import vlrTokenABI from 'src/assets/abis/adValoremToken.json';
-import { dateWithTimestamp } from 'src/utils/formartUtils';
+import { dateWithTimestamp, fromWei } from 'src/utils/formartUtils';
 
 const {
   REACT_APP_MARKETPLACE_CONTRACT_ADDRESS,
@@ -305,10 +306,32 @@ const Profile = () => {
     if (!account) return;
     try {
       setIsLoading(true);
-      const res = await royaltyContract.methods.harvest().send({ from: account });
-      if (res.status) {
-        getRoyaltyPoolInfo();
-        toast.success('Successfully harvested!');
+      const gasPrice = await web3.eth.getGasPrice();
+      const {
+        transactionHash,
+        blockNumber,
+        status,
+        events: harvestEvents,
+      } = await royaltyContract.methods.harvest().send({ from: account, gasPrice: gasPrice * 5 });
+      const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
+      console.log('>>>>>>>>>>>>>>>>>> harvestEvents : ', harvestEvents);
+      const from = web3.eth.abi.decodeParameter('address', harvestEvents[0]?.raw?.topics[1]);
+      const to = web3.eth.abi.decodeParameter('address', harvestEvents[0]?.raw?.topics[2]);
+      if (status) {
+        const dbRes = await newTransaction({
+          hash: transactionHash,
+          from: from,
+          to: to,
+          token_id: '',
+          price: fromWei(pendingRewardAmount),
+          method: 'harvest',
+          timestamp: blockTimeStamp,
+        });
+        if (dbRes.status) {
+          getRoyaltyPoolInfo();
+          setIsLoading(false);
+          toast.success('Successfully harvested!');
+        }
       }
       setIsLoading(false);
     } catch (err) {
@@ -322,7 +345,7 @@ const Profile = () => {
     if (!account) return;
 
     try {
-      setIsLoading(true);
+      const gasPrice = await web3.eth.getGasPrice();
       const currentTimestamp = Date.now() / 1000;
       const unlockedTimestamp = parseInt(userPoolInfo.timeDeposited) + parseInt(lockDuration);
       const unlockDate = dateWithTimestamp((parseInt(userPoolInfo?.timeDeposited) + parseInt(lockDuration)) * 1000);
@@ -330,10 +353,32 @@ const Profile = () => {
         toast.error(`Please can withdraw on ${unlockDate}!`);
         return;
       }
-      const res = await royaltyContract.methods.withdraw().send({ from: account });
-      if (res.status) {
-        getRoyaltyPoolInfo();
-        toast.success('Successfully withdrawed!');
+      setIsLoading(true);
+      const {
+        transactionHash,
+        blockNumber,
+        status,
+        events: withdrawEvents,
+      } = await royaltyContract.methods.withdraw().send({ from: account, gasPrice: gasPrice * 5 });
+      const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
+      console.log('>>>>>>>>>>>>>>>>>> withdrawEvents : ', withdrawEvents);
+      const from = web3.eth.abi.decodeParameter('address', withdrawEvents[0]?.raw?.topics[1]);
+      const to = web3.eth.abi.decodeParameter('address', withdrawEvents[0]?.raw?.topics[2]);
+      if (status) {
+        const dbRes = await newTransaction({
+          hash: transactionHash,
+          from: from,
+          to: to,
+          token_id: '',
+          price: fromWei(userPoolInfo?.amount),
+          method: 'withdraw',
+          timestamp: blockTimeStamp,
+        });
+        if (dbRes.status) {
+          getRoyaltyPoolInfo();
+          setIsLoading(false);
+          toast.success('Successfully withdrawed!');
+        }
       }
       setIsLoading(false);
     } catch (err) {
