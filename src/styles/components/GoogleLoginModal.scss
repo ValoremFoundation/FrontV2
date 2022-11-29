@@ -33,6 +33,10 @@
   &:hover {
     background: #00000015;
   }
+
+  @media screen and (max-width: 768px) {
+    padding: 16px 4px;
+  } 
 }
 
 .google-login-button-title {

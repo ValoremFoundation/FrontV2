@@ -6,11 +6,29 @@ import 'src/styles/components/GoogleLoginModal.scss';
 import 'src/styles/Global.scss';
 import { GoogleLogin } from 'react-google-login';
 import toast from 'react-hot-toast';
+import { isMobile } from 'react-device-detect';
 
-const GoogleLoginModal = ({ modalIsOpen, closeModal, redirectUrl }) => {
+const GoogleLoginModal = ({ modalIsOpen, closeModal, redirectUrl, toggle }) => {
   const hisotry = useHistory();
   const customStyles = {
     content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      zIndex: 99999,
+    },
+    overlay: {
+      background: '#00000060',
+      zIndex: 99,
+    },
+  };
+
+  const mobileCustomStyles = {
+    content: {
+      width: 'calc(100% - 40px)',
       top: '50%',
       left: '50%',
       right: 'auto',
@@ -29,11 +47,6 @@ const GoogleLoginModal = ({ modalIsOpen, closeModal, redirectUrl }) => {
     Modal.setAppElement('body');
   }, []);
 
-  const handleClickGoogleLogin = () => {
-    hisotry.push(redirectUrl);
-    closeModal();
-  };
-
   const responseGoogle = response => {
     const accessToken = response.accessToken;
     const userName = response.profileObj.name;
@@ -43,6 +56,7 @@ const GoogleLoginModal = ({ modalIsOpen, closeModal, redirectUrl }) => {
     localStorage.setItem('login-with-google', accessToken);
     hisotry.push(redirectUrl);
     closeModal();
+    toggle();
   };
 
   const responseGoogleFail = response => {
@@ -50,7 +64,12 @@ const GoogleLoginModal = ({ modalIsOpen, closeModal, redirectUrl }) => {
   };
 
   return (
-    <Modal isOpen={modalIsOpen} onRequestClose={closeModal} style={customStyles} contentLabel="Google Login Modal">
+    <Modal
+      isOpen={modalIsOpen}
+      onRequestClose={closeModal}
+      style={isMobile ? mobileCustomStyles : customStyles}
+      contentLabel="Google Login Modal"
+    >
       <GoogleLogin
         clientId={process.env.REACT_APP_GOOGLE_KEY}
         buttonText="Login"
@@ -58,7 +77,7 @@ const GoogleLoginModal = ({ modalIsOpen, closeModal, redirectUrl }) => {
         onFailure={responseGoogleFail}
         cookiePolicy={'single_host_origin'}
         render={renderProps => (
-          <div style={{ padding: '65px' }}>
+          <div style={{ padding: isMobile ? '10px' : '65px' }}>
             <div className="google-login-title">AdValorem</div>
             <div className="google-login-content">Welcome Back!</div>
             <div className="google-login-button" onClick={renderProps.onClick}>

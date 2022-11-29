@@ -1,6 +1,5 @@
 import React from 'react';
 import Modal from 'react-modal';
-import 'src/styles/components/SwitchNetworkModal.scss';
 import 'src/styles/Global.scss';
 import MaticIcon from 'src/assets/images/ic-matic.png';
 import RPCHelper from 'src/assets/images/rpc-helper.gif';

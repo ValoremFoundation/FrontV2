@@ -1,194 +1,60 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import 'src/styles/layout/Navbar.scss';
 import SearchInput from 'src/components/SearchInput';
 import RoundBorderButton from 'src/components/RoundBorderButton';
 import { FiMenu } from 'react-icons/fi';
 import GoogleLoginModal from 'src/components/GoogleLoginModal';
-import { useWeb3React } from '@web3-react/core';
-import { injected, networkItem } from 'src/utils/connector';
-import toast from 'react-hot-toast';
 import SwitchNetworkModal from 'src/components/SwitchNetworkModal';
 import { truncateAddress } from 'src/utils/formartUtils';
-import { setWalletAddress } from 'src/actions/wallet';
-import { setProfile } from 'src/actions/profile';
-import { useDispatch, useSelector } from 'react-redux';
-import { login } from 'src/api';
-import { MDBDropdown, MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem } from 'mdb-react-ui-kit';
-import { setAuthToken } from 'src/actions/auth';
 
-const Navbar = ({ toggle }) => {
+const Navbar = ({
+  toggle,
+  switchNetworkModal,
+  setSwitchNetworkModal,
+  handleSwithNetwork,
+  account,
+  active,
+  handleDisconnectWallet,
+  logout,
+  handleConnectWallet,
+}) => {
   const history = useHistory();
-  const dispatch = useDispatch();
-  const wallet = useSelector(state => state.wallet.address);
-  const profile = useSelector(state => state.profile);
-  const { active, account, chainId, activate, deactivate } = useWeb3React();
-  const [connectShowModal, setConnectShowModal] = useState(false);
-  const [switchNetworkModal, setSwitchNetworkModal] = useState(false);
-  const [modalIsOpen, setIsOpen] = useState(false);
-  const openModal = () => {
+  const refDrop = useRef(null);
+  const [googleModalOpen, setGoogleModalOpen] = useState(false);
+  const handleClickCreate = () => {
     if (!localStorage.getItem('login-with-google')) {
-      setIsOpen(true);
+      setGoogleModalOpen(true);
     } else {
       history.push('/create');
     }
   };
-  const closeModal = () => {
-    setIsOpen(false);
+  const closeGoogleModal = () => {
+    setGoogleModalOpen(false);
+  };
+
+  const [openMenu, setOpenMenu] = React.useState(false);
+
+  const handleOpen = () => {
+    setOpenMenu(!openMenu);
+  };
+
+  const handleClickOutside = event => {
+    if (refDrop.current && !refDrop.current.contains(event.target)) {
+      setOpenMenu(false);
+    }
   };
 
   useEffect(() => {
-    const connectWalletOnPageLoad = async () => {
-      if (JSON.parse(localStorage?.getItem('isWalletConnected'))) {
-        try {
-          await activate(injected);
-          localStorage.setItem('isWalletConnected', true);
-        } catch (ex) {
-          console.log(ex);
-        }
-      }
+    document.addEventListener('click', handleClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
     };
-    connectWalletOnPageLoad();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    loginAction();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account]);
-
-  useEffect(() => {
-    if (!active) {
-      localStorage.setItem('authToken', '');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [active]);
-
-  useEffect(() => {
-    const provider = window.ethereum?.isTrust ? window?.trustwallet?.Provider : window.ethereum;
-
-    if (!provider) {
-      console.error('MetaMask is not installed. Please consider installing it: https://metamask.io/download.html');
-      toast.error('MetaMask is not installed.');
-      return;
-    }
-
-    const visible = localStorage.getItem('login-with-metamask') ? localStorage.getItem('login-with-metamask') : false;
-
-    if (!account) {
-      if (visible) setSwitchNetworkModal(false);
-      return;
-    }
-    dispatch(setWalletAddress(account));
-    if (!JSON.parse(process.env.REACT_APP_SUPPORTED_CHAINS).includes(chainId)) {
-      if (visible || JSON.parse(localStorage.getItem('isWalletConnected'))) setSwitchNetworkModal(true);
-    } else {
-      if (visible || JSON.parse(localStorage.getItem('isWalletConnected'))) setSwitchNetworkModal(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainId, account]);
-
-  const loginAction = async () => {
-    if (account) {
-      const userName = localStorage.getItem('userName');
-      const userEmail = localStorage.getItem('userEmail');
-      const {
-        data: { status, token, user },
-      } = await login({ wallet_address: account, userName, userEmail });
-      if (!status) {
-        console.log('Failed to login');
-      } else {
-        localStorage.setItem('authToken', token);
-        dispatch(setAuthToken(token));
-        // if (user.feature_id > 0 && user.feature_upgraded) {
-        //   const {
-        //     data: { data: features },
-        //   } = await getFeaturs();
-        //   const startTime = user.feature_start_time;
-        //   const lockTime = features[user.feature_id - 1].lock_time;
-        //   const expireTimestamp = Number(startTime) + Number(lockTime * 24 * 60 * 60);
-        //   const currentTimestamp = Number(new Date().getTime() / 1000);
-        //   if (currentTimestamp > expireTimestamp) {
-        //     const params = { wallet_address: account, feature_upgraded: false };
-        //     const result = await updateProfileFeatureUpgrade(params);
-        //     if (result.status === 200) {
-        //       user.feature_upgraded = false;
-        //     }
-        //   }
-        // }
-        // delete user.feature_start_time;
-        dispatch(setProfile(user));
-      }
-    }
-  };
-
-  const handleConnectWallet = async () => {
-    try {
-      await activate(injected);
-      localStorage.setItem('isWalletConnected', true);
-      loginAction();
-    } catch (ex) {
-      console.log(ex);
-    }
-  };
-
-  const handleDisconnectWallet = () => {
-    try {
-      deactivate();
-      localStorage.setItem('isWalletConnected', false);
-    } catch (ex) {
-      console.log(ex);
-    }
-  };
-
-  const handleSwithNetwork = async networkId => {
-    const provider = window.ethereum?.isTrust ? window?.trustwallet?.Provider : window.ethereum;
-    if (provider) {
-      try {
-        // check if the chain to connect to is installed
-        await window.ethereum.request({
-          method: 'wallet_switchEthereumChain',
-          params: [{ chainId: `0x${networkId.toString(16)}` }], // chainId must be in hexadecimal numbers
-        });
-        return true;
-      } catch (error) {
-        // This error code indicates that the chain has not been added to MetaMask
-        // if it is not, then install it into the user MetaMask
-
-        if (error.code === 4902) {
-          try {
-            await window.ethereum.request({
-              method: 'wallet_addEthereumChain',
-              params: networkItem[0].params,
-            });
-          } catch (addError) {
-            console.error(addError);
-            return false;
-          }
-        }
-        console.error(error);
-        return false;
-      }
-    }
-  };
-
-  const logout = async () => {
-    try {
-      deactivate();
-      localStorage.setItem('isWalletConnected', false);
-      localStorage.setItem('authToken', '');
-      localStorage.setItem('login-with-google', '');
-      dispatch(setWalletAddress(''));
-      localStorage.setItem('login-with-metamask', '');
-      history.push('/');
-    } catch (ex) {
-      console.log(ex);
-    }
-  };
 
   return (
     <div className="nav-container">
-      <GoogleLoginModal modalIsOpen={modalIsOpen} closeModal={closeModal} redirectUrl={'/create'} />
+      <GoogleLoginModal modalIsOpen={googleModalOpen} closeModal={closeGoogleModal} redirectUrl={'/create'} />
       <SwitchNetworkModal
         modalIsOpen={switchNetworkModal}
         closeModal={() => {
@@ -211,36 +77,46 @@ const Navbar = ({ toggle }) => {
           <a className="nav-link" href="https://discord.gg/3kjQ8fBpks" target="_blank" rel="noopener noreferrer">
             Resources
           </a>
-          <div className="nav-link" exact="true" onClick={openModal}>
+          <div className="nav-link" exact="true" onClick={handleClickCreate}>
             Create
           </div>
           <Link to="/map" className="nav-link" exact="true">
             Map
           </Link>
           {active ? (
-            <MDBDropdown>
-              <MDBDropdownToggle tag="a" className="caret-none">
-                <RoundBorderButton label={truncateAddress(account)}></RoundBorderButton>
-              </MDBDropdownToggle>
-              <MDBDropdownMenu>
-                <MDBDropdownItem
-                  href=""
-                  link
-                  onClick={() => history.push(`/profile?activeTab=created&actionTab=listed`)}
-                >
-                  Profile
-                </MDBDropdownItem>
-                <MDBDropdownItem href="" link onClick={() => history.push(`/settings`)}>
-                  Settings
-                </MDBDropdownItem>
-                <MDBDropdownItem href="" link onClick={handleDisconnectWallet}>
-                  Disconnect Wallet
-                </MDBDropdownItem>
-                <MDBDropdownItem href="" link onClick={logout}>
-                  Logout
-                </MDBDropdownItem>
-              </MDBDropdownMenu>
-            </MDBDropdown>
+            <div className="dropdown" ref={refDrop}>
+              <RoundBorderButton onClick={handleOpen} label={truncateAddress(account)}></RoundBorderButton>
+              {openMenu ? (
+                <ul className="menu">
+                  <li className="menu-item">
+                    <button
+                      onClick={() => {
+                        history.push(`/profile?activeTab=created&actionTab=listed`);
+                        setOpenMenu(false);
+                      }}
+                    >
+                      Profile
+                    </button>
+                  </li>
+                  <li className="menu-item">
+                    <button
+                      onClick={() => {
+                        history.push(`/settings`);
+                        setOpenMenu(false);
+                      }}
+                    >
+                      Settings
+                    </button>
+                  </li>
+                  <li className="menu-item">
+                    <button onClick={handleDisconnectWallet}>Disconnect Wallet</button>
+                  </li>
+                  <li className="menu-item">
+                    <button onClick={logout}>Logout</button>
+                  </li>
+                </ul>
+              ) : null}
+            </div>
           ) : (
             <RoundBorderButton label={'Connect'} onClick={handleConnectWallet} />
           )}
