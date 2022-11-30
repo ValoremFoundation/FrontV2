@@ -11,14 +11,14 @@ import NFTCardButton from 'src/components/NFTCardButton';
 import NFTDivideLine from 'src/components/NFTDivideLine';
 import StarString from '../StarString';
 import { SYMBOL } from 'src/constants';
-import MultipleNFTCard from '../MultipleNFTCard';
+import MultiMediaView from '../MultiMediaView';
 
 const NFTCard = ({ onClick, token, price = 0 }) => {
   return (
     <div className="nft-card-container" onClick={onClick}>
-      <MultipleNFTCard
+      <MultiMediaView
         src={token?.uri || '/img/blank-image.jpg'}
-        style={{ width: '100%', height: '260px' }}
+        style={{ width: '100%', height: '260px', borderRadius: 5, objectFit: 'cover', objectPosition: 'center' }}
         mediaType={token?.media_type}
       />
       {/* <img

@@ -30,10 +30,8 @@ import { ethers } from 'ethers';
 import TransferModal from 'src/components/TransferModal';
 import { toFixedTail } from 'src/utils/formartUtils';
 import Star from 'src/assets/images/star.svg';
-// import Zoom from 'react-medium-image-zoom';
-// import 'react-medium-image-zoom/dist/styles.css';
-import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
-import MultipleNFTCard from 'src/components/MultipleNFTCard';
+import MultiMediaZoomView from 'src/components/MultiMediaZoomView';
+import MultiMediaView from 'src/components/MultiMediaView';
 
 const { REACT_APP_MARKETPLACE_CONTRACT_ADDRESS, REACT_APP_NFT_CONTRACT_ADDRESS, REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS } =
   process.env;
@@ -352,11 +350,11 @@ const TokenDetail = () => {
       <div className="token-detail-container">
         <div className="row gx-5">
           <div className="col-12 col-lg-7 my-4">
-            <MultipleNFTCard
+            <MultiMediaZoomView
               src={nftData?.uri || '/img/blank-image.jpg'}
               style={{
                 width: '100%',
-                height: '350px',
+                // height: '380px',
                 borderRadius: 5,
                 objectFit: 'cover',
                 objectPosition: 'center',

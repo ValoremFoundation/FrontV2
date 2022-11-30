@@ -1,10 +1,9 @@
 import React, { memo } from 'react';
-import styles from './multiplenftcard.module.scss';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
 
-export const MultipleNFTCard = memo(({ style, className, mediaType, src }) => {
+export const MultiMediaZoomView = memo(({ style, className, mediaType, src }) => {
   return (
     <div className={className}>
       {mediaType === 'application' ? (
@@ -34,4 +33,4 @@ export const MultipleNFTCard = memo(({ style, className, mediaType, src }) => {
   );
 });
 
-export default MultipleNFTCard;
+export default MultiMediaZoomView;

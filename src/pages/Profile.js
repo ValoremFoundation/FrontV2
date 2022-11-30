@@ -125,11 +125,6 @@ const Profile = () => {
   useEffect(() => {
     getTransactionByWallet();
     getRoyaltyPoolInfo();
-    const myInterval = setInterval(() => {
-      getRoyaltyPoolInfo();
-    }, 1000);
-
-    return () => clearInterval(myInterval);
   }, [account, activeTab]);
 
   const getTransactionAll = async () => {
@@ -504,6 +499,7 @@ const Profile = () => {
                   handleClickWithdraw={handleClickWithdraw}
                   userPoolInfo={userPoolInfo}
                   pendingRewardAmount={pendingRewardAmount}
+                  getRoyaltyPoolInfo={getRoyaltyPoolInfo}
                 />
               )}
               {/* {activeTab === 'earn-liquidity-rewards' && <EarnLiquidityRewards />} */}

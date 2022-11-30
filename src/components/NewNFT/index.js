@@ -9,7 +9,7 @@ import SelectInput from '../SelectInput';
 import { giftCardOptions } from 'src/constants';
 import { fetchAllCategories } from 'src/actions/categories';
 import { useSelector, useDispatch } from 'react-redux';
-import MultipleNFTCard from '../MultipleNFTCard';
+import MultiMediaView from '../MultiMediaView';
 
 const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT, editable = false }) => {
   const dispatch = useDispatch();
@@ -32,7 +32,7 @@ const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT, ed
       <div>
         <div className="global-flex-between flex-wrap my-4">
           <div className="global-flex-start my-4">
-            <MultipleNFTCard
+            <MultiMediaView
               src={itemNFT?.imageUrl.value}
               style={{ width: 100, height: 100, borderRadius: 64, objectFit: 'cover', objectPosition: 'center' }}
               mediaType={itemNFT?.type}

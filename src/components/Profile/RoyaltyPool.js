@@ -1,4 +1,5 @@
 import React from 'react';
+import { useEffect } from 'react';
 import { dateWithTimestamp, fromWei, numberFormat } from 'src/utils/formartUtils';
 import RoundBorderButton from '../RoundBorderButton';
 
@@ -9,7 +10,14 @@ const RoyaltyPool = ({
   handleClickWithdraw,
   userPoolInfo,
   pendingRewardAmount,
+  getRoyaltyPoolInfo,
 }) => {
+  useEffect(() => {
+    const myInterval = setInterval(() => {
+      getRoyaltyPoolInfo();
+    }, 1000);
+    return () => clearInterval(myInterval);
+  }, []);
   return (
     <div>
       <div className="d-flex justify-content-start gap-5">
