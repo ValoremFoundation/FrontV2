@@ -1,16 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useHistory, useLocation, Link, NavLink } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import 'src/styles/Profile.scss';
 import 'src/styles/Global.scss';
-import ProfileNumberName from 'src/components/ProfileNumberName';
-import RedeemedCard from 'src/components/RedeemedCard';
-import NotRedeemedCard from 'src/components/NotRedeemedCard';
-import BoostPost from 'src/components/BoostPost';
-import NFTCard from 'src/components/NFTCard';
 import EditIcon from 'src/assets/images/editIcon.svg';
 import {
   getProfile,
-  getTransactionForAllToken,
   getTransactionForWallet,
   newTransaction,
   tokenRedeem,
@@ -20,34 +14,21 @@ import {
 } from 'src/api';
 import { useSelector } from 'react-redux';
 import LoadingPage from 'src/components/LoadingPage';
-import { profileNumberNameData } from 'src/constants';
 import Tabs, { Tab } from 'src/components/LineTab';
 import Created from 'src/components/Profile/Created';
 import Collections from 'src/components/Profile/Collections';
 import Transactions from 'src/components/Profile/Transactions';
 import RoyaltyPool from 'src/components/Profile/RoyaltyPool';
-import EarnLiquidityRewards from 'src/components/Profile/EarnLiquidityRewards';
-import BuyMatic from 'src/components/Profile/BuyMatic';
-import BuyVLR from 'src/components/Profile/BuyVLR';
 import { useWeb3React } from '@web3-react/core';
 import toast from 'react-hot-toast';
 import Web3 from 'web3';
-import marketplaceABI from 'src/assets/abis/nftMarketplace.json';
 import nftABI from 'src/assets/abis/nftAdValorem.json';
 import royaltyPoolABI from 'src/assets/abis/royaltyPool.json';
-import vlrTokenABI from 'src/assets/abis/adValoremToken.json';
 import { dateWithTimestamp, fromWei } from 'src/utils/formartUtils';
 
-const {
-  REACT_APP_MARKETPLACE_CONTRACT_ADDRESS,
-  REACT_APP_NFT_CONTRACT_ADDRESS,
-  REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS,
-  REACT_APP_ROYALTY_POOL_CONTRACT_ADDRESS,
-} = process.env;
+const { REACT_APP_NFT_CONTRACT_ADDRESS, REACT_APP_ROYALTY_POOL_CONTRACT_ADDRESS } = process.env;
 const web3 = new Web3(window.ethereum);
-const marketplaceContract = new web3.eth.Contract(marketplaceABI, REACT_APP_MARKETPLACE_CONTRACT_ADDRESS);
 const nftContract = new web3.eth.Contract(nftABI, REACT_APP_NFT_CONTRACT_ADDRESS);
-const vlrTokenContract = new web3.eth.Contract(vlrTokenABI, REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS);
 const royaltyContract = new web3.eth.Contract(royaltyPoolABI, REACT_APP_ROYALTY_POOL_CONTRACT_ADDRESS);
 const zeroAddress = '0x0000000000000000000000000000000000000000';
 
@@ -57,7 +38,6 @@ const Profile = () => {
   const query = new URLSearchParams(search);
   const activeTab = query.get('activeTab');
   const actionTab = query.get('actionTab');
-  const history = useHistory();
   const [profile, setProfile] = useState([]);
   const bannerRef = useRef(null);
   const avatarRef = useRef(null);
@@ -99,6 +79,8 @@ const Profile = () => {
 
   useEffect(() => {
     getProfileData();
+    setGeoLocation({ latitude: 0, longitude: 0 });
+    // eslint-disable-next-line
   }, [authToken]);
 
   const getTransactionByWallet = async () => {
@@ -124,6 +106,7 @@ const Profile = () => {
   useEffect(() => {
     getTransactionByWallet();
     getRoyaltyPoolInfo();
+    // eslint-disable-next-line
   }, [account, activeTab]);
 
   const handleClickRedeem = async token => {
@@ -376,7 +359,7 @@ const Profile = () => {
       <div className="profile-container">
         <div className="profile-banner-container">
           <img
-            alt="banner-image"
+            alt="banner"
             src={bannerSource}
             width={'100%'}
             height={192}
@@ -385,7 +368,7 @@ const Profile = () => {
             onClick={() => bannerRef.current.click()}
           />
           <div className={'profile-imgOverlay'} onClick={() => bannerRef.current.click()}>
-            <img src={EditIcon} width="40" height="40" color="white" />
+            <img src={EditIcon} width="40" height="40" color="white" alt="edit" />
           </div>
           <input ref={bannerRef} type="file" className="d-none" onChange={handleCoverPhotoInputChange} />
         </div>
@@ -393,7 +376,7 @@ const Profile = () => {
           <div className="profile-avatar-container">
             <div style={{ width: 'fit-content', position: 'relative' }}>
               <img
-                alt="avatar-image"
+                alt="avatar"
                 src={avatarSource}
                 width={140}
                 height={140}
@@ -405,7 +388,7 @@ const Profile = () => {
                 style={{ borderRadius: '50%' }}
                 onClick={() => avatarRef.current.click()}
               >
-                <img src={EditIcon} width="40" height="40" color="white" />
+                <img src={EditIcon} width="40" height="40" color="white" alt="edit" />
               </div>
               <input ref={avatarRef} type="file" className="d-none" onChange={handleAvatarInputChange} />
             </div>

@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 import Modal from 'react-modal';
 import 'src/styles/Global.scss';
 import TextInput from '../TextInput';
-import RoundBorderButton from '../RoundBorderButton';
 import BackgroundButton from '../BackgroundButton';
 
 const TransferModal = ({

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import 'src/styles/ActivateListing.scss';
 import 'src/styles/Global.scss';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import NFTCard from 'src/components/NFTCard';
 import ActivateListingCard from 'src/components/ActivateListingCard';
 import UserWithName from 'src/components/UserWithName';
@@ -25,25 +25,21 @@ import { useWeb3React } from '@web3-react/core';
 import marketplaceABI from 'src/assets/abis/nftMarketplace.json';
 import nftABI from 'src/assets/abis/nftAdValorem.json';
 import royaltyPoolABI from 'src/assets/abis/royaltyPool.json';
-import vlrTokenABI from 'src/assets/abis/adValoremToken.json';
 import TransferModal from 'src/components/TransferModal';
 
 const {
   REACT_APP_MARKETPLACE_CONTRACT_ADDRESS,
   REACT_APP_NFT_CONTRACT_ADDRESS,
-  REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS,
   REACT_APP_ROYALTY_POOL_CONTRACT_ADDRESS,
 } = process.env;
 const web3 = new Web3(window.ethereum);
 const marketplaceContract = new web3.eth.Contract(marketplaceABI, REACT_APP_MARKETPLACE_CONTRACT_ADDRESS);
 const nftContract = new web3.eth.Contract(nftABI, REACT_APP_NFT_CONTRACT_ADDRESS);
-const vlrTokenContract = new web3.eth.Contract(vlrTokenABI, REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS);
 const royaltyContract = new web3.eth.Contract(royaltyPoolABI, REACT_APP_ROYALTY_POOL_CONTRACT_ADDRESS);
-const zeroAddress = '0x0000000000000000000000000000000000000000';
 
 const ActivateListing = () => {
   const history = useHistory();
-  const { account, chainId } = useWeb3React();
+  const { account } = useWeb3React();
   const params = useParams();
   const { tokenId } = params;
   const authToken = useSelector(state => state.auth.token);
@@ -91,8 +87,6 @@ const ActivateListing = () => {
     }
     try {
       setIsLoading(true);
-      const tokenPrice = Web3.utils.toWei(price);
-      const approvedAddress = await nftContract.methods.getApproved(nftData.token_id).call();
       const gasPrice = await web3.eth.getGasPrice();
       const approvedAll = await nftContract.methods
         .isApprovedForAll(account, process.env.REACT_APP_MARKETPLACE_CONTRACT_ADDRESS)
@@ -102,23 +96,6 @@ const ActivateListing = () => {
           .setApprovalForAll(process.env.REACT_APP_MARKETPLACE_CONTRACT_ADDRESS, true)
           .send({ from: account });
       }
-      // if (approvedAddress === zeroAddress) {
-      //   await nftContract.methods
-      //     .approve(process.env.REACT_APP_MARKETPLACE_CONTRACT_ADDRESS, nftData.token_id)
-      //     .send({ from: account, gasPrice: gasPrice * 5 });
-      // }
-
-      // const { events } = await marketplaceContract.methods
-      //   .createMarketItem(
-      //     process.env.REACT_APP_NFT_CONTRACT_ADDRESS,
-      //     nftData.token_id,
-      //     nftData.creator * 100,
-      //     nftData.reseller * 100,
-      //     nftData.royalty_pool * 100
-      //   )
-      //   .send({ from: account, gasPrice: gasPrice * 5 });
-      // const { itemId } = events.MarketItemCreated.returnValues;
-
       window.gtag('event', 'Token List', { tokenId: nftData.id });
       window.gtag('event', 'conversion', { send_to: 'AW-826595197/Xd_8CPKMvMIDEP2uk4oD' });
 
@@ -145,7 +122,6 @@ const ActivateListing = () => {
       });
       setIsLoading(false);
       history.push(`/token-detail/${nftData?.id}`);
-      // await getTokenDetail();
       toast.success('Listed for sale success');
     } catch (err) {
       console.log('Error listing : ', err?.message);
@@ -179,7 +155,6 @@ const ActivateListing = () => {
 
       setIsLoading(false);
       history.push('/profile?activeTab=created&actionTab=minted');
-      // await getTokenDetail();
     } catch (err) {
       console.log(err.message);
       setIsLoading(false);
@@ -218,7 +193,6 @@ const ActivateListing = () => {
       setIsLoading(false);
       toast.success('Transfer success!');
       history.push('/profile?activeTab=created&actionTab=listed');
-      await getTokenDetail();
     } catch (err) {
       console.log('Error Transfer : ', err.message);
       setIsLoading(false);
@@ -250,7 +224,7 @@ const ActivateListing = () => {
       <div className="activate-listing-container">
         <div style={{ background: '#ffffff', position: 'relative', height: '192px' }}>
           <img
-            alt="banner-image"
+            alt="banner"
             src={profile?.cover_photo || '/img/default-banner.png'}
             width={'100%'}
             height={192}
@@ -260,7 +234,7 @@ const ActivateListing = () => {
         </div>
         <div className="avatar-container">
           <img
-            alt="avatar-image"
+            alt="avatar"
             src={profile?.avatar || '/img/default-avatar.png'}
             width={140}
             height={140}

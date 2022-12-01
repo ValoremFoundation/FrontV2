@@ -19,6 +19,7 @@ const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT, ed
 
   useEffect(() => {
     dispatch(fetchAllCategories());
+    // eslint-disable-next-line
   }, []);
 
   return (

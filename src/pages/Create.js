@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import 'src/styles/Create.scss';
@@ -8,7 +8,6 @@ import StepOrder from 'src/components/StepOrder';
 import BackgroundButton from 'src/components/BackgroundButton';
 import MenuIcon from 'src/assets/images/menu-icon.svg';
 import CustomCheckBox from 'src/components/CustomCheckBox';
-import { isMobile } from 'react-device-detect';
 import MetamaskSigninModal from 'src/components/MetamaskSigninModal';
 import { useSelector, useDispatch } from 'react-redux';
 import { getGeoLocationFromIPAddress, getProfile, pinFileToIPFS, tokenCreate, tokenMint } from 'src/api';
@@ -23,8 +22,7 @@ import { useWeb3React } from '@web3-react/core';
 import nftABI from 'src/assets/abis/nftAdValorem.json';
 import marketplaceABI from 'src/assets/abis/nftMarketplace.json';
 
-const { REACT_APP_MARKETPLACE_CONTRACT_ADDRESS, REACT_APP_NFT_CONTRACT_ADDRESS, REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS } =
-  process.env;
+const { REACT_APP_MARKETPLACE_CONTRACT_ADDRESS, REACT_APP_NFT_CONTRACT_ADDRESS } = process.env;
 
 const web3 = new Web3(window.ethereum);
 const marketplaceContract = new web3.eth.Contract(marketplaceABI, REACT_APP_MARKETPLACE_CONTRACT_ADDRESS);
@@ -33,7 +31,7 @@ const impactClickId = localStorage.getItem('Impact_ClickId');
 
 const Create = () => {
   const history = useHistory();
-  const { account, chainId } = useWeb3React();
+  const { account } = useWeb3React();
   const dispatch = useDispatch();
   const categories = useSelector(state => state.categories.items.items);
   const [bannerSource, setBannerSource] = useState('/img/default-banner.png');
@@ -43,7 +41,6 @@ const Create = () => {
   const [seenVideo, setSeenVideo] = useState(false);
   let savedForLater = 0;
   const [startRequire, setStartRequire] = useState(false);
-  const [errMsg, setErrMsg] = useState('Please input all field!');
   const [arrayNFT, setArrayNFT] = useState([
     {
       imageUrl: { value: '/img/blank-image.jpg', error: false },
@@ -68,9 +65,7 @@ const Create = () => {
   ]);
 
   const [modalIsOpen, setIsOpen] = useState(false);
-  const openModal = () => {
-    setIsOpen(true);
-  };
+
   const closeModal = () => {
     setIsOpen(false);
   };
@@ -100,6 +95,7 @@ const Create = () => {
 
   useEffect(() => {
     getProfileData();
+    // eslint-disable-next-line
   }, [authToken]);
 
   const handleClickSaveForLater = async () => {
@@ -111,7 +107,6 @@ const Create = () => {
     try {
       setIsLoading(true);
       savedForLater = 1;
-      const newNFTs = await handleSaveNFTAPI(arrayNFT);
       toast.success('Successfully saved!');
       setIsLoading(false);
       history.push('/profile?activeTab=created&actionTab=saved-for-later');
@@ -283,10 +278,6 @@ const Create = () => {
 
     try {
       setIsLoading(true);
-      // const newNFTs = await handleSaveNFTAPI();
-      // const tokenURIs = newNFTs.map(item => item.uri);
-      // const tokenIds = newNFTs.map(item => item.id);
-      // const res = await handleMultiMintContract(tokenURIs, tokenIds);
       const res = await handleMultiMintContract();
       if (res?.length > 0) {
         toast.success('Successfully minted!');
@@ -478,7 +469,7 @@ const Create = () => {
         />
         <div style={{ background: '#ffffff', position: 'relative', height: '192px' }}>
           <img
-            alt="banner-image"
+            alt="banner"
             src={bannerSource}
             width={'100%'}
             height={192}
@@ -488,7 +479,7 @@ const Create = () => {
         </div>
         <div className="avatar-container">
           <img
-            alt="avatar-image"
+            alt="avatar"
             src={avatarSource || '/img/default-avatar.png'}
             width={140}
             height={140}

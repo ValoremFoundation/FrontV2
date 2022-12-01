@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import Tabs, { Tab } from 'src/components/SubLineTab';
-import BoostPost from '../BoostPost';
+// import BoostPost from '../BoostPost';
 import MintCard from '../MintCard';
 import NFTCard from '../NFTCard';
 

@@ -39,7 +39,9 @@ const Settings = () => {
         setIsLoading(false);
       }
     };
+    setGeoLocation({ latitude: 0, longitude: 0 });
     getProfileData();
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -134,7 +136,7 @@ const Settings = () => {
           <div className="settings-avatar-container">
             <div style={{ width: 'fit-content', position: 'relative' }}>
               <img
-                alt="avatar-image"
+                alt="avatar"
                 src={avatarSource}
                 width={140}
                 height={140}
@@ -146,7 +148,7 @@ const Settings = () => {
                 style={{ borderRadius: '50%' }}
                 onClick={() => avatarRef.current.click()}
               >
-                <img src={EditIcon} width="40" height="40" color="white" />
+                <img src={EditIcon} width="40" height="40" color="white" alt="edit" />
               </div>
               <input ref={avatarRef} type="file" className="d-none" onChange={handleAvatarInputChange} />
             </div>
@@ -156,7 +158,7 @@ const Settings = () => {
           <div className="poppins-14-500 mb-1">{'Profile Banner'}</div>
           <div className="settings-banner-container">
             <img
-              alt="banner-image"
+              alt="banner"
               src={bannerSource}
               width={'100%'}
               height={192}
@@ -165,7 +167,7 @@ const Settings = () => {
               onClick={() => bannerRef.current.click()}
             />
             <div className={'settings-imgOverlay'} onClick={() => bannerRef.current.click()}>
-              <img src={EditIcon} width="40" height="40" color="white" />
+              <img src={EditIcon} width="40" height="40" color="white" alt="edit" />
             </div>
             <input ref={bannerRef} type="file" className="d-none" onChange={handleCoverPhotoInputChange} />
           </div>

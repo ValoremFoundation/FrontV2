@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import 'src/styles/TokenDetail.scss';
 import 'src/styles/Global.scss';
-import Avatar2 from 'src/assets/images/avatar-1.png';
 import DiscodIcon from 'src/assets/images/discord-blue.svg';
-import TokenImage from 'src/assets/images/nft-card.png';
 import FavoriteBlackIcon from 'src/assets/images/favorite-black-icon.svg';
 import EyeIcon from 'src/assets/images/eye-icon.svg';
 import BenefitCard from 'src/components/BenefitCard';
@@ -12,7 +10,6 @@ import RoundBorderButton from 'src/components/RoundBorderButton';
 import ReactMapGL, { Marker, /* Popup, */ NavigationControl, GeolocateControl, FlyToInterpolator } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { isMobile } from 'react-device-detect';
-import NFTDivideLine from 'src/components/NFTDivideLine';
 import { useParams } from 'react-router';
 import { useWeb3React } from '@web3-react/core';
 import { createComment, getComments, newTransaction, tokenBuy, tokenById, tokenDelist } from 'src/api';
@@ -21,8 +18,6 @@ import toast from 'react-hot-toast';
 import Web3 from 'web3';
 import { useSelector, useDispatch } from 'react-redux';
 import marketplaceABI from 'src/assets/abis/nftMarketplace.json';
-import nftABI from 'src/assets/abis/nftAdValorem.json';
-import royaltyPoolABI from 'src/assets/abis/royaltyPool.json';
 import vlrTokenABI from 'src/assets/abis/adValoremToken.json';
 import { useHistory } from 'react-router-dom';
 import { fetchAllCategories } from 'src/actions/categories';
@@ -31,15 +26,11 @@ import TransferModal from 'src/components/TransferModal';
 import { toFixedTail } from 'src/utils/formartUtils';
 import Star from 'src/assets/images/star.svg';
 import MultiMediaZoomView from 'src/components/MultiMediaZoomView';
-import MultiMediaView from 'src/components/MultiMediaView';
 
-const { REACT_APP_MARKETPLACE_CONTRACT_ADDRESS, REACT_APP_NFT_CONTRACT_ADDRESS, REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS } =
-  process.env;
+const { REACT_APP_MARKETPLACE_CONTRACT_ADDRESS, REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS } = process.env;
 const web3 = new Web3(window.ethereum);
 const marketplaceContract = new web3.eth.Contract(marketplaceABI, REACT_APP_MARKETPLACE_CONTRACT_ADDRESS);
-const nftContract = new web3.eth.Contract(nftABI, REACT_APP_NFT_CONTRACT_ADDRESS);
 const vlrTokenContract = new web3.eth.Contract(vlrTokenABI, REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS);
-const zeroAddress = '0x0000000000000000000000000000000000000000';
 
 const TokenDetail = () => {
   const history = useHistory();
@@ -68,7 +59,7 @@ const TokenDetail = () => {
   };
   const nearMeHandler = () => {};
 
-  const { account, chainId } = useWeb3React();
+  const { account } = useWeb3React();
   const params = useParams();
   const { tokenId } = params;
   const authToken = useSelector(state => state.auth.token);
@@ -83,6 +74,7 @@ const TokenDetail = () => {
 
   useEffect(() => {
     dispatch(fetchAllCategories());
+    // eslint-disable-next-line
   }, []);
 
   const getTokenDetail = async () => {
@@ -474,7 +466,7 @@ const TokenDetail = () => {
           </div>
           <div className="col-12 col-lg-5 my-4">
             <div className="global-flex-center">
-              <img alt="QR Image" src={qrImage} style={{ maxWidth: '300px' }} />
+              <img alt="QRcode" src={qrImage} style={{ maxWidth: '300px' }} />
             </div>
           </div>
         </div>

@@ -1,7 +1,6 @@
 import React from 'react';
 import 'src/styles/components/MintCard.scss';
 import 'src/styles/Global.scss';
-import NFTImage from 'src/assets/images/nft-card.png';
 import Favorite from 'src/assets/images/favorite.svg';
 import Message from 'src/assets/images/message.svg';
 import Position from 'src/assets/images/position.svg';

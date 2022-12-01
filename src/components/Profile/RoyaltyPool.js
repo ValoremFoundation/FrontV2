@@ -17,6 +17,7 @@ const RoyaltyPool = ({
       getRoyaltyPoolInfo();
     }, 1000);
     return () => clearInterval(myInterval);
+    // eslint-disable-next-line
   }, []);
   return (
     <div>

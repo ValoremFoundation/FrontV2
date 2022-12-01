@@ -1,7 +1,6 @@
 import React from 'react';
 import 'src/styles/components/RedeemedCard.scss';
 import 'src/styles/Global.scss';
-import NFTImage from 'src/assets/images/nft-card.png';
 import Favorite from 'src/assets/images/favorite.svg';
 import Message from 'src/assets/images/message.svg';
 import Position from 'src/assets/images/position.svg';
@@ -11,6 +10,7 @@ import LinkIcon from 'src/assets/images/facebook-icon.svg';
 import NFTCardButton from '../NFTCardButton';
 import BackgroundButton from '../BackgroundButton';
 import DistributionItem from '../DistributionItem';
+import MultiMediaView from '../MultiMediaView';
 
 const RedeemedCard = ({ handleClickRedeem, token, profile }) => {
   return (
@@ -18,17 +18,18 @@ const RedeemedCard = ({ handleClickRedeem, token, profile }) => {
       <div className="row gx-4">
         <div className="col-12 col-lg-3 p-2">
           <div className="global-flex-center">
-            <img
-              alt="alt"
+            <MultiMediaView
               src={token?.uri || '/img/blank-image.jpg'}
               style={{
                 maxWidth: '250px',
-                width: '100%',
+                // width: '100%',
                 height: '170px',
                 borderRadius: 5,
                 objectFit: 'cover',
                 objectPosition: 'center',
               }}
+              mediaType={token?.media_type}
+              height={'170px'}
             />
           </div>
         </div>

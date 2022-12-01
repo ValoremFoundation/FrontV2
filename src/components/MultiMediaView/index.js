@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 import 'react-medium-image-zoom/dist/styles.css';
 
 export const MultiMediaView = ({ style, className, mediaType, src, height }) => {
@@ -13,7 +13,7 @@ export const MultiMediaView = ({ style, className, mediaType, src, height }) => 
           <source src={src} />
         </audio>
       ) : (
-        <img src={src} alt="Image" style={{ ...style }} />
+        <img src={src} alt="token" style={{ ...style }} />
       )}
     </div>
   );

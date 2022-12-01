@@ -1,7 +1,6 @@
 import React from 'react';
 import 'src/styles/components/NotRedeemedCard.scss';
 import 'src/styles/Global.scss';
-import NFTImage from 'src/assets/images/nft-card.png';
 import Favorite from 'src/assets/images/favorite.svg';
 import Message from 'src/assets/images/message.svg';
 import Position from 'src/assets/images/position.svg';
@@ -9,6 +8,7 @@ import NFTCardButton from '../NFTCardButton';
 import BackgroundButton from '../BackgroundButton';
 import RoundBorderButton from '../RoundBorderButton';
 import DistributionItem from '../DistributionItem';
+import MultiMediaView from '../MultiMediaView';
 
 const NotRedeemedCard = ({ handleClickAccept, handleClickDeny, token, profile }) => {
   return (
@@ -16,17 +16,18 @@ const NotRedeemedCard = ({ handleClickAccept, handleClickDeny, token, profile })
       <div className="d-flex justify-content-around algin-items-center flex-wrap gx-4">
         <div className=" p-2">
           <div className="global-flex-center">
-            <img
-              alt="alt"
+            <MultiMediaView
               src={token?.uri || '/img/blank-image.jpg'}
               style={{
-                // maxWidth: '250px',
-                width: '250px',
+                maxWidth: '250px',
+                // width: '100%',
                 height: '170px',
                 borderRadius: 5,
                 objectFit: 'cover',
                 objectPosition: 'center',
               }}
+              mediaType={token?.media_type}
+              height={'170px'}
             />
           </div>
         </div>

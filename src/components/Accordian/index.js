@@ -1,4 +1,4 @@
-import React, { FC, memo, useState, useRef, useEffect } from 'react';
+import React, { memo, useState, useRef, useEffect } from 'react';
 import ArrowDownIcon from '../Icons/ArrowDownIcon';
 import styles from './accordian.module.scss';
 

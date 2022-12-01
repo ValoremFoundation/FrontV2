@@ -26,6 +26,7 @@ const Browse = () => {
 
   useEffect(() => {
     dispatch(fetchAllCategories());
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {

@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { Router, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import styles from './lineTab.module.scss';
 
 export const Tabs = memo(({ children }) => {

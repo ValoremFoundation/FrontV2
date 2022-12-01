@@ -1,15 +1,11 @@
 import React from 'react';
 import 'src/styles/components/NFTCard.scss';
 import 'src/styles/Global.scss';
-import NFTImage from 'src/assets/images/nft-card.png';
-import Avatar1 from 'src/assets/images/avatar-1.png';
 import BlueCheck from 'src/assets/images/blue-check.svg';
 import Position from 'src/assets/images/position.svg';
 import Favorite from 'src/assets/images/favorite.svg';
 import Message from 'src/assets/images/message.svg';
 import NFTCardButton from 'src/components/NFTCardButton';
-import NFTDivideLine from 'src/components/NFTDivideLine';
-import StarString from '../StarString';
 import { SYMBOL } from 'src/constants';
 import MultiMediaView from '../MultiMediaView';
 
@@ -22,11 +18,6 @@ const NFTCard = ({ onClick, token, price = 0 }) => {
         mediaType={token?.media_type}
         height={'260px'}
       />
-      {/* <img
-        alt="alt"
-        src={token?.uri || '/img/blank-image.jpg'}
-        style={{ width: '100%', height: '260px', borderRadius: 5, objectFit: 'cover', objectPosition: 'center' }}
-      /> */}
       <div className="global-flex-between my-3">
         <div className="global-flex-center">
           <div>

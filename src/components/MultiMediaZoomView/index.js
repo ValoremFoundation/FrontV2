@@ -25,7 +25,7 @@ export const MultiMediaZoomView = memo(({ style, className, mediaType, src }) =>
       ) : (
         <TransformWrapper>
           <TransformComponent>
-            <img src={src} alt="Image" style={{ ...style }} />
+            <img src={src} alt="token" style={{ ...style }} />
           </TransformComponent>
         </TransformWrapper>
       )}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import 'src/styles/Create.scss';
@@ -9,15 +9,7 @@ import BackgroundButton from 'src/components/BackgroundButton';
 import MenuIcon from 'src/assets/images/menu-icon.svg';
 import CustomCheckBox from 'src/components/CustomCheckBox';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  getGeoLocationFromIPAddress,
-  getProfile,
-  pinFileToIPFS,
-  tokenById,
-  tokenMarketItem,
-  tokenMint,
-  tokenUpdate,
-} from 'src/api';
+import { getGeoLocationFromIPAddress, getProfile, pinFileToIPFS, tokenById, tokenMint, tokenUpdate } from 'src/api';
 import { fetchAllCategories } from 'src/actions/categories';
 import NewNFT from 'src/components/NewNFT';
 import { user1Info, user2Info, user3Info, user4Info, step1, step2, step3 } from 'src/constants';
@@ -30,8 +22,7 @@ import marketplaceABI from 'src/assets/abis/nftMarketplace.json';
 import nftABI from 'src/assets/abis/nftAdValorem.json';
 import { useParams } from 'react-router';
 
-const { REACT_APP_MARKETPLACE_CONTRACT_ADDRESS, REACT_APP_NFT_CONTRACT_ADDRESS, REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS } =
-  process.env;
+const { REACT_APP_MARKETPLACE_CONTRACT_ADDRESS, REACT_APP_NFT_CONTRACT_ADDRESS } = process.env;
 const web3 = new Web3(window.ethereum);
 const marketplaceContract = new web3.eth.Contract(marketplaceABI, REACT_APP_MARKETPLACE_CONTRACT_ADDRESS);
 const nftContract = new web3.eth.Contract(nftABI, REACT_APP_NFT_CONTRACT_ADDRESS);
@@ -41,7 +32,7 @@ const TokenEdit = () => {
   const history = useHistory();
   const params = useParams();
   const { tokenId } = params;
-  const { account, chainId } = useWeb3React();
+  const { account } = useWeb3React();
   const dispatch = useDispatch();
   const [bannerSource, setBannerSource] = useState('/img/default-banner.png');
   const [avatarSource, setAvatarSource] = useState('/img/default-avatar.png');
@@ -137,6 +128,7 @@ const TokenEdit = () => {
 
   useEffect(() => {
     getProfileData();
+    // eslint-disable-next-line
   }, [authToken]);
 
   const checkValidation = () => {
@@ -430,7 +422,7 @@ const TokenEdit = () => {
       <div className="create-container">
         <div style={{ background: '#ffffff', position: 'relative', height: '192px' }}>
           <img
-            alt="banner-image"
+            alt="banner"
             src={bannerSource}
             width={'100%'}
             height={192}
@@ -440,7 +432,7 @@ const TokenEdit = () => {
         </div>
         <div className="avatar-container">
           <img
-            alt="avatar-image"
+            alt="avatar"
             src={avatarSource || '/img/default-avatar.png'}
             width={140}
             height={140}

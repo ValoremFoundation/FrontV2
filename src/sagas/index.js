@@ -1,4 +1,4 @@
-import { all, take, fork, takeEvery } from 'redux-saga/effects';
+import { all, /* take, fork, */ takeEvery } from 'redux-saga/effects';
 import { GET_WALLET_ADDRESS, SET_AUTH_TOKEN, SET_PROFILE, GET_CATEGORIES } from '../actions/types';
 
 import { getWalletAddress } from './wallet';
