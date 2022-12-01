@@ -12,9 +12,12 @@ import { fetchAllCategories } from 'src/actions/categories';
 import { useSelector, useDispatch } from 'react-redux';
 import Tabs, { Tab } from 'src/components/Browse/LineTab';
 import RoundBorderButton from 'src/components/RoundBorderButton';
+import { useWeb3React } from '@web3-react/core';
+import toast from 'react-hot-toast';
 
 const Browse = () => {
   const history = useHistory();
+  const { account } = useWeb3React();
   const dispatch = useDispatch();
   const propsCategory = history.location?.category?.data;
   const categories = useSelector(state => state.categories.items.items);
@@ -59,6 +62,15 @@ const Browse = () => {
   const handleChangeRemotePerson = e => {
     setRemotePerson(e.target.value);
     setSearchAll('');
+  };
+
+  const handleClickNFTCard = itemId => {
+    if (account) {
+      history.push(`/token-detail/${itemId}`);
+    } else {
+      toast.error('Please connect wallet!');
+      return;
+    }
   };
 
   return (
@@ -116,7 +128,7 @@ const Browse = () => {
           {filteredData?.length > 0 ? (
             filteredData.map((item, index) => (
               <div key={index} className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 my-3">
-                <NFTCard onClick={() => history.push(`/token-detail/${item?.id}`)} token={item} />
+                <NFTCard onClick={() => handleClickNFTCard(item?.id)} token={item} />
               </div>
             ))
           ) : (

@@ -1,3 +1,10 @@
+.google-login-section {
+  padding: 65px;
+  @media screen and (max-width: 768px) {
+    padding: 10px;
+  }
+}
+
 .google-login-title {
   font-family: 'Inter';
   font-style: normal;

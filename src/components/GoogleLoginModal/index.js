@@ -60,6 +60,7 @@ const GoogleLoginModal = ({ modalIsOpen, closeModal, redirectUrl, toggle }) => {
   };
 
   const responseGoogleFail = response => {
+    console.log('responseGoogleFail : ', response);
     toast.error('Signin Google login failed!');
   };
 
@@ -77,7 +78,7 @@ const GoogleLoginModal = ({ modalIsOpen, closeModal, redirectUrl, toggle }) => {
         onFailure={responseGoogleFail}
         cookiePolicy={'single_host_origin'}
         render={renderProps => (
-          <div style={{ padding: isMobile ? '10px' : '65px' }}>
+          <div className="google-login-section">
             <div className="google-login-title">AdValorem</div>
             <div className="google-login-content">Welcome Back!</div>
             <div className="google-login-button" onClick={renderProps.onClick}>
@@ -87,6 +88,16 @@ const GoogleLoginModal = ({ modalIsOpen, closeModal, redirectUrl, toggle }) => {
           </div>
         )}
       />
+      <div
+        className="poppins-18-500 mt-2 global-pointer text-end"
+        onClick={() => {
+          hisotry.push(redirectUrl);
+          closeModal();
+          toggle && toggle();
+        }}
+      >
+        skip for now
+      </div>
     </Modal>
   );
 };

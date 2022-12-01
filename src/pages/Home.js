@@ -16,9 +16,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getRandomTokenBuyNum } from 'src/api';
 import LoadingPage from 'src/components/LoadingPage';
 import { fetchAllCategories } from 'src/actions/categories';
+import { useWeb3React } from '@web3-react/core';
+import toast from 'react-hot-toast';
 
 const Home = () => {
   const history = useHistory();
+  const { account } = useWeb3React();
   const dispatch = useDispatch();
   const [modalIsOpen, setIsOpen] = useState(false);
   const [randomToken, setRandomToken] = useState([]);
@@ -69,6 +72,15 @@ const Home = () => {
     setIsOpen(false);
   };
 
+  const handleClickNFTCard = itemId => {
+    if (account) {
+      history.push(`/token-detail/${itemId}`);
+    } else {
+      toast.error('Please connect wallet!');
+      return;
+    }
+  };
+
   return (
     <div>
       {isLoading && <LoadingPage />}
@@ -104,7 +116,7 @@ const Home = () => {
         <div className="row gx-5">
           {randomToken?.map((item, index) => (
             <div key={index} className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 my-3">
-              <NFTCard onClick={() => history.push(`/token-detail/${item?.id}`)} token={item} />
+              <NFTCard onClick={() => handleClickNFTCard(item?.id)} token={item} />
             </div>
           ))}
         </div>
