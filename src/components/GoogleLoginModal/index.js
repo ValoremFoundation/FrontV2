@@ -88,16 +88,20 @@ const GoogleLoginModal = ({ modalIsOpen, closeModal, redirectUrl, toggle }) => {
           </div>
         )}
       />
-      <div
-        className="poppins-18-500 mt-2 global-pointer text-end"
-        onClick={() => {
-          hisotry.push(redirectUrl);
-          closeModal();
-          toggle && toggle();
-        }}
-      >
-        skip for now
-      </div>
+      {isMobile ? (
+        <div
+          className="poppins-18-500 mt-2 global-pointer text-end"
+          onClick={() => {
+            hisotry.push(redirectUrl);
+            closeModal();
+            toggle && toggle();
+          }}
+        >
+          skip for now
+        </div>
+      ) : (
+        <></>
+      )}
     </Modal>
   );
 };
