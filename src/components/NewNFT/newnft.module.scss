@@ -1,0 +1,9 @@
+.nftImage {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  @media screen and (max-width: 978px) {
+    flex-direction: column;
+  }
+}

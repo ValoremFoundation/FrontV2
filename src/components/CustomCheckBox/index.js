@@ -2,7 +2,7 @@ import React from 'react';
 import 'src/styles/components/CustomCheckBox.scss';
 import 'src/styles/Global.scss';
 
-const CustomCheckBox = ({ label, onChange, value, require = false }) => {
+const CustomCheckBox = ({ label = '', onChange, value, require = false }) => {
   return (
     <div className="d-flex justify-content-start">
       <div className="custom-checkbox">

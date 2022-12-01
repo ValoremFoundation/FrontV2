@@ -1,5 +1,6 @@
 import React, { useEffect, memo, useRef } from 'react';
 import 'src/styles/Global.scss';
+import styles from './newnft.module.scss';
 import { useState } from 'react';
 import Accordian from 'src/components/Accordian';
 import RoundBorderButton from '../RoundBorderButton';
@@ -31,20 +32,19 @@ const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT, ed
       }}
     >
       <div>
-        <div className="global-flex-between flex-wrap my-4">
-          <div className="global-flex-start my-4">
+        <div className={`${styles.nftImage} my-4`}>
+          <div className="d-flex justify-content-start align-items-center my-4">
             <MultiMediaView
               src={itemNFT?.imageUrl.value}
               style={{ width: 100, height: 100, borderRadius: 64, objectFit: 'cover', objectPosition: 'center' }}
               mediaType={itemNFT?.type}
               height={'revert'}
             />
-            <div className="poppins-14-400 ms-2">
+            <div className="poppins-14-400 ms-2 text-break">
               {itemNFT?.fileName.value}
               <span className="err-text">{itemNFT?.fileName.error && '**require**'}</span>
             </div>
           </div>
-
           <div className="my-2">
             <RoundBorderButton label={'Choose NFT '} color={'#2DC015'} onClick={() => avatarRef.current.click()} />
             <input

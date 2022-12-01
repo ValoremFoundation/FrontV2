@@ -21,7 +21,7 @@ const RoyaltyPool = ({
   }, []);
   return (
     <div>
-      <div className="d-flex justify-content-start gap-5">
+      <div className="d-flex justify-content-start flex-wrap gap-3">
         <div>
           <p className="poppins-16-600 my-2">{'Apr'}</p>
           <p className="poppins-16-500">{apr} %</p>

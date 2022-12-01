@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import 'src/styles/components/StepOrder.scss';
 import 'src/styles/Global.scss';
+import { isMobile } from 'react-device-detect';
 
 const StepOrder = ({ step, existGift = 1 }) => {
   const [currentWidth, setCurrentWidth] = useState(768);
@@ -12,7 +13,9 @@ const StepOrder = ({ step, existGift = 1 }) => {
   return (
     // <div style={{ maxWidth: 180, marginBottom: '230px' }}>
     <div style={{ marginBottom: currentWidth < 380 ? '20px' : existGift > 0 ? '230px' : '40px' }}>
-      <div className="poppins-12-400 p-3">{step?.description}</div>
+      <div className="poppins-12-400 p-3 text-center" style={{ maxWidth: isMobile ? '150px' : '400px' }}>
+        {step?.description}
+      </div>
       <div className="poppins-16-700 text-center" style={{ height: '24px' }}>
         {step?.amount ? step?.amount + ' VLR' : ''}
       </div>

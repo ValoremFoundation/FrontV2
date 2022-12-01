@@ -588,12 +588,26 @@ const Create = () => {
           <div className="create-middle-one-container">
             <div className="create-middle-section">
               <div className="poppins-20-600 my-3">Hava you seen the videos?</div>
-              <CustomCheckBox
-                label={`Have you watched our tutorial video's (Link: www.AdValorem.io/tutorial) and agree to our licensing and distribution agreement (Link: www.advalorem.io/licensing-agreement)`}
-                onChange={handleChangeSeenVideo}
-                value={seenVideo}
-                require={startRequire && !seenVideo}
-              />
+              <div className="d-flex justify-content-start">
+                <CustomCheckBox
+                  onChange={handleChangeSeenVideo}
+                  value={seenVideo}
+                  require={startRequire && !seenVideo}
+                />
+                <span>
+                  Have you watched our
+                  <span style={{ color: '#0d6efd' }} onClick={() => window.open('https://AdValorem.io/tutorial')}>
+                    {` tutorial video's `}
+                  </span>
+                  and agree to our
+                  <span
+                    style={{ color: '#0d6efd' }}
+                    onClick={() => window.open('https://advalorem.io/licensing-agreement')}
+                  >
+                    {` licensing and distribution agreement `}
+                  </span>
+                </span>
+              </div>
             </div>
           </div>
         </div>

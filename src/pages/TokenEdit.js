@@ -530,21 +530,27 @@ const TokenEdit = () => {
         <div className="create-middle-background px-2 py-4">
           <div className="create-middle-one-container">
             <div className="create-middle-section">
-              <div className="poppins-20-500 my-3">
+              <div className="poppins-20-600 my-3">Hava you seen the videos?</div>
+              <div className="d-flex justify-content-start">
+                <CustomCheckBox
+                  onChange={handleChangeSeenVideo}
+                  value={seenVideo}
+                  require={startRequire && !seenVideo}
+                />
                 <span>
                   Have you watched our
-                  <span className="poppins-20-600"> tutorial video's </span>
-                  (Link: www.AdValorem.io/tutorial) and agree to our
-                  <span className="poppins-20-600"> licensing and distribution agreement </span>
-                  (Link: www.advalorem.io/licensing-agreement) ?
+                  <span style={{ color: '#0d6efd' }} onClick={() => window.open('https://AdValorem.io/tutorial')}>
+                    {` tutorial video's `}
+                  </span>
+                  and agree to our
+                  <span
+                    style={{ color: '#0d6efd' }}
+                    onClick={() => window.open('https://advalorem.io/licensing-agreement')}
+                  >
+                    {` licensing and distribution agreement `}
+                  </span>
                 </span>
               </div>
-              <CustomCheckBox
-                label={'I have seen the video and understand how the advalorem marketplace works'}
-                onChange={handleChangeSeenVideo}
-                value={seenVideo}
-                require={startRequire && !seenVideo}
-              />
             </div>
           </div>
         </div>
