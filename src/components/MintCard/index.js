@@ -30,6 +30,7 @@ const MintCard = ({ handleClick, token, userInfo, handleClickEdit }) => {
                 objectPosition: 'center',
               }}
               mediaType={token?.media_type}
+              height={'170px'}
             />
           </div>
         </div>

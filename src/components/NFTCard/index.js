@@ -20,6 +20,7 @@ const NFTCard = ({ onClick, token, price = 0 }) => {
         src={token?.uri || '/img/blank-image.jpg'}
         style={{ width: '100%', height: '260px', borderRadius: 5, objectFit: 'cover', objectPosition: 'center' }}
         mediaType={token?.media_type}
+        height={'260px'}
       />
       {/* <img
         alt="alt"

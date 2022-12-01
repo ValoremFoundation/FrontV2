@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import 'react-medium-image-zoom/dist/styles.css';
 
-export const MultiMediaView = memo(({ style, className, mediaType, src }) => {
+export const MultiMediaView = ({ style, className, mediaType, src, height }) => {
   return (
     <div className={className}>
       {mediaType === 'application' ? (
@@ -9,7 +9,7 @@ export const MultiMediaView = memo(({ style, className, mediaType, src }) => {
       ) : mediaType === 'video' ? (
         <video src={src} muted autoPlay loop style={{ ...style, borderRadius: '4px' }} />
       ) : mediaType === 'audio' ? (
-        <audio controls loop style={{ ...style }}>
+        <audio controls loop style={{ height: height }}>
           <source src={src} />
         </audio>
       ) : (
@@ -17,6 +17,6 @@ export const MultiMediaView = memo(({ style, className, mediaType, src }) => {
       )}
     </div>
   );
-});
+};
 
 export default MultiMediaView;
