@@ -70,7 +70,6 @@ const Profile = () => {
   const [header, setHeader] = useState('');
   const [description, setDescription] = useState('');
   const [transactions, setTransactions] = useState([]);
-  const [allTransactions, setAllTransactions] = useState([]);
   const [apr, setApr] = useState(0);
   const [lockDuration, setLockDuration] = useState(0);
   const [userPoolInfo, setUserPoolInfo] = useState({});
@@ -127,30 +126,18 @@ const Profile = () => {
     getRoyaltyPoolInfo();
   }, [account, activeTab]);
 
-  const getTransactionAll = async () => {
-    if (!account) return;
-    const {
-      data: { data },
-    } = await getTransactionForAllToken(account);
-    setAllTransactions(data);
-  };
-
-  useEffect(() => {
-    getTransactionAll();
-  }, [account]);
-
   const handleClickRedeem = async token => {
     try {
       setIsLoading(true);
-      if (!Web3.utils.isAddress(token?.redeemAddress)) return;
+      if (!Web3.utils.isAddress(token?.redeem_to)) return;
       const approvedAddress = await nftContract.methods.getApproved(token?.token_id).call();
       if (approvedAddress === zeroAddress) {
-        await nftContract.methods.approve(token?.redeemAddress, token.token_id).send({ from: account });
+        await nftContract.methods.approve(token?.redeem_to, token.token_id).send({ from: account });
       }
 
       const res = await tokenRedeemUpdate(token?.id, {
         redeem_from: account,
-        redeem_to: token?.redeemAddress,
+        redeem_to: token?.redeem_to,
         redeem_status: 'request',
       });
       if (res?.data.status) {
@@ -193,8 +180,8 @@ const Profile = () => {
       });
 
       const res = await tokenRedeemUpdate(token?.id, {
-        redeem_from: '',
-        redeem_to: '',
+        redeem_from: token?.redeem_from,
+        redeem_to: token?.redeem_to,
         redeem_status: 'accept',
       });
       if (res?.data.status) {
@@ -211,12 +198,12 @@ const Profile = () => {
     }
   };
 
-  const handleClickDeny = async tokenId => {
+  const handleClickDeny = async token => {
     try {
       setIsLoading(true);
-      const res = await tokenRedeemUpdate(tokenId, {
-        redeem_from: '',
-        redeem_to: '',
+      const res = await tokenRedeemUpdate(token?.id, {
+        redeem_from: token?.redeem_from,
+        redeem_to: token?.redeem_to,
         redeem_status: 'deny',
       });
       if (res?.data.status) {
@@ -486,8 +473,6 @@ const Profile = () => {
                   handleClickAccept={handleClickAccept}
                   handleClickDeny={handleClickDeny}
                   profile={profile}
-                  transactions={allTransactions}
-                  account={account}
                 />
               )}
               {activeTab === 'transactions' && <Transactions transactions={transactions} />}

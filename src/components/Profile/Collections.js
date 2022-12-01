@@ -1,41 +1,11 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import Tabs, { Tab } from 'src/components/SubLineTab';
 import RedeemedCard from 'src/components/RedeemedCard';
 import NotRedeemedCard from 'src/components/NotRedeemedCard';
 
-const Collections = ({
-  actionTab = 'redeemed',
-  handleClickRedeem,
-  handleClickAccept,
-  handleClickDeny,
-  profile,
-  transactions,
-  account,
-}) => {
+const Collections = ({ actionTab = 'redeemed', handleClickRedeem, handleClickAccept, handleClickDeny, profile }) => {
   const requestedTokens = profile?.tokens?.requestRedeemed;
-  const soldTokens = profile?.tokens?.sold;
-
-  const redeemTokens = useMemo(() => {
-    let result = [];
-    if (soldTokens) {
-      soldTokens.map(token => {
-        if (token.minted && !token.for_sale) {
-          console.log('>>>>>>>>>>>>>>>>>>> transactions = ', transactions);
-          const mintedSoldNotlistTransaction = transactions?.find(
-            transaction => transaction.method === 'mint' && transaction.token_id === token.token_id
-          );
-          if (
-            mintedSoldNotlistTransaction?.to &&
-            mintedSoldNotlistTransaction?.to.toLowerCase() !== account.toLowerCase()
-          ) {
-            result.push({ ...token, redeemAddress: mintedSoldNotlistTransaction?.to });
-          }
-        }
-      });
-    }
-
-    return result;
-  }, [soldTokens]);
+  const redeemTokens = profile?.tokens?.buy;
 
   const Redeemed = () => {
     return (
@@ -61,7 +31,7 @@ const Collections = ({
             <div className="my-4" key={index}>
               <NotRedeemedCard
                 handleClickAccept={() => handleClickAccept(token)}
-                handleClickDeny={() => handleClickDeny(token.id)}
+                handleClickDeny={() => handleClickDeny(token)}
                 token={token}
                 profile={profile}
               />

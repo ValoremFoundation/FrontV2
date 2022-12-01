@@ -212,6 +212,7 @@ const TokenDetail = () => {
         price,
         token_id,
         user_id: user.id,
+        wallet_address: user.walletAddress,
         impactClickId: impactClickId === 'null' ? null : impactClickId,
       });
       history.push('/profile?activeTab=created&actionTab=minted');

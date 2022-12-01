@@ -148,10 +148,6 @@ const Sidebar = ({
             <RoundBorderButton label={'Connect'} onClick={handleConnectWallet} />
           )}
         </div>
-
-        {/* <div className="global-flex-center">
-          <RoundBorderButton label={'Connect'} onClick={handleConnectWallet} />
-        </div> */}
       </div>
     </aside>
   );

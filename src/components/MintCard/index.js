@@ -23,7 +23,7 @@ const MintCard = ({ handleClick, token, userInfo, handleClickEdit }) => {
               src={token?.uri || '/img/blank-image.jpg'}
               style={{
                 maxWidth: '250px',
-                width: '100%',
+                // width: '100%',
                 height: '170px',
                 borderRadius: 5,
                 objectFit: 'cover',

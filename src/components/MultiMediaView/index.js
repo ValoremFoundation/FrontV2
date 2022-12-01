@@ -9,7 +9,7 @@ export const MultiMediaView = memo(({ style, className, mediaType, src }) => {
       ) : mediaType === 'video' ? (
         <video src={src} muted autoPlay loop style={{ ...style, borderRadius: '4px' }} />
       ) : mediaType === 'audio' ? (
-        <audio controls loop style={{ height: '260px' }}>
+        <audio controls loop style={{ ...style }}>
           <source src={src} />
         </audio>
       ) : (
