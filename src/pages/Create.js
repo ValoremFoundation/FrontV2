@@ -128,8 +128,6 @@ const Create = () => {
       if (key === 'file') {
         const file = e.target.files[0];
         const _mediaType = file.type.split('/')[0];
-        tmpArrNFT[index].fileName.value = file.name;
-        tmpArrNFT[index].type = _mediaType;
 
         //upload ipfs
         const formData = new FormData();
@@ -140,6 +138,10 @@ const Create = () => {
           data: { IpfsHash },
         } = await pinFileToIPFS(formData);
         if (status !== 200) return;
+
+        tmpArrNFT[index].fileName.value = file.name;
+        tmpArrNFT[index].type = _mediaType;
+
         tmpArrNFT[index]['imageUrl'].value = `https://ipfs.io/ipfs/${IpfsHash}`;
         tmpArrNFT[index]['imageUrl'].error = false;
         tmpArrNFT[index].fileName.error = false;

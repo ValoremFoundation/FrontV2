@@ -248,8 +248,6 @@ const TokenEdit = () => {
       if (key === 'file') {
         const file = e.target.files[0];
         const _mediaType = file.type.split('/')[0];
-        tmpNftData.fileName = file.name;
-        tmpNftData.type = _mediaType;
 
         //upload ipfs
         const formData = new FormData();
@@ -260,6 +258,8 @@ const TokenEdit = () => {
           data: { IpfsHash },
         } = await pinFileToIPFS(formData);
         if (status !== 200) return;
+        tmpNftData.fileName = file.name;
+        tmpNftData.type = _mediaType;
         tmpNftData['imageUrl'].value = `https://ipfs.io/ipfs/${IpfsHash}`;
         tmpNftData['imageUrl'].error = false;
         tmpNftData.fileName.error = false;
