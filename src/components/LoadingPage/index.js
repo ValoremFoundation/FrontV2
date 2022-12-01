@@ -19,7 +19,7 @@ export const LoadingPage = () => {
         style={{ flexDirection: 'column', color: 'white' }}
       >
         <LoadingIcon color="white" width="60px" height="60px" />
-        <h4 className="mt-2 text-cetner">Please don't leave this page while loading...</h4>
+        <h4 className="mt-2 text-center">Please don't leave this page while loading...</h4>
       </div>
     </div>
   );
