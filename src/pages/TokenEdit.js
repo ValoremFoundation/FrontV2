@@ -530,7 +530,7 @@ const TokenEdit = () => {
         <div className="create-middle-background px-2 py-4">
           <div className="create-middle-one-container">
             <div className="create-middle-section">
-              <div className="poppins-20-600 my-3">Hava you seen the videos?</div>
+              <div className="poppins-20-600 my-3">Have you seen the videos?</div>
               <div className="d-flex justify-content-start">
                 <CustomCheckBox
                   onChange={handleChangeSeenVideo}

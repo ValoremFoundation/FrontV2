@@ -79,7 +79,7 @@ const Browse = () => {
       <div className="browser-container">
         <div className={isMobile ? 'poppins-24-600' : 'poppins-36-600'}>Discover Creators</div>
         <div className={isMobile ? 'poppins-16-600-gray' : 'poppins-20-400-gray'}>
-          Learn how you can make money on services your purchase?
+          Learn how you can make money on services you purchase?
         </div>
         <div className="global-flex-between flex-wrap my-4">
           <div className="global-flex-start flex-wrap">
