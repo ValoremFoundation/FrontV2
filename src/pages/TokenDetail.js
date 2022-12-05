@@ -12,13 +12,22 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { isMobile } from 'react-device-detect';
 import { useParams } from 'react-router';
 import { useWeb3React } from '@web3-react/core';
-import { createComment, getComments, newTransaction, tokenBuy, tokenById, tokenDelist } from 'src/api';
+import {
+  createComment,
+  getComments,
+  newTransaction,
+  tokenBuy,
+  tokenById,
+  tokenDelist,
+  updateTokenOwner,
+} from 'src/api';
 import LoadingPage from 'src/components/LoadingPage';
 import toast from 'react-hot-toast';
 import Web3 from 'web3';
 import { useSelector, useDispatch } from 'react-redux';
 import marketplaceABI from 'src/assets/abis/nftMarketplace.json';
 import vlrTokenABI from 'src/assets/abis/adValoremToken.json';
+import nftABI from 'src/assets/abis/nftAdValorem.json';
 import { useHistory } from 'react-router-dom';
 import { fetchAllCategories } from 'src/actions/categories';
 import { ethers } from 'ethers';
@@ -27,10 +36,12 @@ import { toFixedTail } from 'src/utils/formartUtils';
 import Star from 'src/assets/images/star.svg';
 import MultiMediaZoomView from 'src/components/MultiMediaZoomView';
 
-const { REACT_APP_MARKETPLACE_CONTRACT_ADDRESS, REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS } = process.env;
+const { REACT_APP_MARKETPLACE_CONTRACT_ADDRESS, REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS, REACT_APP_NFT_CONTRACT_ADDRESS } =
+  process.env;
 const web3 = new Web3(window.ethereum);
 const marketplaceContract = new web3.eth.Contract(marketplaceABI, REACT_APP_MARKETPLACE_CONTRACT_ADDRESS);
 const vlrTokenContract = new web3.eth.Contract(vlrTokenABI, REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS);
+const nftContract = new web3.eth.Contract(nftABI, REACT_APP_NFT_CONTRACT_ADDRESS);
 
 const TokenDetail = () => {
   const history = useHistory();
@@ -59,7 +70,7 @@ const TokenDetail = () => {
   };
   const nearMeHandler = () => {};
 
-  const { account } = useWeb3React();
+  const { account, chainId } = useWeb3React();
   const params = useParams();
   const { tokenId } = params;
   const authToken = useSelector(state => state.auth.token);
@@ -71,6 +82,7 @@ const TokenDetail = () => {
   const [commentStarCount, setCommentStarCount] = useState(-1);
   const [commentText, setCommentText] = useState('');
   const [tokenComments, setTokenComments] = useState([]);
+  const [tokenStatus, setTokenStatus] = useState('');
 
   useEffect(() => {
     dispatch(fetchAllCategories());
@@ -78,49 +90,71 @@ const TokenDetail = () => {
   }, []);
 
   const getTokenDetail = async () => {
-    setIsLoading(true);
-    let {
-      data: { data: token },
-    } = await tokenById(tokenId, {
-      Authorization: `Bearer ${authToken}`,
-    });
+    try {
+      setIsLoading(true);
+      let {
+        data: { data: token },
+      } = await tokenById(tokenId, {
+        Authorization: `Bearer ${authToken}`,
+      });
 
-    const {
-      data: { comments },
-    } = await getComments(tokenId);
-    setTokenComments(comments);
+      const nftOwner = await nftContract.methods.ownerOf(token?.token_id).call();
+      const marketItemInfo = await marketplaceContract.methods.idToMarketItem(token?.market_item_id).call();
+      if (nftOwner?.toLowerCase() === account?.toLowerCase()) {
+        setTokenStatus('list');
+        if (nftOwner.toLowerCase() !== token?.user?.walletAddress.toLowerCase()) {
+          await updateTokenOwner(token?.id, { account });
+        }
+        history.push(`/activate-listing/${token?.id}`);
+      }
+      if (nftOwner?.toLowerCase() === REACT_APP_MARKETPLACE_CONTRACT_ADDRESS?.toLowerCase()) {
+        if (account?.toLowerCase() === marketItemInfo?.seller?.toLowerCase()) {
+          setTokenStatus('delist');
+        } else {
+          setTokenStatus('buy');
+        }
+      }
 
-    setViewport({
-      latitude: token?.position?.latitude || 38.57,
-      longitude: token?.position?.longitude || -121.47,
-      width: '100%',
-      height: '351px',
-      zoom: 1,
-    });
-    setNftData(token);
-    // setQRImage(
-    //   token?.user?.id
-    //     ? `${process.env.REACT_APP_RESOURCE_URL}/images/qr-${token?.user?.id}.png`
-    //     : '/img/blank-image.jpg'
-    // );
-    setQRImage(
-      token?.id && token?.token_id
-        ? `${process.env.REACT_APP_RESOURCE_URL}/images/qr-${token?.id}-${token?.token_id}.png`
-        : '/img/blank-image.jpg'
-    );
+      const {
+        data: { comments },
+      } = await getComments(tokenId);
+      setTokenComments(comments);
 
-    if (Web3.utils.isAddress(account)) {
-      const bal = await vlrTokenContract.methods.balanceOf(account).call();
-      setVlrBalance(Number(toFixedTail(web3.utils.fromWei(bal, 'ether'), 4)));
+      setViewport({
+        latitude: token?.position?.latitude || 38.57,
+        longitude: token?.position?.longitude || -121.47,
+        width: '100%',
+        height: '351px',
+        zoom: 1,
+      });
+      setNftData(token);
+      // setQRImage(
+      //   token?.user?.id
+      //     ? `${process.env.REACT_APP_RESOURCE_URL}/images/qr-${token?.user?.id}.png`
+      //     : '/img/blank-image.jpg'
+      // );
+      setQRImage(
+        token?.id && token?.token_id
+          ? `${process.env.REACT_APP_RESOURCE_URL}/images/qr-${token?.id}-${token?.token_id}.png`
+          : '/img/blank-image.jpg'
+      );
+
+      if (Web3.utils.isAddress(account)) {
+        const bal = await vlrTokenContract.methods.balanceOf(account).call();
+        setVlrBalance(Number(toFixedTail(web3.utils.fromWei(bal, 'ether'), 4)));
+      }
+
+      setIsLoading(false);
+    } catch (err) {
+      console.log(err?.message);
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   useEffect(() => {
     getTokenDetail();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params, account]);
+  }, [params, account, chainId]);
 
   const isOwner = useMemo(() => {
     if (!nftData) return false;
@@ -188,8 +222,12 @@ const TokenDetail = () => {
       } = await marketplaceContract.methods.buyMarketItem(marketItemId).send({ from: account, gasPrice: gasPrice * 5 });
       const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
       console.log('>>>>>>>>>>>>>>>>>> buyEvents : ', buyEvents);
-      let from = web3.eth.abi.decodeParameter('address', buyEvents[28]?.raw?.topics[1]);
-      let to = web3.eth.abi.decodeParameter('address', buyEvents[28]?.raw?.topics[2]);
+      let from = REACT_APP_MARKETPLACE_CONTRACT_ADDRESS;
+      let to = account;
+      if (buyEvents[28]?.raw?.topics[1] && buyEvents[28]?.raw?.topics[2]) {
+        from = web3.eth.abi.decodeParameter('address', buyEvents[28]?.raw?.topics[1]);
+        to = web3.eth.abi.decodeParameter('address', buyEvents[28]?.raw?.topics[2]);
+      }
 
       window.gtag('event', 'Token Buy', { tokenId: nftData.id });
       window.gtag('event', 'conversion', { send_to: 'AW-826595197/5zZSCPWMvMIDEP2uk4oD' });
@@ -347,7 +385,7 @@ const TokenDetail = () => {
               src={nftData?.uri || '/img/blank-image.jpg'}
               style={{
                 width: '100%',
-                // height: '380px',
+                height: '380px',
                 borderRadius: 5,
                 objectFit: 'cover',
                 objectPosition: 'center',
@@ -399,6 +437,7 @@ const TokenDetail = () => {
               handleClickBuy={handleClickBuy}
               handleClickDelist={handleClickDelist}
               handleClickGift={handleClickGift}
+              tokenStatus={tokenStatus}
             />
           </div>
         </div>

@@ -609,6 +609,7 @@ const Create = () => {
                     {` licensing and distribution agreement `}
                   </span>
                 </span>
+                {startRequire && !seenVideo && <span className="err-text">**require**</span>}
               </div>
             </div>
           </div>

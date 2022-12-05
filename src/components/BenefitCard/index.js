@@ -5,7 +5,7 @@ import SendIcon from 'src/assets/images/send-green-icon.svg';
 import BackgroundButton from '../BackgroundButton';
 import { dateWithTimestamp } from 'src/utils/formartUtils';
 
-const BenefitCard = ({ nftData, isOwner, handleClickBuy, handleClickDelist, handleClickGift }) => {
+const BenefitCard = ({ nftData, isOwner, handleClickBuy, handleClickDelist, handleClickGift, tokenStatus }) => {
   return (
     <div className="benefit-card-container">
       <div className="benefit-card-header">
@@ -61,7 +61,7 @@ const BenefitCard = ({ nftData, isOwner, handleClickBuy, handleClickDelist, hand
           <div className="poppins-36-700 me-3">{nftData?.price} VLR</div>
           <div className="poppins-16-500 mt-3">$0.25 USD</div>
         </div>
-        {!nftData?.burned && isOwner ? (
+        {!nftData?.burned && tokenStatus === 'delist' && (
           <div className="my-2">
             <BackgroundButton
               label={'Delist'}
@@ -71,26 +71,17 @@ const BenefitCard = ({ nftData, isOwner, handleClickBuy, handleClickDelist, hand
               onClick={handleClickDelist}
             />
           </div>
-        ) : (
-          <>
-            <div className="my-2">
-              <BackgroundButton
-                label={'BUY NOW'}
-                color={'#2A212E'}
-                bgColor={'#96F2A4'}
-                fullWidth={true}
-                onClick={handleClickBuy}
-              />
-            </div>
-            {/* <div className="row gx-4">
-          <div className="col-12 col-lg-6 my-3">
-            <BackgroundButton label={'BUY MATIC'} color={'#2A212E'} bgColor={'#FFFFFF'} fullWidth={true} />
+        )}
+        {!nftData?.burned && tokenStatus === 'buy' && (
+          <div className="my-2">
+            <BackgroundButton
+              label={'BUY NOW'}
+              color={'#2A212E'}
+              bgColor={'#96F2A4'}
+              fullWidth={true}
+              onClick={handleClickBuy}
+            />
           </div>
-          <div className="col-12 col-lg-6 my-3">
-            <BackgroundButton label={'BUY VLR'} color={'#FFFFFF'} bgColor={'#000000'} fullWidth={true} />
-          </div>
-        </div> */}
-          </>
         )}
       </div>
     </div>

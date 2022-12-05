@@ -57,6 +57,10 @@ export const tokenMarketItem = async (tokenId, data) => {
   return await axios.post(`${process.env.REACT_APP_BACKEND_BASE_URL}/tokens/${tokenId}/marketItem`, data);
 };
 
+export const updateTokenOwner = async (tokenId, data) => {
+  return await axios.post(`${process.env.REACT_APP_BACKEND_BASE_URL}/tokens/${tokenId}/updateTokenUserId`, data);
+};
+
 export const tokenMint = async (tokenId, data) => {
   return await axios.post(`${process.env.REACT_APP_BACKEND_BASE_URL}/tokens/${tokenId}/mint`, data);
 };

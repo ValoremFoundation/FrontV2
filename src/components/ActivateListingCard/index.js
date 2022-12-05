@@ -15,6 +15,7 @@ const ActivateListingCard = ({
   businessOwnerPercent,
   buyerPercent,
   marketOwnerPercent,
+  tokenStatus,
 }) => {
   return (
     <div className="activate-listing-card">
@@ -68,7 +69,9 @@ const ActivateListingCard = ({
       <div className="poppins-12-400 my-1">*Burn Fee</div>
       <div className="poppins-12-400 my-1">*Advalorem transaction fee</div>
       <div className="global-flex-end gap-2">
-        <BackgroundButton label={'List'} color={'#000000'} bgColor={'#96F2A4'} onClick={handleClickList} />
+        {tokenStatus === 'list' && (
+          <BackgroundButton label={'List'} color={'#000000'} bgColor={'#96F2A4'} onClick={handleClickList} />
+        )}
         <BackgroundButton label={'Burn'} color={'#000000'} bgColor={'#96F2A4'} onClick={handleClickBurn} />
         <BackgroundButton label={'Transfer'} color={'#000000'} bgColor={'#96F2A4'} onClick={handleClickTransfer} />
       </div>

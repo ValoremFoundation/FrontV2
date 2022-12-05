@@ -17,7 +17,7 @@ import {
   step3Listing,
 } from 'src/constants';
 import { useParams } from 'react-router';
-import { tokenBurn, tokenById, tokenList, tokenTransfer } from 'src/api';
+import { tokenBurn, tokenById, tokenList, tokenTransfer, updateTokenOwner } from 'src/api';
 import LoadingPage from 'src/components/LoadingPage';
 import toast from 'react-hot-toast';
 import Web3 from 'web3';
@@ -52,6 +52,7 @@ const ActivateListing = () => {
   const [businessOwnerPercent, setBusinessOwnerPercent] = useState(0);
   const [buyerPercent, setBuyerPercent] = useState(0);
   const [marketOwnerPercent, setMarketOwnerPercent] = useState(0);
+  const [tokenStatus, setTokenStatus] = useState('');
 
   const getTokenDetail = async () => {
     setIsLoading(true);
@@ -60,6 +61,18 @@ const ActivateListing = () => {
     } = await tokenById(tokenId, {
       Authorization: `Bearer ${authToken}`,
     });
+
+    const nftOwner = await nftContract.methods.ownerOf(token?.token_id).call();
+    if (nftOwner?.toLowerCase() === account?.toLowerCase()) {
+      setTokenStatus('list');
+      if (nftOwner.toLowerCase() !== token?.user?.walletAddress.toLowerCase()) {
+        await updateTokenOwner(token?.id, { account });
+      }
+    }
+    if (nftOwner?.toLowerCase() === REACT_APP_MARKETPLACE_CONTRACT_ADDRESS?.toLowerCase()) {
+      history.push(`/token-detail/${token?.id}`);
+    }
+
     setNftData(token);
     setIsLoading(false);
   };
@@ -259,6 +272,7 @@ const ActivateListing = () => {
                     businessOwnerPercent={businessOwnerPercent}
                     buyerPercent={buyerPercent}
                     marketOwnerPercent={marketOwnerPercent}
+                    tokenStatus={tokenStatus}
                   />
                 </div>
               </div>
