@@ -598,12 +598,15 @@ const Create = () => {
                 />
                 <span>
                   Have you watched our
-                  <span style={{ color: '#0d6efd' }} onClick={() => window.open('https://AdValorem.io/tutorial')}>
+                  <span
+                    style={{ color: '#0d6efd', cursor: 'pointer' }}
+                    onClick={() => window.open('https://AdValorem.io/tutorial')}
+                  >
                     {` tutorial video's `}
                   </span>
                   and agree to our
                   <span
-                    style={{ color: '#0d6efd' }}
+                    style={{ color: '#0d6efd', cursor: 'pointer' }}
                     onClick={() => window.open('https://advalorem.io/licensing-agreement')}
                   >
                     {` licensing and distribution agreement `}

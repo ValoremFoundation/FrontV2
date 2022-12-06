@@ -51,9 +51,10 @@ const NotRedeemedCard = ({ handleClickAccept, handleClickDeny, token, profile })
                 <img alt="alt" src={Position} style={{ width: 13, height: 21 }} />
                 <div className="poppins-14-500 ms-1 mt-1">{token?.location}</div>
               </div>
+              <div className="poppins-16-600 mt-2">{token?.name}</div>
             </div>
             <div>
-              <div className="global-flex-start my-3">
+              <div className="global-flex-start my-1">
                 <DistributionItem label={'Seller'} value={token?.creator} />
                 <DistributionItem label={'Reseller'} value={token?.reseller} />
                 <DistributionItem label={'Royalty'} value={token?.royalty_pool} />

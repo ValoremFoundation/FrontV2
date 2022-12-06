@@ -59,7 +59,7 @@ const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT, ed
           <div className="row gx-5">
             <div className="col-12 col-lg-6 my-2">
               <TextInput
-                label={'Name of service'}
+                label={'Token Name'}
                 type={'text'}
                 value={itemNFT?.name.value}
                 require={itemNFT?.name.error}

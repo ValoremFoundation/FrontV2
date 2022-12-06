@@ -46,6 +46,7 @@ const NFTCard = ({ onClick, token, price = 0 }) => {
             <div className="nft-card-favor-number">1k</div>
           </div>
         </div>
+        <div className="poppins-20-600 mt-2">{token?.name}</div>
       </div>
       <div className="global-flex-between my-3">
         <div className="d-flex justify-content-start">
