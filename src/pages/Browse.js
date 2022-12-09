@@ -20,12 +20,14 @@ const Browse = () => {
   const { account } = useWeb3React();
   const dispatch = useDispatch();
   const propsCategory = history.location?.category?.data;
+  const propsTokenName = history.location?.name?.data;
   const categories = useSelector(state => state.categories.items.items);
   const [isLoading, setIsLoading] = useState(false);
   const [nftData, setNftData] = useState();
   const [remotePerson, setRemotePerson] = useState('remote');
   const [category, setCategory] = useState(1);
   const [searchAll, setSearchAll] = useState('');
+  const [searchTokenName, setSearchTokenName] = useState('');
 
   useEffect(() => {
     dispatch(fetchAllCategories());
@@ -34,7 +36,12 @@ const Browse = () => {
 
   useEffect(() => {
     if (propsCategory) setSearchAll('all');
-  }, [propsCategory]);
+    if (propsTokenName) setSearchTokenName(propsTokenName);
+  }, [propsCategory, propsTokenName]);
+
+  useEffect(() => {
+    if (propsTokenName) setSearchTokenName(propsTokenName);
+  }, []);
 
   const getAllTokens = async () => {
     setIsLoading(true);
@@ -52,16 +59,19 @@ const Browse = () => {
   const filteredData = useMemo(() => {
     if (searchAll === 'all') {
       return nftData;
+    } else if (searchTokenName) {
+      return nftData?.filter(item => item?.name?.toLowerCase().match(searchTokenName));
     } else {
       return nftData?.filter(item => item.remote_person === remotePerson && item?.category_id === parseInt(category));
     }
-  }, [nftData, category, remotePerson, searchAll]);
+  }, [nftData, category, remotePerson, searchAll, searchTokenName]);
 
   const sortedCategories = useMemo(() => categories?.sort((a, b) => (a.name > b.name ? 1 : -1)), [categories]);
 
   const handleChangeRemotePerson = e => {
     setRemotePerson(e.target.value);
     setSearchAll('');
+    setSearchTokenName('');
   };
 
   const handleClickNFTCard = itemId => {
@@ -106,6 +116,7 @@ const Browse = () => {
             onClick={() => {
               setSearchAll('all');
               setCategory(-1);
+              setSearchTokenName('');
               setRemotePerson('');
             }}
           />
@@ -117,6 +128,7 @@ const Browse = () => {
               active={category === item.id}
               onClick={() => {
                 setCategory(item.id);
+                setSearchTokenName('');
                 setSearchAll('');
               }}
             >

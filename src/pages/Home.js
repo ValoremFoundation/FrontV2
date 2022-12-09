@@ -30,6 +30,7 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const [filteredCategories, setFilteredCategories] = useState([]);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     dispatch(fetchAllCategories());
@@ -78,6 +79,14 @@ const Home = () => {
     } else {
       toast.error('Please connect wallet!');
       return;
+    }
+  };
+
+  const handleClickSearch = () => {
+    if (search) {
+      history.push({ pathname: '/browse', name: { data: search } });
+    } else {
+      toast.error('Please input token name!');
     }
   };
 
@@ -168,8 +177,13 @@ const Home = () => {
         <div className="home-bottom-search-section mt-5">
           <div className="row flex-wrap justify-content-between">
             <div className="col-12 col-md-7 col-lg-7 home-cate-search-section">
-              <div className="home-cate-search-title">Search categories</div>
-              <HomeSearchInput placeholder={'What are you looking for?'} />
+              <div className="home-cate-search-title">Search NFT name</div>
+              <HomeSearchInput
+                placeholder={'What are you looking for?'}
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                onClick={handleClickSearch}
+              />
             </div>
             <div className="col-12 col-md-5 col-lg-5 home-cate-search-image">
               <img alt="alt" src={HomeSearchMan} width={'100%'} style={{ objectFit: 'cover', maxWidth: 330 }} />
