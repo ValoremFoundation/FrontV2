@@ -1,7 +1,7 @@
 import React from 'react';
 import 'src/styles/components/HomeSearchInput.scss';
 
-const HomeSearchInput = ({ width, height, placeholder, type = 'text' }) => {
+const HomeSearchInput = ({ placeholder, type = 'text' }) => {
   return (
     <div className="home-search-inpute-container">
       <input id="home-search" placeholder={placeholder} type={type} />

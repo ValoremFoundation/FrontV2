@@ -21,7 +21,7 @@ const ActivateListingCard = ({
     <div className="activate-listing-card">
       <div className="poppins-24-600 my-2">Activating your listing</div>
       <div className="poppins-14-500 my-2">
-        Set a price for your listing and we will automatically conver it to the advalorem native token VLR!
+        {`Set a price, we'll convert it to AdValoremVLR {recent values are estimates}`}
       </div>
       <div className="row gx-5 mt-5">
         <div className="col-12 col-lg-5 mb-4">

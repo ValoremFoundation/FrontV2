@@ -315,7 +315,7 @@ const Profile = () => {
       const unlockedTimestamp = parseInt(userPoolInfo.timeDeposited) + parseInt(lockDuration);
       const unlockDate = dateWithTimestamp((parseInt(userPoolInfo?.timeDeposited) + parseInt(lockDuration)) * 1000);
       if (currentTimestamp < unlockedTimestamp) {
-        toast.error(`Please can withdraw on ${unlockDate}!`);
+        toast.error(`You will be able to withdraw on ${unlockDate}!`);
         return;
       }
       setIsLoading(true);
