@@ -452,7 +452,7 @@ const Profile = () => {
                   path="https://www.moonpay.com/buy"
                   style={{ position: 'relative' }}
                 >
-                  Buy Matic
+                  <span onClick={() => window.open('https://www.moonpay.com/buy')}>Buy Matic</span>
                   <div
                     data-tip
                     data-for="buy-matic-tip"
@@ -467,7 +467,9 @@ const Profile = () => {
                   path="https://quickswap.exchange/#/swap?inputCurrency=0x221d160BA7E3552FeE22A33B3982AD408C3D6E65"
                   style={{ position: 'relative' }}
                 >
-                  Buy VLR
+                  <span onClick={() => window.open('https://www.advalorem.io/tutorial/v/buying-vlr-quickswap')}>
+                    Buy VLR
+                  </span>
                   <div
                     data-tip
                     data-for="buy-vlr-tip"
@@ -482,7 +484,11 @@ const Profile = () => {
                   path="https://quickswap.exchange/#/pools"
                   style={{ position: 'relative' }}
                 >
-                  Add Liquidity
+                  <span
+                    onClick={() => window.open('https://www.advalorem.io/tutorial/v/adding-liquidity-on-quickswap')}
+                  >
+                    Add Liquidity
+                  </span>
                   <div
                     data-tip
                     data-for="add-liquidity-tip"

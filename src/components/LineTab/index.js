@@ -10,7 +10,7 @@ export const Tab = memo(({ children, active, style, path }) => {
   const history = useHistory();
   const onClick = () => {
     if (path?.includes('https')) {
-      window.open(path);
+      // window.open(path);
     } else {
       history.push(path);
     }
