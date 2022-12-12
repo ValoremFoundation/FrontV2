@@ -502,6 +502,7 @@ const Profile = () => {
                   handleClickBuy={handleClickBuy}
                   handleChangeOption={handleChangeOption}
                   profile={profile}
+                  categories={categories}
                 />
               )}
               {activeTab === 'collections' && (

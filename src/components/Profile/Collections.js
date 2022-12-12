@@ -20,12 +20,7 @@ const Collections = ({
         {redeemTokens?.length > 0 ? (
           redeemTokens?.map((token, index) => (
             <div className="my-4" key={index}>
-              <RedeemedCard
-                handleClickRedeem={() => handleClickRedeem(token)}
-                token={token}
-                profile={profile}
-                categories={categories}
-              />
+              <RedeemedCard handleClickRedeem={() => handleClickRedeem(token)} token={token} profile={profile} />
             </div>
           ))
         ) : (

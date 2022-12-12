@@ -3,13 +3,13 @@ import 'src/styles/components/NFTCard.scss';
 import 'src/styles/Global.scss';
 import BlueCheck from 'src/assets/images/blue-check.svg';
 import Position from 'src/assets/images/position.svg';
-import Favorite from 'src/assets/images/favorite.svg';
+// import Favorite from 'src/assets/images/favorite.svg';
 import Message from 'src/assets/images/message.svg';
 import NFTCardButton from 'src/components/NFTCardButton';
 import { SYMBOL } from 'src/constants';
 import MultiMediaView from '../MultiMediaView';
 
-const NFTCard = ({ onClick, token, price = 0 }) => {
+const NFTCard = ({ onClick, token, price = 0, categories }) => {
   return (
     <div className="nft-card-container" onClick={onClick}>
       <MultiMediaView
@@ -37,13 +37,13 @@ const NFTCard = ({ onClick, token, price = 0 }) => {
           </div>
         </div>
         <div className="global-flex-center">
-          <div>
+          {/* <div>
             <img alt="alt" src={Favorite} />
             <div className="nft-card-favor-number">5k</div>
-          </div>
+          </div> */}
           <div className="ms-4">
-            <img alt="alt" src={Message} />
-            <div className="nft-card-favor-number">1k</div>
+            <img alt="alt" src={Message} onClick={() => window.open(categories[token?.category_id - 1]?.discord)} />
+            {/* <div className="nft-card-favor-number">1k</div> */}
           </div>
         </div>
         <div className="poppins-20-600 mt-2">{token?.name}</div>

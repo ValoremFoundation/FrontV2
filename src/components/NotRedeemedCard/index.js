@@ -1,7 +1,7 @@
 import React from 'react';
 import 'src/styles/components/NotRedeemedCard.scss';
 import 'src/styles/Global.scss';
-import Favorite from 'src/assets/images/favorite.svg';
+// import Favorite from 'src/assets/images/favorite.svg';
 import Message from 'src/assets/images/message.svg';
 import Position from 'src/assets/images/position.svg';
 import NFTCardButton from '../NFTCardButton';
@@ -37,13 +37,13 @@ const NotRedeemedCard = ({ handleClickAccept, handleClickDeny, token, profile })
               <div className="global-flex-between">
                 <div className="poppins-20-600">{profile?.name}</div>
                 <div className="global-flex-between">
-                  <div className="me-4">
+                  {/* <div className="me-4">
                     <img alt="alt" src={Favorite} width={20} height={20} className="global-pointer" />
                     <div className="poppins-16-700-gray text-center">5k</div>
-                  </div>
+                  </div> */}
                   <div>
                     <img alt="alt" src={Message} width={20} height={20} className="global-pointer" />
-                    <div className="poppins-16-700-gray text-center">1k</div>
+                    {/* <div className="poppins-16-700-gray text-center">1k</div> */}
                   </div>
                 </div>
               </div>

@@ -5,7 +5,7 @@ import Tabs, { Tab } from 'src/components/SubLineTab';
 import MintCard from '../MintCard';
 import NFTCard from '../NFTCard';
 
-const Created = ({ actionTab = 'listed', handleClickBuy, handleChangeOption, profile }) => {
+const Created = ({ actionTab = 'listed', handleClickBuy, handleChangeOption, profile, categories }) => {
   const history = useHistory();
   const mintedTokens = profile?.tokens?.minted;
   const savedForLaterTokens = profile?.tokens?.saved;
@@ -23,6 +23,7 @@ const Created = ({ actionTab = 'listed', handleClickBuy, handleChangeOption, pro
                 token={token}
                 userInfo={profile}
                 key={index}
+                categories={categories}
               />
             </div>
           ))
@@ -41,7 +42,11 @@ const Created = ({ actionTab = 'listed', handleClickBuy, handleChangeOption, pro
           {listedTokens?.length > 0 ? (
             listedTokens?.map((item, index) => (
               <div key={index} className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 my-3">
-                <NFTCard onClick={() => history.push(`/token-detail/${item?.id}`)} token={item} />
+                <NFTCard
+                  onClick={() => history.push(`/token-detail/${item?.id}`)}
+                  token={item}
+                  categories={categories}
+                />
               </div>
             ))
           ) : (
@@ -58,7 +63,7 @@ const Created = ({ actionTab = 'listed', handleClickBuy, handleChangeOption, pro
         {soldTokens?.length > 0 ? (
           soldTokens?.map((item, index) => (
             <div key={index} className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 my-3">
-              <NFTCard onClick={() => history.push(`/token-detail/${item?.id}`)} token={item} />
+              <NFTCard onClick={() => history.push(`/token-detail/${item?.id}`)} token={item} categories={categories} />
             </div>
           ))
         ) : (

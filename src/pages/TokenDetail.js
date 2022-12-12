@@ -2,8 +2,8 @@ import React, { useState, useEffect, useMemo } from 'react';
 import 'src/styles/TokenDetail.scss';
 import 'src/styles/Global.scss';
 import DiscodIcon from 'src/assets/images/discord-blue.svg';
-import FavoriteBlackIcon from 'src/assets/images/favorite-black-icon.svg';
-import EyeIcon from 'src/assets/images/eye-icon.svg';
+// import FavoriteBlackIcon from 'src/assets/images/favorite-black-icon.svg';
+// import EyeIcon from 'src/assets/images/eye-icon.svg';
 import BenefitCard from 'src/components/BenefitCard';
 import TokenDetailComment from 'src/components/TokenDetailComment';
 import RoundBorderButton from 'src/components/RoundBorderButton';
@@ -421,7 +421,7 @@ const TokenDetail = () => {
               {categories?.length > 0 ? categories[nftData?.category_id - 1]?.name : ''}
             </div>
             <div className={isMobile ? 'poppins-24-700' : 'poppins-36-700'}>{nftData?.name}</div>
-            <div className="global-flex-start my-3">
+            {/* <div className="global-flex-start my-3">
               <div className="global-flex-start me-3">
                 <img alt="alt" src={EyeIcon} width={25} height={17} className="me-1 global-pointer" />
                 <div className="poppins-16-500-gray">5</div>
@@ -430,7 +430,7 @@ const TokenDetail = () => {
                 <img alt="alt" src={FavoriteBlackIcon} width={21} height={18} className="me-1 global-pointer" />
                 <div className="poppins-16-500-gray">10</div>
               </div>
-            </div>
+            </div> */}
             <BenefitCard
               nftData={nftData}
               isOwner={isOwner}
