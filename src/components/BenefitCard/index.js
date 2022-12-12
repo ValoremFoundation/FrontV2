@@ -4,8 +4,21 @@ import 'src/styles/Global.scss';
 import SendIcon from 'src/assets/images/send-green-icon.svg';
 import BackgroundButton from '../BackgroundButton';
 import { dateWithTimestamp } from 'src/utils/formartUtils';
+import MetamaskIcon from 'src/assets/images/metamask.svg';
+import { registerToken } from 'src/utils/formartUtils';
 
-const BenefitCard = ({ nftData, isOwner, handleClickBuy, handleClickDelist, handleClickGift, tokenStatus }) => {
+const BenefitCard = ({
+  nftData,
+  isOwner,
+  handleClickBuy,
+  handleClickDelist,
+  handleClickGift,
+  tokenStatus,
+  tokenAddress,
+  tokenSymbol,
+  tokenDecimals,
+  chainId,
+}) => {
   return (
     <div className="benefit-card-container">
       <div className="benefit-card-header">
@@ -53,6 +66,17 @@ const BenefitCard = ({ nftData, isOwner, handleClickBuy, handleClickDelist, hand
                 {nftData?.royalty_pool}%
               </div>
             </div>
+          </div>
+        </div>
+        <div className="my-2">
+          <div className="poppins-14-600 mt-3 mb-2">Import Token</div>
+          <div
+            className="d-flex justify-content-start align-items-center global-pointer p-2 rounded"
+            style={{ background: '#96F2A4', width: 'fit-content' }}
+            onClick={() => registerToken(tokenAddress, tokenSymbol, tokenDecimals, chainId)}
+          >
+            <div className="poppins-14-500 me-2">Add Metamask</div>
+            <img alt="alt" src={MetamaskIcon} width={20} height={20} />
           </div>
         </div>
         <div className="poppins-14-600-gray">Current Price</div>

@@ -65,3 +65,20 @@ export const numberFormat = (num = 0, fixed = 3) => {
 export const sliceString = (description, letters) => {
   return description?.length > letters ? description?.slice(0, letters) + ' ...' : description;
 };
+
+export const registerToken = async (tokenAddress, tokenSymbol, tokenDecimals, chainId) => {
+  const tokenAdded = await window.ethereum.request({
+    method: 'wallet_watchAsset',
+    params: {
+      type: 'ERC20',
+      options: {
+        address: tokenAddress,
+        symbol: tokenSymbol,
+        decimals: tokenDecimals,
+        image: `https://valorem-nft-marketplace.s3.us-east-2.amazonaws.com/logo-rounded.png`, // https://s2.coinmarketcap.com/static/img/coins/64x64/3890.png
+      },
+    },
+  });
+
+  return tokenAdded;
+};

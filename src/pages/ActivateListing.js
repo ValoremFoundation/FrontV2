@@ -25,21 +25,24 @@ import { useWeb3React } from '@web3-react/core';
 import marketplaceABI from 'src/assets/abis/nftMarketplace.json';
 import nftABI from 'src/assets/abis/nftAdValorem.json';
 import royaltyPoolABI from 'src/assets/abis/royaltyPool.json';
+import vlrTokenABI from 'src/assets/abis/adValoremToken.json';
 import TransferModal from 'src/components/TransferModal';
 
 const {
   REACT_APP_MARKETPLACE_CONTRACT_ADDRESS,
   REACT_APP_NFT_CONTRACT_ADDRESS,
   REACT_APP_ROYALTY_POOL_CONTRACT_ADDRESS,
+  REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS,
 } = process.env;
 const web3 = new Web3(window.ethereum);
 const marketplaceContract = new web3.eth.Contract(marketplaceABI, REACT_APP_MARKETPLACE_CONTRACT_ADDRESS);
 const nftContract = new web3.eth.Contract(nftABI, REACT_APP_NFT_CONTRACT_ADDRESS);
 const royaltyContract = new web3.eth.Contract(royaltyPoolABI, REACT_APP_ROYALTY_POOL_CONTRACT_ADDRESS);
+const vlrTokenContract = new web3.eth.Contract(vlrTokenABI, REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS);
 
 const ActivateListing = () => {
   const history = useHistory();
-  const { account } = useWeb3React();
+  const { account, chainId } = useWeb3React();
   const params = useParams();
   const { tokenId } = params;
   const authToken = useSelector(state => state.auth.token);
@@ -53,6 +56,8 @@ const ActivateListing = () => {
   const [buyerPercent, setBuyerPercent] = useState(0);
   const [marketOwnerPercent, setMarketOwnerPercent] = useState(0);
   const [tokenStatus, setTokenStatus] = useState('');
+  const [tokenSymbol, setTokenSymbol] = useState('VLR');
+  const [tokenDecimals, setTokenDecimals] = useState(18);
 
   const getTokenDetail = async () => {
     setIsLoading(true);
@@ -72,6 +77,8 @@ const ActivateListing = () => {
     if (nftOwner?.toLowerCase() === REACT_APP_MARKETPLACE_CONTRACT_ADDRESS?.toLowerCase()) {
       history.push(`/token-detail/${token?.id}`);
     }
+    setTokenSymbol(await vlrTokenContract.methods.symbol().call());
+    setTokenDecimals(await vlrTokenContract.methods.decimals().call());
 
     setNftData(token);
     setIsLoading(false);
@@ -273,6 +280,10 @@ const ActivateListing = () => {
                     buyerPercent={buyerPercent}
                     marketOwnerPercent={marketOwnerPercent}
                     tokenStatus={tokenStatus}
+                    tokenSymbol={tokenSymbol}
+                    tokenDecimals={tokenDecimals}
+                    tokenAddress={REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS}
+                    chainId={chainId}
                   />
                 </div>
               </div>

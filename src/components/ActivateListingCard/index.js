@@ -4,6 +4,8 @@ import 'src/styles/Global.scss';
 import BackgroundButton from '../BackgroundButton';
 import ShowRoleInfo from '../ShowRoleInfo';
 import TextInput from '../TextInput';
+import MetamaskIcon from 'src/assets/images/metamask.svg';
+import { registerToken } from 'src/utils/formartUtils';
 
 const ActivateListingCard = ({
   handleClickList,
@@ -16,6 +18,10 @@ const ActivateListingCard = ({
   buyerPercent,
   marketOwnerPercent,
   tokenStatus,
+  tokenSymbol,
+  tokenDecimals,
+  tokenAddress,
+  chainId,
 }) => {
   return (
     <div className="activate-listing-card">
@@ -50,6 +56,15 @@ const ActivateListingCard = ({
               <div className="me-3">
                 <ShowRoleInfo value={(token?.royalty_pool * price) / 100} role={'Royalty Pool'} unit={'VLR'} />
               </div>
+            </div>
+            <div className="poppins-14-600 mt-3 mb-2">Import Token</div>
+            <div
+              className="d-flex justify-content-start align-items-center global-pointer p-2 rounded"
+              style={{ background: '#96F2A4', width: 'fit-content' }}
+              onClick={() => registerToken(tokenAddress, tokenSymbol, tokenDecimals, chainId)}
+            >
+              <div className="poppins-14-500 me-2">Add Metamask</div>
+              <img alt="alt" src={MetamaskIcon} width={20} height={20} />
             </div>
           </div>
           <div className="my-2">

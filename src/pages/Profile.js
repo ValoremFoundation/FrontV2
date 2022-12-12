@@ -453,7 +453,12 @@ const Profile = () => {
                   style={{ position: 'relative' }}
                 >
                   Buy Matic
-                  <div data-tip data-for="buy-matic-tip" className="profile-help">
+                  <div
+                    data-tip
+                    data-for="buy-matic-tip"
+                    className="profile-help"
+                    onClick={() => window.open('https://www.advalorem.io/tutorial/v/buying-matic-on-moonpay')}
+                  >
                     ?
                   </div>
                 </Tab>
@@ -463,7 +468,12 @@ const Profile = () => {
                   style={{ position: 'relative' }}
                 >
                   Buy VLR
-                  <div data-tip data-for="buy-vlr-tip" className="profile-help">
+                  <div
+                    data-tip
+                    data-for="buy-vlr-tip"
+                    className="profile-help"
+                    onClick={() => window.open('https://www.advalorem.io/tutorial/v/buying-vlr-quickswap')}
+                  >
                     ?
                   </div>
                 </Tab>
@@ -473,7 +483,12 @@ const Profile = () => {
                   style={{ position: 'relative' }}
                 >
                   Add Liquidity
-                  <div data-tip data-for="add-liquidity-tip" className="profile-help">
+                  <div
+                    data-tip
+                    data-for="add-liquidity-tip"
+                    className="profile-help"
+                    onClick={() => window.open('https://www.advalorem.io/tutorial/v/adding-liquidity-on-quickswap')}
+                  >
                     ?
                   </div>
                 </Tab>

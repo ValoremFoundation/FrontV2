@@ -83,6 +83,8 @@ const TokenDetail = () => {
   const [commentText, setCommentText] = useState('');
   const [tokenComments, setTokenComments] = useState([]);
   const [tokenStatus, setTokenStatus] = useState('');
+  const [tokenSymbol, setTokenSymbol] = useState('VLR');
+  const [tokenDecimals, setTokenDecimals] = useState(18);
 
   useEffect(() => {
     dispatch(fetchAllCategories());
@@ -114,6 +116,8 @@ const TokenDetail = () => {
           setTokenStatus('buy');
         }
       }
+      setTokenSymbol(await vlrTokenContract.methods.symbol().call());
+      setTokenDecimals(await vlrTokenContract.methods.decimals().call());
 
       const {
         data: { comments },
@@ -438,6 +442,10 @@ const TokenDetail = () => {
               handleClickDelist={handleClickDelist}
               handleClickGift={handleClickGift}
               tokenStatus={tokenStatus}
+              tokenAddress={REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS}
+              tokenSymbol={tokenSymbol}
+              tokenDecimals={tokenDecimals}
+              chainId={chainId}
             />
           </div>
         </div>
