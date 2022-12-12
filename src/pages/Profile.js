@@ -467,7 +467,13 @@ const Profile = () => {
                   path="https://quickswap.exchange/#/swap?inputCurrency=0x221d160BA7E3552FeE22A33B3982AD408C3D6E65"
                   style={{ position: 'relative' }}
                 >
-                  <span onClick={() => window.open('https://www.advalorem.io/tutorial/v/buying-vlr-quickswap')}>
+                  <span
+                    onClick={() =>
+                      window.open(
+                        'https://quickswap.exchange/#/swap?inputCurrency=0x221d160BA7E3552FeE22A33B3982AD408C3D6E65'
+                      )
+                    }
+                  >
                     Buy VLR
                   </span>
                   <div
@@ -484,11 +490,7 @@ const Profile = () => {
                   path="https://quickswap.exchange/#/pools"
                   style={{ position: 'relative' }}
                 >
-                  <span
-                    onClick={() => window.open('https://www.advalorem.io/tutorial/v/adding-liquidity-on-quickswap')}
-                  >
-                    Add Liquidity
-                  </span>
+                  <span onClick={() => window.open('https://quickswap.exchange/#/pools')}>Add Liquidity</span>
                   <div
                     data-tip
                     data-for="add-liquidity-tip"
