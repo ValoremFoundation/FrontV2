@@ -12,7 +12,7 @@ import {
   updateProfile,
   uploadFile,
 } from 'src/api';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import LoadingPage from 'src/components/LoadingPage';
 import Tabs, { Tab } from 'src/components/LineTab';
 import Created from 'src/components/Profile/Created';
@@ -25,6 +25,8 @@ import Web3 from 'web3';
 import nftABI from 'src/assets/abis/nftAdValorem.json';
 import royaltyPoolABI from 'src/assets/abis/royaltyPool.json';
 import { dateWithTimestamp, fromWei } from 'src/utils/formartUtils';
+import { fetchAllCategories } from 'src/actions/categories';
+import ReactTooltip from 'react-tooltip';
 
 const { REACT_APP_NFT_CONTRACT_ADDRESS, REACT_APP_ROYALTY_POOL_CONTRACT_ADDRESS } = process.env;
 const web3 = new Web3(window.ethereum);
@@ -35,6 +37,7 @@ const zeroAddress = '0x0000000000000000000000000000000000000000';
 const Profile = () => {
   const { search } = useLocation();
   const { account } = useWeb3React();
+  const dispatch = useDispatch();
   const query = new URLSearchParams(search);
   const activeTab = query.get('activeTab');
   const actionTab = query.get('actionTab');
@@ -46,6 +49,7 @@ const Profile = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [geoLocation, setGeoLocation] = useState({ latitude: 0, longitude: 0 });
   const authToken = useSelector(state => state.auth.token);
+  const categories = useSelector(state => state.categories.items.items);
   const [userName, setUserName] = useState('');
   const [header, setHeader] = useState('');
   const [description, setDescription] = useState('');
@@ -83,6 +87,11 @@ const Profile = () => {
     // eslint-disable-next-line
   }, [authToken]);
 
+  useEffect(() => {
+    dispatch(fetchAllCategories());
+    // eslint-disable-next-line
+  }, []);
+
   const getTransactionByWallet = async () => {
     if (!account) return;
     const {
@@ -107,7 +116,7 @@ const Profile = () => {
     getTransactionByWallet();
     getRoyaltyPoolInfo();
     // eslint-disable-next-line
-  }, [account, activeTab]);
+  }, [account]);
 
   const handleClickRedeem = async token => {
     try {
@@ -170,6 +179,7 @@ const Profile = () => {
       if (res?.data.status) {
         toast.success('Accepted redeem successfully');
         getProfileData();
+        getTransactionByWallet();
       } else {
         toast.error('Not redeemed');
       }
@@ -409,6 +419,7 @@ const Profile = () => {
                   <ProfileNumberName data={item} key={index} />
                 ))}
               </div> */}
+
               <Tabs>
                 <Tab active={activeTab === 'created'} path="/profile?activeTab=created&actionTab=listed">
                   Created
@@ -419,22 +430,66 @@ const Profile = () => {
                 <Tab active={activeTab === 'transactions'} path="/profile?activeTab=transactions">
                   Transactions
                 </Tab>
-                <Tab active={activeTab === 'royalty-pool'} path="/profile?activeTab=royalty-pool">
+                <Tab
+                  active={activeTab === 'royalty-pool'}
+                  path="/profile?activeTab=royalty-pool"
+                  style={{ position: 'relative' }}
+                >
                   Royalty Pool
+                  <div
+                    data-tip
+                    data-for="royalty-pool-tip"
+                    className="profile-help"
+                    onClick={() =>
+                      window.open('https://www.advalorem.io/tutorial/v/royalty-distributions-pools-yield-harvest')
+                    }
+                  >
+                    ?
+                  </div>
                 </Tab>
-                {/* <Tab active={activeTab === 'earn-liquidity-rewards'} path="/profile?activeTab=earn-liquidity-rewards">
-                  Earn Liquidity Rewards
-                </Tab> */}
-                <Tab active={activeTab === 'buy-matic'} path="https://www.moonpay.com/buy">
+                <Tab
+                  active={activeTab === 'buy-matic'}
+                  path="https://www.moonpay.com/buy"
+                  style={{ position: 'relative' }}
+                >
                   Buy Matic
+                  <div data-tip data-for="buy-matic-tip" className="profile-help">
+                    ?
+                  </div>
                 </Tab>
                 <Tab
                   active={activeTab === 'buy-vlr'}
-                  path="https://quickswap.exchange/#/swap?inputCurrency=0xe1b757fc80ca95677da112e3231a571469252710"
+                  path="https://quickswap.exchange/#/swap?inputCurrency=0x221d160BA7E3552FeE22A33B3982AD408C3D6E65"
+                  style={{ position: 'relative' }}
                 >
                   Buy VLR
+                  <div data-tip data-for="buy-vlr-tip" className="profile-help">
+                    ?
+                  </div>
+                </Tab>
+                <Tab
+                  active={activeTab === 'add-liquidity'}
+                  path="https://quickswap.exchange/#/pools"
+                  style={{ position: 'relative' }}
+                >
+                  Add Liquidity
+                  <div data-tip data-for="add-liquidity-tip" className="profile-help">
+                    ?
+                  </div>
                 </Tab>
               </Tabs>
+              <ReactTooltip id="royalty-pool-tip" place="top" effect="solid">
+                https://www.advalorem.io/tutorial/v/royalty-distributions-pools-yield-harvest
+              </ReactTooltip>
+              <ReactTooltip id="buy-matic-tip" place="top" effect="solid">
+                https://www.advalorem.io/tutorial/v/buying-matic-on-moonpay
+              </ReactTooltip>
+              <ReactTooltip id="buy-vlr-tip" place="top" effect="solid">
+                https://www.advalorem.io/tutorial/v/buying-vlr-quickswap
+              </ReactTooltip>
+              <ReactTooltip id="add-liquidity-tip" place="top" effect="solid">
+                https://www.advalorem.io/tutorial/v/adding-liquidity-on-quickswap
+              </ReactTooltip>
             </div>
           </div>
         </div>
@@ -456,6 +511,7 @@ const Profile = () => {
                   handleClickAccept={handleClickAccept}
                   handleClickDeny={handleClickDeny}
                   profile={profile}
+                  categories={categories}
                 />
               )}
               {activeTab === 'transactions' && <Transactions transactions={transactions} />}
@@ -470,7 +526,6 @@ const Profile = () => {
                   getRoyaltyPoolInfo={getRoyaltyPoolInfo}
                 />
               )}
-              {/* {activeTab === 'earn-liquidity-rewards' && <EarnLiquidityRewards />} */}
               {/* {activeTab === 'buy-matic' && <BuyMatic />}
               {activeTab === 'buy-vlr' && <BuyVLR />} */}
             </div>

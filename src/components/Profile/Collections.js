@@ -3,7 +3,14 @@ import Tabs, { Tab } from 'src/components/SubLineTab';
 import RedeemedCard from 'src/components/RedeemedCard';
 import NotRedeemedCard from 'src/components/NotRedeemedCard';
 
-const Collections = ({ actionTab = 'redeemed', handleClickRedeem, handleClickAccept, handleClickDeny, profile }) => {
+const Collections = ({
+  actionTab = 'redeemed',
+  handleClickRedeem,
+  handleClickAccept,
+  handleClickDeny,
+  profile,
+  categories,
+}) => {
   const requestedTokens = profile?.tokens?.requestRedeemed;
   const redeemTokens = profile?.tokens?.buy;
 
@@ -13,7 +20,12 @@ const Collections = ({ actionTab = 'redeemed', handleClickRedeem, handleClickAcc
         {redeemTokens?.length > 0 ? (
           redeemTokens?.map((token, index) => (
             <div className="my-4" key={index}>
-              <RedeemedCard handleClickRedeem={() => handleClickRedeem(token)} token={token} profile={profile} />
+              <RedeemedCard
+                handleClickRedeem={() => handleClickRedeem(token)}
+                token={token}
+                profile={profile}
+                categories={categories}
+              />
             </div>
           ))
         ) : (

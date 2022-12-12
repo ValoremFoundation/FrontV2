@@ -36,8 +36,9 @@ const SwitchNetworkModal = ({ modalIsOpen, closeModal, handleSwithNetwork }) => 
           onClick={() => handleSwithNetwork(process.env.REACT_APP_NODE_ENV === 'production' ? 137 : 80001)}
         >
           <img src={MaticIcon} className="me-3" alt="polygon-icon" width="56px" height="56px" />
-          <div className="poppins-20-500">Polygon Mainnet</div>
-          {/* <div className="poppins-20-500">Mumbai Testnet</div> */}
+          <div className="poppins-20-500">
+            {process.env.REACT_APP_NODE_ENV === 'production' ? 'Polygon Mainnet' : 'Mumbai Testnet'}
+          </div>
         </div>
         <img src={RPCHelper} alt={'rpchelper'} width="300px" className="rounded-3" />
       </div>

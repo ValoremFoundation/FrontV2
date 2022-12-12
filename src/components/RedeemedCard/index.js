@@ -1,18 +1,18 @@
 import React from 'react';
 import 'src/styles/components/RedeemedCard.scss';
 import 'src/styles/Global.scss';
-import Favorite from 'src/assets/images/favorite.svg';
 import Message from 'src/assets/images/message.svg';
 import Position from 'src/assets/images/position.svg';
-import FacebookIcon from 'src/assets/images/facebook-icon.svg';
-import InstagramIcon from 'src/assets/images/instagram-icon.svg';
-import LinkIcon from 'src/assets/images/facebook-icon.svg';
+// import Favorite from 'src/assets/images/favorite.svg';
+// import FacebookIcon from 'src/assets/images/facebook-icon.svg';
+// import InstagramIcon from 'src/assets/images/instagram-icon.svg';
+// import LinkIcon from 'src/assets/images/facebook-icon.svg';
 import NFTCardButton from '../NFTCardButton';
 import BackgroundButton from '../BackgroundButton';
 import DistributionItem from '../DistributionItem';
 import MultiMediaView from '../MultiMediaView';
 
-const RedeemedCard = ({ handleClickRedeem, token, profile }) => {
+const RedeemedCard = ({ handleClickRedeem, token, profile, categories }) => {
   return (
     <div className="listing-card-container global-pointer">
       <div className="row gx-4">
@@ -39,8 +39,15 @@ const RedeemedCard = ({ handleClickRedeem, token, profile }) => {
               <div className="global-flex-between">
                 <div className="poppins-20-600">{profile?.name}</div>
                 <div className="global-flex-between">
-                  <img alt="alt" src={Favorite} width={20} height={20} className="me-4 global-pointer" />
-                  <img alt="alt" src={Message} width={20} height={20} className="global-pointer" />
+                  {/* <img alt="alt" src={Favorite} width={20} height={20} className="me-4 global-pointer" /> */}
+                  <img
+                    alt="alt"
+                    src={Message}
+                    width={20}
+                    height={20}
+                    className="global-pointer"
+                    onClick={() => window.open(categories[token?.category_id - 1]?.discord)}
+                  />
                 </div>
               </div>
               <div className="global-flex-start">
@@ -70,13 +77,13 @@ const RedeemedCard = ({ handleClickRedeem, token, profile }) => {
           </div>
         </div>
         <div className="col-12 col-lg-3  p-2">
-          <div className="global-flex-end" style={{ height: '100%' }}>
-            <div className="global-flex-column-between">
-              <div className="global-flex-center mb-3">
+          <div className="global-flex-end h-100">
+            <div className="d-flex align-items-end h-100">
+              {/* <div className="global-flex-center mb-3">
                 <img alt="alt" src={FacebookIcon} width={20} height={20} className="mx-2 global-pointer" />
                 <img alt="alt" src={InstagramIcon} width={25} height={25} className="mx-2 global-pointer" />
                 <img alt="alt" src={LinkIcon} width={20} height={20} className="mx-2 global-pointer" />
-              </div>
+              </div> */}
               <div>
                 <BackgroundButton
                   label={token?.redeem_status === 'request' ? 'Pending Redemption' : 'Redeem'}

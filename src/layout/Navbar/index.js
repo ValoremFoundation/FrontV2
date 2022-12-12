@@ -80,6 +80,7 @@ const Navbar = ({
     } else {
       setSearchResults([]);
     }
+    // eslint-disable-next-line
   }, [search]);
 
   const SearchItems = ({ results }) => {
@@ -169,6 +170,14 @@ const Navbar = ({
                 <Link to="/browse" className="nav-link" exact="true">
                   Browse
                 </Link>
+                <a
+                  className="nav-link"
+                  href="https://www.advalorem.io/tutorial"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Tutorials
+                </a>
                 <a className="nav-link" href="https://discord.gg/3kjQ8fBpks" target="_blank" rel="noopener noreferrer">
                   Resources
                 </a>

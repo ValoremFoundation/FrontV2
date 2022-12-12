@@ -1,6 +1,7 @@
 import React from 'react';
 import { format } from 'date-fns';
 import styles from './profile.module.scss';
+import { numberFormat } from 'src/utils/formartUtils';
 
 const Transactions = ({ transactions }) => {
   return (
@@ -9,6 +10,7 @@ const Transactions = ({ transactions }) => {
         <thead>
           <tr style={{ textAlign: 'left' }}>
             <th>Txn Hash</th>
+            <th>Amount</th>
             <th>Method</th>
             <th>From</th>
             <th>To</th>
@@ -27,6 +29,7 @@ const Transactions = ({ transactions }) => {
                   target="_blank"
                 >{`${item?.hash.slice(0, 5)}...${item?.hash.slice(item?.hash.length - 5, item?.hash.length)}`}</a>
               </td>
+              <td>{Number(numberFormat(item?.value, item?.value > 1 ? 4 : 9))}</td>
               <td>{item?.method}</td>
               <td>{`${item?.from.slice(0, 5)}...${item?.from.slice(item?.from.length - 5, item?.from.length)}`}</td>
               <td>{`${item?.to.slice(0, 5)}...${item?.to.slice(item?.to.length - 5, item?.to.length)}`}</td>

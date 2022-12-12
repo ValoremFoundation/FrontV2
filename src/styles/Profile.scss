@@ -130,3 +130,18 @@ img + .profile-avatar-imgOverlay {
 *:hover> .profile-avatar-imgOverlay {
   display: inline-flex;
 }
+
+.profile-help {
+  position: absolute;
+  top: 9px;
+  right: 3px;
+  background: #202020;
+  width: 14px;
+  height: 14px;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 10px;
+  color: #ffffff;
+}

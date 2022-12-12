@@ -231,11 +231,6 @@ function App() {
             <Browse />
           </MainLayout>
         </Route>
-        {/* <Route path="/resources" exact>
-          <MainLayout>
-            <Resources />
-          </MainLayout>
-        </Route> */}
         <Route path="/create" exact>
           <MainLayout>
             <Create />

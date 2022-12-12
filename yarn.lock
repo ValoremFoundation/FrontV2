@@ -10801,6 +10801,13 @@ react-scripts@3.4.3:
   optionalDependencies:
     fsevents "2.1.2"
 
+react-tooltip@4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/react-tooltip/-/react-tooltip-4.0.3.tgz#2c1f97bb8c4edec0c11e40d39e2c97b7c2bab72b"
+  integrity sha512-xEM+fr8tr/KJP5PZEOg/fc5bZ7ZkC658iMDgCq5DfTqHVyuIOOd5loyxQD0eAJiZ6jWdEd18owbRqd3stHtEDg==
+  dependencies:
+    prop-types "^15.6.0"
+
 react-use@13.26.1:
   version "13.26.1"
   resolved "https://registry.yarnpkg.com/react-use/-/react-use-13.26.1.tgz#a26e51b26ebe1a3a00cadfe4d7f15c25bb19780b"

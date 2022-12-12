@@ -41,6 +41,7 @@ const Browse = () => {
 
   useEffect(() => {
     if (propsTokenName) setSearchTokenName(propsTokenName);
+    // eslint-disable-next-line
   }, []);
 
   const getAllTokens = async () => {

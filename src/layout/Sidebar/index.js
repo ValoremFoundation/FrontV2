@@ -78,6 +78,15 @@ const Sidebar = ({
         </Link>
         <a
           className="nav-link"
+          href="https://www.advalorem.io/tutorial"
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={toggle}
+        >
+          Tutorials
+        </a>
+        <a
+          className="nav-link"
           href="https://discord.gg/3kjQ8fBpks"
           target="_blank"
           rel="noopener noreferrer"
