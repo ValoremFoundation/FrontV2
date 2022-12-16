@@ -118,19 +118,19 @@ const Settings = () => {
       <div className="settings-container">
         <p className="poppins-32-500">Profile Details</p>
         <div className="my-4">
-          <TextInput label={'Username'} type={'text'} value={name} onChange={e => setName(e.target.value)} />
+          <TextInput label={'Username'} type={'text'} value={name || ''} onChange={e => setName(e.target.value)} />
         </div>
         <div className="my-4">
-          <TextInput label={'Email'} type={'text'} value={profile?.email} disabled={true} />
+          <TextInput label={'Email'} type={'text'} value={profile?.email || ''} disabled={true} />
         </div>
         <div className="my-4">
-          <TextInput label={'Header'} type={'text'} value={header} onChange={e => setHeader(e.target.value)} />
+          <TextInput label={'Header'} type={'text'} value={header || ''} onChange={e => setHeader(e.target.value)} />
         </div>
         <div className="my-4">
           <TextInput
             label={'Description'}
             type={'textarea'}
-            value={description}
+            value={description || ''}
             onChange={e => setDescription(e.target.value)}
           />
         </div>

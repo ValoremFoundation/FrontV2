@@ -10,6 +10,10 @@ export const getProfile = async header => {
   });
 };
 
+export const getUsers = async wallet => {
+  return await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/users?publicAddress=${wallet}`);
+};
+
 export const uploadFile = async formData => {
   return await axios.post(`${process.env.REACT_APP_BACKEND_BASE_URL}/files`, formData);
 };

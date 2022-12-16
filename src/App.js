@@ -18,6 +18,7 @@ import ActivateListing from 'src/pages/ActivateListing';
 import TokenDetail from 'src/pages/TokenDetail';
 import Settings from 'src/pages/Settings';
 import TokenEdit from './pages/TokenEdit';
+import Public from './pages/Public';
 import { useDispatch } from 'react-redux';
 import { login } from 'src/api';
 import { useWeb3React } from '@web3-react/core';
@@ -264,6 +265,11 @@ function App() {
         <Route path="/token-detail/:tokenId/edit" exact>
           <MainLayout>
             <TokenEdit />
+          </MainLayout>
+        </Route>
+        <Route path="/public/:walletAddress" exact>
+          <MainLayout>
+            <Public />
           </MainLayout>
         </Route>
         <Route component={NotFound} />

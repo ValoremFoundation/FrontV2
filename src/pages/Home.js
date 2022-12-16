@@ -95,7 +95,6 @@ const Home = () => {
         setUnitEstimateOut(0);
         setIsLoading(false);
       });
-    return;
   };
 
   const openModal = () => {

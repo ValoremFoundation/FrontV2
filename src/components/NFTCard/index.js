@@ -9,10 +9,28 @@ import NFTCardButton from 'src/components/NFTCardButton';
 import { SYMBOL } from 'src/constants';
 import MultiMediaView from '../MultiMediaView';
 import { numberFormat } from 'src/utils/formartUtils';
+import { useWeb3React } from '@web3-react/core';
+import { useHistory } from 'react-router-dom';
 
 const NFTCard = ({ onClick, token, price = 0, categories, unitEstimateOut, nativePrice, listCard = false }) => {
+  const { account } = useWeb3React();
+  const history = useHistory();
+
+  const handleClick = (event, type) => {
+    event.stopPropagation();
+    if (type === 'card') {
+      onClick();
+    } else {
+      if (account?.toLowerCase() === token?.user?.walletAddress?.toLowerCase()) {
+        onClick();
+      } else {
+        history.push(`/public/${token?.user?.walletAddress}`);
+      }
+    }
+  };
+
   return (
-    <div className="nft-card-container" onClick={onClick}>
+    <div className="nft-card-container" onClick={event => handleClick(event, 'card')}>
       <MultiMediaView
         src={token?.uri || '/img/blank-image.jpg'}
         style={{ width: '100%', height: '260px', borderRadius: 5, objectFit: 'cover', objectPosition: 'center' }}
@@ -21,15 +39,20 @@ const NFTCard = ({ onClick, token, price = 0, categories, unitEstimateOut, nativ
       />
       <div className="global-flex-between my-3">
         <div className="global-flex-center">
-          <div>
+          <div style={{ position: 'relative' }}>
             <img
               alt="alt"
               src={token?.user?.avatar || '/img/default-avatar.png'}
               style={{ width: 55, height: 55, borderRadius: 50 }}
+              onClick={event => handleClick(event, 'avatar')}
             />
-            <img alt="alt" src={BlueCheck} style={{ width: 20, height: 20, marginTop: -50 }} />
+            <img
+              alt="alt"
+              src={BlueCheck}
+              style={{ position: 'absolute', width: 20, height: 20, top: -7, right: -15 }}
+            />
           </div>
-          <div>
+          <div className="ms-3">
             <div className="nft-card-name">{token?.user?.name}</div>
             <div className="global-flex-start">
               <img alt="alt" src={Position} style={{ width: 13, height: 21 }} />
@@ -43,7 +66,8 @@ const NFTCard = ({ onClick, token, price = 0, categories, unitEstimateOut, nativ
             <div className="nft-card-favor-number">5k</div>
           </div> */}
           <div className="ms-4">
-            <img alt="alt" src={Message} onClick={() => window.open(categories[token?.category_id - 1]?.discord)} />
+            {/* <img alt="alt" src={Message} onClick={() => window.open(categories[token?.category_id - 1]?.discord)} /> */}
+            <img alt="alt" src={Message} />
             {/* <div className="nft-card-favor-number">1k</div> */}
           </div>
         </div>

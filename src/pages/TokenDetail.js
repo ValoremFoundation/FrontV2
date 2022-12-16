@@ -124,7 +124,6 @@ const TokenDetail = () => {
         setUnitEstimateOut(0);
         setIsLoading(false);
       });
-    return;
   };
 
   const getTokenDetail = async () => {

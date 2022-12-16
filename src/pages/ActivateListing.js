@@ -124,7 +124,6 @@ const ActivateListing = () => {
         setUnitEstimateOut(0);
         setIsLoading(false);
       });
-    return;
   };
 
   useEffect(() => {
