@@ -5,7 +5,7 @@ import BackgroundButton from '../BackgroundButton';
 import ShowRoleInfo from '../ShowRoleInfo';
 import TextInput from '../TextInput';
 import MetamaskIcon from 'src/assets/images/metamask.svg';
-import { registerToken } from 'src/utils/formartUtils';
+import { numberFormat, registerToken } from 'src/utils/formartUtils';
 
 const ActivateListingCard = ({
   handleClickList,
@@ -22,6 +22,8 @@ const ActivateListingCard = ({
   tokenDecimals,
   tokenAddress,
   chainId,
+  unitEstimateOut,
+  nativePrice,
 }) => {
   return (
     <div className="activate-listing-card">
@@ -32,7 +34,15 @@ const ActivateListingCard = ({
       <div className="row gx-5 mt-5">
         <div className="col-12 col-lg-5 mb-4">
           <div className="poppins-14-600">Set your price</div>
-          <div className="poppins-12-500">*1 VLR = $1</div>
+          <div>
+            {unitEstimateOut && nativePrice ? (
+              <span className="poppins-12-500">
+                {`1 VLR = ${numberFormat((1 / unitEstimateOut) * nativePrice, 3)} USD (Today's Price * )`}
+              </span>
+            ) : (
+              <></>
+            )}
+          </div>
           <TextInput label={''} type={'text'} value={price} onChange={handleChangePrice} />
         </div>
         <div className="col-12 col-lg-7 mb-4">

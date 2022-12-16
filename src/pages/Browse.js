@@ -14,10 +14,17 @@ import Tabs, { Tab } from 'src/components/Browse/LineTab';
 import RoundBorderButton from 'src/components/RoundBorderButton';
 import { useWeb3React } from '@web3-react/core';
 import toast from 'react-hot-toast';
+import {
+  getEstimateAmount,
+  getNativeTokenPrice,
+  getQuickPairAddress,
+  W_ADDRESS,
+  VLR_ADDRESS,
+} from 'src/utils/priceProvider';
 
 const Browse = () => {
   const history = useHistory();
-  const { account } = useWeb3React();
+  const { account, chainId } = useWeb3React();
   const dispatch = useDispatch();
   const propsCategory = history.location?.category?.data;
   const propsTokenName = history.location?.name?.data;
@@ -28,11 +35,40 @@ const Browse = () => {
   const [category, setCategory] = useState(1);
   const [searchAll, setSearchAll] = useState('');
   const [searchTokenName, setSearchTokenName] = useState('');
+  const [nativePrice, setNativePrice] = useState(0);
+  const [unitEstimateOut, setUnitEstimateOut] = useState(0);
 
   useEffect(() => {
     dispatch(fetchAllCategories());
+    getEstimatedVlrPrice();
     // eslint-disable-next-line
-  }, []);
+  }, [dispatch]);
+
+  const getEstimatedVlrPrice = async () => {
+    if (!chainId || !process.env.REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS) return;
+    const price = await getNativeTokenPrice(137);
+    setNativePrice(price);
+
+    const pairAddress = await getQuickPairAddress(W_ADDRESS[137], VLR_ADDRESS[137], 137);
+    if (pairAddress === null) return;
+    setIsLoading(true);
+    getEstimateAmount(
+      W_ADDRESS[137], // inputToken?.address,
+      VLR_ADDRESS[137], // outputToken?.address,
+      1, // unit amount
+      137 // chainId
+    )
+      .then(res => {
+        setUnitEstimateOut(Number(res));
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.log('unit price error', err);
+        setUnitEstimateOut(0);
+        setIsLoading(false);
+      });
+    return;
+  };
 
   useEffect(() => {
     if (propsCategory) setSearchAll('all');
@@ -141,7 +177,12 @@ const Browse = () => {
           {filteredData?.length > 0 ? (
             filteredData.map((item, index) => (
               <div key={index} className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 my-3">
-                <NFTCard onClick={() => handleClickNFTCard(item?.id)} token={item} />
+                <NFTCard
+                  onClick={() => handleClickNFTCard(item?.id)}
+                  token={item}
+                  nativePrice={nativePrice}
+                  unitEstimateOut={unitEstimateOut}
+                />
               </div>
             ))
           ) : (

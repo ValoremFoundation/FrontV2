@@ -8,8 +8,9 @@ import Message from 'src/assets/images/message.svg';
 import NFTCardButton from 'src/components/NFTCardButton';
 import { SYMBOL } from 'src/constants';
 import MultiMediaView from '../MultiMediaView';
+import { numberFormat } from 'src/utils/formartUtils';
 
-const NFTCard = ({ onClick, token, price = 0, categories }) => {
+const NFTCard = ({ onClick, token, price = 0, categories, unitEstimateOut, nativePrice }) => {
   return (
     <div className="nft-card-container" onClick={onClick}>
       <MultiMediaView
@@ -53,9 +54,11 @@ const NFTCard = ({ onClick, token, price = 0, categories }) => {
           <div className="nft-card-matic-number">
             {token?.price ? token?.price : price} {SYMBOL}
           </div>
-          <div className="nft-card-usd-number">($20 usd)</div>
+          <div className="nft-card-usd-number">
+            ( {`$ ${numberFormat((1 / unitEstimateOut) * nativePrice * Number(token?.price), 2)} usd`} )
+          </div>
         </div>
-        <div className="nft-card-up-percent">+5%</div>
+        {/* <div className="nft-card-up-percent">+5%</div> */}
       </div>
       <div className="d-flex flex-wrap justify-content-between my-3">
         <div style={{ width: '46%' }} className="my-1">

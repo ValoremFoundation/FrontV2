@@ -35,6 +35,13 @@ import TransferModal from 'src/components/TransferModal';
 import { toFixedTail } from 'src/utils/formartUtils';
 import Star from 'src/assets/images/star.svg';
 import MultiMediaZoomView from 'src/components/MultiMediaZoomView';
+import {
+  getEstimateAmount,
+  getNativeTokenPrice,
+  getQuickPairAddress,
+  W_ADDRESS,
+  VLR_ADDRESS,
+} from 'src/utils/priceProvider';
 
 const { REACT_APP_MARKETPLACE_CONTRACT_ADDRESS, REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS, REACT_APP_NFT_CONTRACT_ADDRESS } =
   process.env;
@@ -85,11 +92,40 @@ const TokenDetail = () => {
   const [tokenStatus, setTokenStatus] = useState('');
   const [tokenSymbol, setTokenSymbol] = useState('VLR');
   const [tokenDecimals, setTokenDecimals] = useState(18);
+  const [nativePrice, setNativePrice] = useState(0);
+  const [unitEstimateOut, setUnitEstimateOut] = useState(0);
 
   useEffect(() => {
     dispatch(fetchAllCategories());
+    getEstimatedVlrPrice();
     // eslint-disable-next-line
-  }, []);
+  }, [dispatch]);
+
+  const getEstimatedVlrPrice = async () => {
+    if (!chainId || !REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS) return;
+    const price = await getNativeTokenPrice(137);
+    setNativePrice(price);
+
+    const pairAddress = await getQuickPairAddress(W_ADDRESS[137], VLR_ADDRESS[137], 137);
+    if (pairAddress === null) return;
+    setIsLoading(true);
+    getEstimateAmount(
+      W_ADDRESS[137], // inputToken?.address,
+      VLR_ADDRESS[137], // outputToken?.address,
+      1, // unit amount
+      137 // chainId
+    )
+      .then(res => {
+        setUnitEstimateOut(Number(res));
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.log('unit price error', err);
+        setUnitEstimateOut(0);
+        setIsLoading(false);
+      });
+    return;
+  };
 
   const getTokenDetail = async () => {
     try {
@@ -446,6 +482,8 @@ const TokenDetail = () => {
               tokenSymbol={tokenSymbol}
               tokenDecimals={tokenDecimals}
               chainId={chainId}
+              unitEstimateOut={unitEstimateOut}
+              nativePrice={nativePrice}
             />
           </div>
         </div>

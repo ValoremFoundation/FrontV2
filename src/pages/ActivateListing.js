@@ -27,6 +27,13 @@ import nftABI from 'src/assets/abis/nftAdValorem.json';
 import royaltyPoolABI from 'src/assets/abis/royaltyPool.json';
 import vlrTokenABI from 'src/assets/abis/adValoremToken.json';
 import TransferModal from 'src/components/TransferModal';
+import {
+  getEstimateAmount,
+  getNativeTokenPrice,
+  getQuickPairAddress,
+  W_ADDRESS,
+  VLR_ADDRESS,
+} from 'src/utils/priceProvider';
 
 const {
   REACT_APP_MARKETPLACE_CONTRACT_ADDRESS,
@@ -58,6 +65,8 @@ const ActivateListing = () => {
   const [tokenStatus, setTokenStatus] = useState('');
   const [tokenSymbol, setTokenSymbol] = useState('VLR');
   const [tokenDecimals, setTokenDecimals] = useState(18);
+  const [nativePrice, setNativePrice] = useState(0);
+  const [unitEstimateOut, setUnitEstimateOut] = useState(0);
 
   const getTokenDetail = async () => {
     setIsLoading(true);
@@ -90,10 +99,37 @@ const ActivateListing = () => {
     setMarketOwnerPercent((await royaltyContract.methods.marketOwnerPercent().call()) / 100);
   };
 
+  const getEstimatedVlrPrice = async () => {
+    if (!chainId || !REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS) return;
+    const price = await getNativeTokenPrice(137);
+    setNativePrice(price);
+
+    const pairAddress = await getQuickPairAddress(W_ADDRESS[137], VLR_ADDRESS[137], 137);
+    if (pairAddress === null) return;
+    setIsLoading(true);
+    getEstimateAmount(
+      W_ADDRESS[137], // inputToken?.address,
+      VLR_ADDRESS[137], // outputToken?.address,
+      1, // unit amount
+      137 // chainId
+    )
+      .then(res => {
+        setUnitEstimateOut(Number(res));
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.log('unit price error', err);
+        setUnitEstimateOut(0);
+        setIsLoading(false);
+      });
+    return;
+  };
+
   useEffect(() => {
     try {
       getTokenDetail();
       getRoyaltyInfo();
+      getEstimatedVlrPrice();
     } catch (err) {
       console.log('Error ActivateListing : ', err.message);
     }
@@ -266,7 +302,7 @@ const ActivateListing = () => {
             <div className="listing-second-section">
               <div className="row gx-5">
                 <div className="col-12 col-lg-4 my-4">
-                  <NFTCard token={nftData} price={price} />
+                  <NFTCard token={nftData} price={price} unitEstimateOut={unitEstimateOut} nativePrice={nativePrice} />
                 </div>
                 <div className="col-12 col-lg-8 my-4">
                   <ActivateListingCard
@@ -284,6 +320,8 @@ const ActivateListing = () => {
                     tokenDecimals={tokenDecimals}
                     tokenAddress={REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS}
                     chainId={chainId}
+                    unitEstimateOut={unitEstimateOut}
+                    nativePrice={nativePrice}
                   />
                 </div>
               </div>

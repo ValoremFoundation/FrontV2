@@ -56,10 +56,12 @@ export const isAddress = address => {
 };
 
 export const numberFormat = (num = 0, fixed = 3) => {
-  return numbro(num).format({
-    thousandSeparated: true,
-    ...(fixed && { mantissa: fixed }), // number of decimals displayed
-  });
+  return Number(
+    numbro(num).format({
+      thousandSeparated: true,
+      ...(fixed && { mantissa: fixed }), // number of decimals displayed
+    })
+  );
 };
 
 export const sliceString = (description, letters) => {

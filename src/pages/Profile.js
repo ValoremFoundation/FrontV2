@@ -90,7 +90,7 @@ const Profile = () => {
   useEffect(() => {
     dispatch(fetchAllCategories());
     // eslint-disable-next-line
-  }, []);
+  }, [dispatch]);
 
   const getTransactionByWallet = async () => {
     if (!account) return;

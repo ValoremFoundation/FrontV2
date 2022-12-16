@@ -18,10 +18,17 @@ import LoadingPage from 'src/components/LoadingPage';
 import { fetchAllCategories } from 'src/actions/categories';
 import { useWeb3React } from '@web3-react/core';
 import toast from 'react-hot-toast';
+import {
+  getEstimateAmount,
+  getNativeTokenPrice,
+  getQuickPairAddress,
+  W_ADDRESS,
+  VLR_ADDRESS,
+} from 'src/utils/priceProvider';
 
 const Home = () => {
   const history = useHistory();
-  const { account } = useWeb3React();
+  const { account, chainId } = useWeb3React();
   const dispatch = useDispatch();
   const [modalIsOpen, setIsOpen] = useState(false);
   const [randomToken, setRandomToken] = useState([]);
@@ -31,6 +38,8 @@ const Home = () => {
   const [showAll, setShowAll] = useState(false);
   const [filteredCategories, setFilteredCategories] = useState([]);
   const [search, setSearch] = useState('');
+  const [nativePrice, setNativePrice] = useState(0);
+  const [unitEstimateOut, setUnitEstimateOut] = useState(0);
 
   useEffect(() => {
     dispatch(fetchAllCategories());
@@ -59,8 +68,35 @@ const Home = () => {
     };
 
     fetchData();
+    getEstimatedVlrPrice();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const getEstimatedVlrPrice = async () => {
+    if (!chainId || !process.env.REACT_APP_VLR_TOKEN_CONTRACT_ADDRESS) return;
+    const price = await getNativeTokenPrice(137);
+    setNativePrice(price);
+
+    const pairAddress = await getQuickPairAddress(W_ADDRESS[137], VLR_ADDRESS[137], 137);
+    if (pairAddress === null) return;
+    setIsLoading(true);
+    getEstimateAmount(
+      W_ADDRESS[137], // inputToken?.address,
+      VLR_ADDRESS[137], // outputToken?.address,
+      1, // unit amount
+      137 // chainId
+    )
+      .then(res => {
+        setUnitEstimateOut(Number(res));
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.log('unit price error', err);
+        setUnitEstimateOut(0);
+        setIsLoading(false);
+      });
+    return;
+  };
 
   const openModal = () => {
     if (!localStorage.getItem('login-with-google')) {
@@ -125,7 +161,12 @@ const Home = () => {
         <div className="row gx-5">
           {randomToken?.map((item, index) => (
             <div key={index} className="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 my-3">
-              <NFTCard onClick={() => handleClickNFTCard(item?.id)} token={item} />
+              <NFTCard
+                onClick={() => handleClickNFTCard(item?.id)}
+                token={item}
+                nativePrice={nativePrice}
+                unitEstimateOut={unitEstimateOut}
+              />
             </div>
           ))}
         </div>

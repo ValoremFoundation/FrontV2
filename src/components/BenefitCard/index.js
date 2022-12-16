@@ -3,7 +3,7 @@ import 'src/styles/components/BenefitCard.scss';
 import 'src/styles/Global.scss';
 import SendIcon from 'src/assets/images/send-green-icon.svg';
 import BackgroundButton from '../BackgroundButton';
-import { dateWithTimestamp } from 'src/utils/formartUtils';
+import { dateWithTimestamp, numberFormat } from 'src/utils/formartUtils';
 import MetamaskIcon from 'src/assets/images/metamask.svg';
 import { registerToken } from 'src/utils/formartUtils';
 
@@ -18,6 +18,8 @@ const BenefitCard = ({
   tokenSymbol,
   tokenDecimals,
   chainId,
+  unitEstimateOut,
+  nativePrice,
 }) => {
   return (
     <div className="benefit-card-container">
@@ -83,7 +85,18 @@ const BenefitCard = ({
         <div className="global-flex-start">
           <img alt="alt" src={'/img/logo.png'} width={30} height={30} className="global-pointer me-3" />
           <div className="poppins-36-700 me-3">{nftData?.price} VLR</div>
-          <div className="poppins-16-500 mt-3">$0.25 USD</div>
+          <div className="poppins-16-500 mt-3">
+            {`$ ${numberFormat((1 / unitEstimateOut) * nativePrice * Number(nftData?.price), 2)} usd`}
+          </div>
+        </div>
+        <div>
+          {unitEstimateOut && nativePrice ? (
+            <span className="poppins-14-500">
+              {`1 VLR = ${numberFormat((1 / unitEstimateOut) * nativePrice, 3)} USD (Today's Price * )`}
+            </span>
+          ) : (
+            <></>
+          )}
         </div>
         {!nftData?.burned && tokenStatus === 'delist' && (
           <div className="my-2">
