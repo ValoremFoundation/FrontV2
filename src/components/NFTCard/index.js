@@ -18,9 +18,11 @@ const NFTCard = ({ onClick, token, price = 0, categories, unitEstimateOut, nativ
 
   const handleClick = (event, type) => {
     event.stopPropagation();
-    if (type === 'card') {
+    if (type == 'discord') {
+      window.open(categories[token?.category_id - 1]?.discord);
+    } else if (type === 'card') {
       onClick();
-    } else {
+    } else if (type === 'avatar') {
       if (account?.toLowerCase() === token?.user?.walletAddress?.toLowerCase()) {
         onClick();
       } else {
@@ -37,8 +39,8 @@ const NFTCard = ({ onClick, token, price = 0, categories, unitEstimateOut, nativ
         mediaType={token?.media_type}
         height={'260px'}
       />
-      <div className="global-flex-between my-3">
-        <div className="global-flex-center">
+      <div className="d-flex justify-content-between align-items-center my-3">
+        <div className="d-flex justify-content-start align-items-center">
           <div style={{ position: 'relative' }}>
             <img
               alt="alt"
@@ -54,7 +56,7 @@ const NFTCard = ({ onClick, token, price = 0, categories, unitEstimateOut, nativ
           </div>
           <div className="ms-3">
             <div className="nft-card-name">{token?.user?.name}</div>
-            <div className="global-flex-start">
+            <div className="d-flex justify-content-start align-items-center">
               <img alt="alt" src={Position} style={{ width: 13, height: 21 }} />
               <div className="nft-card-position ms-1 mt-1">{token?.location}</div>
             </div>
@@ -67,7 +69,7 @@ const NFTCard = ({ onClick, token, price = 0, categories, unitEstimateOut, nativ
           </div> */}
           <div className="ms-4">
             {/* <img alt="alt" src={Message} onClick={() => window.open(categories[token?.category_id - 1]?.discord)} /> */}
-            <img alt="alt" src={Message} />
+            <img alt="alt" src={Message} onClick={event => handleClick(event, 'discord')} />
             {/* <div className="nft-card-favor-number">1k</div> */}
           </div>
         </div>

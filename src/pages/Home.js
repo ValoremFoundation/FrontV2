@@ -165,6 +165,7 @@ const Home = () => {
                 token={item}
                 nativePrice={nativePrice}
                 unitEstimateOut={unitEstimateOut}
+                categories={categories}
               />
             </div>
           ))}

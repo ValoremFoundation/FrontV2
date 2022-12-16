@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import 'src/styles/Public.scss';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchAllCategories } from 'src/actions/categories';
+import { useHistory } from 'react-router-dom';
 import LoadingPage from 'src/components/LoadingPage';
 import { useParams } from 'react-router';
 import { getTokensByFilters, getUsers } from 'src/api';
@@ -17,7 +19,9 @@ import {
 
 const Public = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
   const params = useParams();
+  const categories = useSelector(state => state.categories.items.items);
   const { walletAddress } = params;
   const { account, chainId } = useWeb3React();
   const [nftData, setNftData] = useState([]);
@@ -25,6 +29,11 @@ const Public = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [nativePrice, setNativePrice] = useState(0);
   const [unitEstimateOut, setUnitEstimateOut] = useState(0);
+
+  useEffect(() => {
+    dispatch(fetchAllCategories());
+    // eslint-disable-next-line
+  }, [dispatch]);
 
   const getAllTokensByWallet = async () => {
     try {
@@ -120,6 +129,7 @@ const Public = () => {
                     token={item}
                     nativePrice={nativePrice}
                     unitEstimateOut={unitEstimateOut}
+                    categories={categories}
                   />
                 </div>
               ))
