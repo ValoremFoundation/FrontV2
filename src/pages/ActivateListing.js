@@ -82,6 +82,8 @@ const ActivateListing = () => {
       if (nftOwner.toLowerCase() !== token?.user?.walletAddress.toLowerCase()) {
         await updateTokenOwner(token?.id, { account });
       }
+    } else {
+      history.push(`/browse`);
     }
     if (nftOwner?.toLowerCase() === REACT_APP_MARKETPLACE_CONTRACT_ADDRESS?.toLowerCase()) {
       history.push(`/token-detail/${token?.id}`);
@@ -302,7 +304,13 @@ const ActivateListing = () => {
             <div className="listing-second-section">
               <div className="row gx-5">
                 <div className="col-12 col-lg-4 my-4">
-                  <NFTCard token={nftData} price={price} unitEstimateOut={unitEstimateOut} nativePrice={nativePrice} />
+                  <NFTCard
+                    token={nftData}
+                    price={price}
+                    unitEstimateOut={unitEstimateOut}
+                    nativePrice={nativePrice}
+                    listCard={true}
+                  />
                 </div>
                 <div className="col-12 col-lg-8 my-4">
                   <ActivateListingCard
@@ -325,7 +333,7 @@ const ActivateListing = () => {
                   />
                 </div>
               </div>
-              <div className="listing-service-price my-4">
+              <div className="d-none listing-service-price my-4">
                 <div className="poppins-24-600">Activating your service and setting a price</div>
                 <div className="poppins-20-500 my-3">Remember this example?</div>
                 <div className="global-flex-lg-between-sm-center">

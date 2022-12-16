@@ -93,13 +93,15 @@ const ActivateListingCard = ({
       </div>
       <div className="poppins-12-400 my-1">*Burn Fee</div>
       <div className="poppins-12-400 my-1">*Advalorem transaction fee</div>
-      <div className="global-flex-end gap-2">
-        {tokenStatus === 'list' && (
+      {tokenStatus === 'list' ? (
+        <div className="global-flex-end gap-2">
           <BackgroundButton label={'List'} color={'#000000'} bgColor={'#96F2A4'} onClick={handleClickList} />
-        )}
-        <BackgroundButton label={'Burn'} color={'#000000'} bgColor={'#96F2A4'} onClick={handleClickBurn} />
-        <BackgroundButton label={'Transfer'} color={'#000000'} bgColor={'#96F2A4'} onClick={handleClickTransfer} />
-      </div>
+          <BackgroundButton label={'Burn'} color={'#000000'} bgColor={'#96F2A4'} onClick={handleClickBurn} />
+          <BackgroundButton label={'Transfer'} color={'#000000'} bgColor={'#96F2A4'} onClick={handleClickTransfer} />
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

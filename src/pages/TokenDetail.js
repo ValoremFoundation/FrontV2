@@ -151,6 +151,8 @@ const TokenDetail = () => {
         } else {
           setTokenStatus('buy');
         }
+      } else {
+        history.push(`/browse`);
       }
       setTokenSymbol(await vlrTokenContract.methods.symbol().call());
       setTokenDecimals(await vlrTokenContract.methods.decimals().call());

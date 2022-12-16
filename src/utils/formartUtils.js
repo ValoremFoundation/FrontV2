@@ -17,12 +17,6 @@ export const toNumber = hex => {
   return parseInt(`${hex}`, 16);
 };
 
-export const numberWithCommas = num => {
-  const parts = num.toString().split('.');
-  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  return parts.join('.');
-};
-
 export const dateWithTimestamp = unix_timestamp => {
   const date = new Date(unix_timestamp);
   // const hours = date.getHours();
@@ -56,13 +50,22 @@ export const isAddress = address => {
 };
 
 export const numberFormat = (num = 0, fixed = 3) => {
-  return Number(
-    numbro(num).format({
-      thousandSeparated: true,
-      ...(fixed && { mantissa: fixed }), // number of decimals displayed
-    })
-  );
+  if (num === '') return;
+  return numbro(num).format({
+    thousandSeparated: true,
+    ...(fixed && { mantissa: fixed }), // number of decimals displayed
+  });
 };
+
+export function numberWithCommas(num) {
+  const parts = num?.toString().split('.');
+  if (parts) {
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return parts.join('.');
+  } else {
+    return num;
+  }
+}
 
 export const sliceString = (description, letters) => {
   return description?.length > letters ? description?.slice(0, letters) + ' ...' : description;

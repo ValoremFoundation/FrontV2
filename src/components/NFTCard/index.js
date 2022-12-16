@@ -10,7 +10,7 @@ import { SYMBOL } from 'src/constants';
 import MultiMediaView from '../MultiMediaView';
 import { numberFormat } from 'src/utils/formartUtils';
 
-const NFTCard = ({ onClick, token, price = 0, categories, unitEstimateOut, nativePrice }) => {
+const NFTCard = ({ onClick, token, price = 0, categories, unitEstimateOut, nativePrice, listCard = false }) => {
   return (
     <div className="nft-card-container" onClick={onClick}>
       <MultiMediaView
@@ -50,13 +50,17 @@ const NFTCard = ({ onClick, token, price = 0, categories, unitEstimateOut, nativ
       </div>
       <div className="poppins-20-600 mt-2">{token?.name}</div>
       <div className="global-flex-between my-3">
-        <div className="d-flex justify-content-start">
-          <div className="nft-card-matic-number">
-            {token?.price ? token?.price : price} {SYMBOL}
+        <div className="d-flex justify-content-start flex-wrap">
+          <div className="nft-card-matic-number mb-1">
+            {listCard ? numberFormat(price, 0) : numberFormat(token?.price, 0)} {SYMBOL}
           </div>
-          <div className="nft-card-usd-number">
-            ( {`$ ${numberFormat((1 / unitEstimateOut) * nativePrice * Number(token?.price), 2)} usd`} )
-          </div>
+          {unitEstimateOut && nativePrice ? (
+            <div className="nft-card-usd-number ms-1">
+              {` $ ${numberFormat((1 / unitEstimateOut) * nativePrice * Number(listCard ? price : token?.price))} usd`}
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
         {/* <div className="nft-card-up-percent">+5%</div> */}
       </div>
