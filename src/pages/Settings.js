@@ -6,8 +6,11 @@ import EditIcon from 'src/assets/images/editIcon.svg';
 import BackgroundButton from 'src/components/BackgroundButton';
 import { getProfile, updateProfile, uploadFile } from 'src/api';
 import LoadingPage from 'src/components/LoadingPage';
+import { useWeb3React } from '@web3-react/core';
+import { useSelector } from 'react-redux';
 
 const Settings = () => {
+  const { account } = useWeb3React();
   const bannerRef = useRef(null);
   const avatarRef = useRef(null);
   const [bannerFile, setBannerFile] = useState('');
@@ -19,8 +22,8 @@ const Settings = () => {
   const [description, setDescription] = useState('');
   const [profile, setProfile] = useState([]);
   const [geoLocation, setGeoLocation] = useState({ latitude: 0, longitude: 0 });
+  const authToken = useSelector(state => state.auth.token);
   const [isLoading, setIsLoading] = useState(false);
-  const authToken = localStorage.getItem('authToken');
 
   useEffect(() => {
     const getProfileData = async () => {
@@ -42,7 +45,7 @@ const Settings = () => {
     setGeoLocation({ latitude: 0, longitude: 0 });
     getProfileData();
     // eslint-disable-next-line
-  }, []);
+  }, [account, authToken]);
 
   useEffect(() => {
     if (!profile) return;
