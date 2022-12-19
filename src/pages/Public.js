@@ -78,6 +78,7 @@ const Public = () => {
     setIsLoading(true);
     getAllTokensByWallet();
     setIsLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [walletAddress]);
 
   const handleClickNFTCard = itemId => {

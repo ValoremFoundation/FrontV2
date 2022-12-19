@@ -214,7 +214,7 @@ const TokenDetail = () => {
         events: delistEvents,
       } = await marketplaceContract.methods.cancelSale(marketItemId).send({ from: account, gasPrice: gasPrice * 5 });
       const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
-      console.log('>>>>>>>>>>>>>>>>>> delistEvents : ', delistEvents);
+      // console.log('>>> delistEvents : ', delistEvents);
       let from = web3.eth.abi.decodeParameter('address', delistEvents[1]?.raw?.topics[1]);
       let to = web3.eth.abi.decodeParameter('address', delistEvents[1]?.raw?.topics[2]);
 
@@ -248,9 +248,7 @@ const TokenDetail = () => {
       const allowance = await vlrTokenContract.methods
         .allowance(account, process.env.REACT_APP_MARKETPLACE_CONTRACT_ADDRESS)
         .call();
-      console.log('>>>>>>>>>>>>>>> allowance : ', allowance);
       if (web3.utils.fromWei(allowance) < ethers.utils.parseEther('1000000')) {
-        console.log('>>>>>>>>>>>>>>>  allowance 111111111111111111111111  : ');
         await vlrTokenContract.methods
           .approve(process.env.REACT_APP_MARKETPLACE_CONTRACT_ADDRESS, ethers.constants.MaxUint256)
           .send({ from: account });
@@ -262,7 +260,7 @@ const TokenDetail = () => {
         events: buyEvents,
       } = await marketplaceContract.methods.buyMarketItem(marketItemId).send({ from: account, gasPrice: gasPrice * 5 });
       const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
-      console.log('>>>>>>>>>>>>>>>>>> buyEvents : ', buyEvents);
+      // console.log('>>> buyEvents : ', buyEvents);
       let from = REACT_APP_MARKETPLACE_CONTRACT_ADDRESS;
       let to = account;
       if (buyEvents[28]?.raw?.topics[1] && buyEvents[28]?.raw?.topics[2]) {
@@ -332,7 +330,7 @@ const TokenDetail = () => {
         .transfer(nftData?.user?.walletAddress, amount)
         .send({ from: account, gasPrice: gasPrice * 5 });
       const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
-      console.log('>>>>>>>>>>>>>>>>>> transferEvents : ', transferEvents);
+      // console.log('>>> transferEvents : ', transferEvents);
       const from = transferEvents?.Transfer[0]?.returnValues?.from || '';
       const to = transferEvents?.Transfer[0]?.returnValues?.to || '';
 

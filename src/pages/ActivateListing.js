@@ -164,7 +164,7 @@ const ActivateListing = () => {
         .sellMarketItem(nftData?.market_item_id, Web3.utils.toWei(price))
         .send({ from: account, gasPrice: gasPrice * 5 });
       const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
-      console.log('>>>>>>>>>>>>>>>>>> listEvents : ', listEvents);
+      // console.log('>>> listEvents : ', listEvents);
       let from = web3.eth.abi.decodeParameter('address', listEvents[1]?.raw?.topics[1]);
       let to = web3.eth.abi.decodeParameter('address', listEvents[1]?.raw?.topics[2]);
 
@@ -198,7 +198,7 @@ const ActivateListing = () => {
         events: burnEvents,
       } = await nftContract.methods.burn(token_id).send({ from: account, gasPrice: gasPrice * 5 });
       const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
-      console.log('>>>>>>>>>>>>>>> burnEvents : ', burnEvents);
+      // console.log('>>> burnEvents : ', burnEvents);
       const from = burnEvents?.Transfer?.returnValues?.from;
       const to = burnEvents?.Transfer?.returnValues?.to;
 
@@ -238,7 +238,7 @@ const ActivateListing = () => {
       const from = transferEvents?.Transfer?.returnValues?.from;
       const to = transferEvents?.Transfer?.returnValues?.to;
 
-      console.log('>>>>>>>>>>>>>>>>> 111111111111 transferEvents :', transferEvents);
+      // console.log('>>> 111111111111 transferEvents :', transferEvents);
       await tokenTransfer(id, {
         hash: transactionHash,
         from,

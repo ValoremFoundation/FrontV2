@@ -159,7 +159,7 @@ const Profile = () => {
         .safeTransferFrom(token?.redeem_from, account, token?.token_id)
         .send({ from: account });
       const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
-      console.log('>>>>>>>>>>>>>>>>>> redeemEvents : ', redeemEvents);
+      // console.log('>>> redeemEvents : ', redeemEvents);
       const from = redeemEvents?.Transfer?.returnValues?.from || '';
       const to = redeemEvents?.Transfer?.returnValues?.to || '';
 
@@ -213,7 +213,7 @@ const Profile = () => {
     }
   };
   const handleChangeOption = event => {
-    console.log('>>>>>>>>>>>>>>>>>> : ', event.target.value);
+    // console.log('>>> : ', event.target.value);
   };
   const handleClickBuy = () => {};
 
@@ -289,7 +289,7 @@ const Profile = () => {
         events: harvestEvents,
       } = await royaltyContract.methods.harvest().send({ from: account, gasPrice: gasPrice * 5 });
       const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
-      console.log('>>>>>>>>>>>>>>>>>> harvestEvents : ', harvestEvents);
+      // console.log('>>> harvestEvents : ', harvestEvents);
       const from = web3.eth.abi.decodeParameter('address', harvestEvents[0]?.raw?.topics[1]);
       const to = web3.eth.abi.decodeParameter('address', harvestEvents[0]?.raw?.topics[2]);
       if (status) {
@@ -336,7 +336,7 @@ const Profile = () => {
         events: withdrawEvents,
       } = await royaltyContract.methods.withdraw().send({ from: account, gasPrice: gasPrice * 5 });
       const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
-      console.log('>>>>>>>>>>>>>>>>>> withdrawEvents : ', withdrawEvents);
+      // console.log('>>> withdrawEvents : ', withdrawEvents);
       const from = web3.eth.abi.decodeParameter('address', withdrawEvents[0]?.raw?.topics[1]);
       const to = web3.eth.abi.decodeParameter('address', withdrawEvents[0]?.raw?.topics[2]);
       if (status) {

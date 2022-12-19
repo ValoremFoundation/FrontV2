@@ -320,7 +320,7 @@ const Create = () => {
         nftTokenIds.push(mintEvent?.TokenCreated?.returnValues?.tokenId);
       }
       const { timestamp: blockTimeStamp } = await web3.eth.getBlock(blockNumber);
-      console.log('>>>>>>>>>>>>>>>>>> createMultiToken mintEvent : ', mintEvent);
+      // console.log('>>> createMultiToken mintEvent : ', mintEvent);
 
       const pmarketItem = [];
       arrayNFT.forEach((item, index) => {
@@ -332,27 +332,27 @@ const Create = () => {
           royaltyPercent: item.royaltyPool.value * 100,
         });
       });
-      console.log('>>>>>>>>>>>>>>>>>> 111111111111111111q : ', pmarketItem);
+      // console.log('>>> 111111111111111111q : ', pmarketItem);
 
       const { events: marketEvent } = await marketplaceContract.methods
         .createMultiMarketItem(pmarketItem)
         .send({ from: account, gasPrice: gasPrice * 5 });
 
       let marketItems = [];
-      console.log('>>>>>>>>>>>>>>>>>> createMultiMarketItem marketEvent : ', marketEvent);
+      // console.log('>>> createMultiMarketItem marketEvent : ', marketEvent);
       if (marketEvent?.MarketItemCreated?.length > 0) {
         marketItems = marketEvent?.MarketItemCreated?.map(item => item?.returnValues?.itemId);
       } else {
         marketItems.push(marketEvent?.MarketItemCreated?.returnValues?.itemId);
       }
-      console.log('>>>>>>>>>>>>>>>>>> 2222222222 createMultiMarketItem : ', marketItems);
+      // console.log('>>> 2222222222 createMultiMarketItem : ', marketItems);
 
       const tmpArrNFT = [];
       arrayNFT.forEach((item, index) => {
         tmpArrNFT.push({ ...item, marketItemId: marketItems[index] });
       });
 
-      console.log('>>>>>>>>>>>>>>>>>> 33333333333333 arrayNFT : ', tmpArrNFT);
+      // console.log('>>> 33333333333333 arrayNFT : ', tmpArrNFT);
 
       const newNFTs = await handleSaveNFTAPI(tmpArrNFT);
       const tokenIds = newNFTs.map(item => item.id);

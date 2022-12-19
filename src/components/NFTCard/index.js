@@ -18,7 +18,7 @@ const NFTCard = ({ onClick, token, price = 0, categories, unitEstimateOut, nativ
 
   const handleClick = (event, type) => {
     event.stopPropagation();
-    if (type == 'discord') {
+    if (type === 'discord') {
       window.open(categories[token?.category_id - 1]?.discord);
     } else if (type === 'card') {
       onClick();
