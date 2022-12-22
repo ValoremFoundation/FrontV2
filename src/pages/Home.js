@@ -112,7 +112,7 @@ const Home = () => {
     if (account) {
       history.push(`/token-detail/${itemId}`);
     } else {
-      toast.error('Please connect wallet!');
+      toast.error('Please connect wallet! https://www.advalorem.io/tutorial/v/metamask-setup-contract-overview-rpcs');
       return;
     }
   };

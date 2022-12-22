@@ -133,7 +133,7 @@ const TokenEdit = () => {
 
   const checkValidation = () => {
     if (!account) {
-      toast.error('Please connect wallet!');
+      toast.error('Please connect wallet! https://www.advalorem.io/tutorial/v/metamask-setup-contract-overview-rpcs');
       return true;
     }
     if (!seenVideo) {
