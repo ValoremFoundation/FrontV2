@@ -85,7 +85,14 @@ const Public = () => {
     if (account) {
       history.push(`/token-detail/${itemId}`);
     } else {
-      toast.error('Please connect wallet! https://www.advalorem.io/tutorial/v/metamask-setup-contract-overview-rpcs');
+      toast.error(
+        <div
+          className="global-pointer"
+          onClick={() => window.open('https://www.advalorem.io/tutorial/v/metamask-setup-contract-overview-rpcs')}
+        >
+          Please connect wallet!
+        </div>
+      );
       return;
     }
   };
