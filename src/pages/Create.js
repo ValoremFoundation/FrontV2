@@ -13,7 +13,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getGeoLocationFromIPAddress, getProfile, pinFileToIPFS, tokenCreate, tokenMint } from 'src/api';
 import { fetchAllCategories } from 'src/actions/categories';
 import NewNFT from 'src/components/NewNFT';
-import { user1Info, user2Info, user3Info, user4Info, step1, step2, step3 } from 'src/constants';
+import { user1Info, user2Info, user3Info, user4Info, step1, step2, step3, step4 } from 'src/constants';
 import toast from 'react-hot-toast';
 import LoadingPage from 'src/components/LoadingPage';
 import { addDays } from 'date-fns';
@@ -500,13 +500,14 @@ const Create = () => {
             <div className="create-middle-section">
               <div className="poppins-24-600 my-3">How it works</div>
               <div style={{ maxWidth: 800 }}>
+                <span className="poppins-16-600">AdValorem Market Royalties </span>
                 <span className="poppins-16-400">
-                  We created a system that rewards your customer everytime resell your service to someone else in the
-                  advalorem marketplace for a{' '}
+                  are creator generated upon minting. Your marketplace rewards you and your customers when your NFTs are{' '}
                 </span>
-                <span className="poppins-16-600">commision </span>
-                <span className="poppins-16-400">and you still get paid your original fee plus </span>
-                <span className="poppins-16-600">royalties</span>
+                <span className="poppins-16-600">sold</span>
+                <span className="poppins-16-400">. When your service NFTs are </span>
+                <span className="poppins-16-600">resold </span>
+                <span className="poppins-16-400">everyone gets the same royalties.</span>
               </div>
               <p className="poppins-20-500 my-4">Here’s a real life example of how it works</p>
               <div className="create-work-flow">
@@ -517,6 +518,7 @@ const Create = () => {
                 <UserWithName userInfo={user3Info} />
                 <StepOrder step={step3} />
                 <UserWithName userInfo={user4Info} last={true} />
+                <StepOrder step={step4} last={true} />
               </div>
               <div className="global-flex-start">
                 <div className="create-red-dot"></div>

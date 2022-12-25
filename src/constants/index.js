@@ -6,70 +6,19 @@ export const user1Info = {
   info: {
     name: 'Sarah',
     role: 'Creator',
-    avatar: '/img/avatar-1.png',
+    avatar: '/img/Sarah.png',
     dotColor: '#111827',
   },
   gift: [
     {
       name: 'Sarah',
-      amount: 180,
+      amount: 100,
       bgColor: '#96F2A4',
       color: '#000000',
     },
     {
-      name: 'Royalty',
-      amount: 20,
-      bgColor: '#F2E9BA',
-      color: '#000000',
-    },
-  ],
-};
-
-export const user2Info = {
-  info: {
-    name: 'John',
-    role: 'Client/Reseller',
-    avatar: '/img/avatar-1.png',
-    dotColor: '#96F2A4',
-  },
-  gift: [
-    {
-      name: 'John',
-      amount: 90,
-      bgColor: '#111827',
-      color: '#ffffff',
-    },
-    {
       name: 'Sarah',
-      amount: 180,
-      bgColor: '#96F2A4',
-      color: '#000000',
-    },
-    {
-      name: 'Royalty',
-      amount: 30,
-      bgColor: '#F2E9BA',
-      color: '#000000',
-    },
-  ],
-};
-export const user3Info = {
-  info: {
-    name: 'Jane',
-    role: 'Client/Reseller',
-    avatar: '/img/avatar-1.png',
-    dotColor: '#96F2A4',
-  },
-  gift: [
-    {
-      name: 'Jane',
-      amount: 120,
-      bgColor: '#111827',
-      color: '#ffffff',
-    },
-    {
-      name: 'Sarah',
-      amount: 240,
+      amount: 60,
       bgColor: '#96F2A4',
       color: '#000000',
     },
@@ -81,13 +30,90 @@ export const user3Info = {
     },
   ],
 };
+
+export const user2Info = {
+  info: {
+    name: 'John',
+    role: 'Client/Reseller',
+    avatar: '/img/John.png',
+    dotColor: '#96F2A4',
+  },
+  gift: [
+    {
+      name: 'John',
+      amount: 90,
+      bgColor: '#111827',
+      color: '#ffffff',
+    },
+    {
+      name: 'Sarah',
+      amount: 150,
+      bgColor: '#96F2A4',
+      color: '#000000',
+    },
+    {
+      name: 'Royalty',
+      amount: 60,
+      bgColor: '#F2E9BA',
+      color: '#000000',
+    },
+  ],
+};
+export const user3Info = {
+  info: {
+    name: 'Jane',
+    role: 'Client/Reseller',
+    avatar: process.env.REACT_APP_NODE_ENV === 'production' ? '/img/Jane.png' : '/img/avatar-1.png',
+    dotColor: '#96F2A4',
+  },
+  gift: [
+    {
+      name: 'Jane',
+      amount: 75,
+      bgColor: '#111827',
+      color: '#ffffff',
+    },
+    {
+      name: 'Sarah',
+      amount: 125,
+      bgColor: '#96F2A4',
+      color: '#000000',
+    },
+    {
+      name: 'Royalty',
+      amount: 50,
+      bgColor: '#F2E9BA',
+      color: '#000000',
+    },
+  ],
+};
 export const user4Info = {
   info: {
     name: 'Tom',
     role: 'Client/Reseller',
-    avatar: '/img/avatar-1.png',
+    avatar: '/img/Tom.png',
     dotColor: '',
   },
+  gift: [
+    {
+      name: 'Tom',
+      amount: 67.5,
+      bgColor: '#111827',
+      color: '#ffffff',
+    },
+    {
+      name: 'Sarah',
+      amount: 112.5,
+      bgColor: '#96F2A4',
+      color: '#000000',
+    },
+    {
+      name: 'Royalty',
+      amount: 45,
+      bgColor: '#F2E9BA',
+      color: '#000000',
+    },
+  ],
 };
 
 export const step1 = {
@@ -96,11 +122,15 @@ export const step1 = {
 };
 export const step2 = {
   description: 'resells service to Jane for ',
-  amount: 200,
+  amount: 300,
 };
 export const step3 = {
   description: 'resells web design service to Tom for',
-  amount: 200,
+  amount: 250,
+};
+export const step4 = {
+  description: '-',
+  amount: 225,
 };
 
 export const giftCardOptions = [
