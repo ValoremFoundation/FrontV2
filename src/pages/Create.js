@@ -331,6 +331,8 @@ const Create = () => {
 
       const pmarketItem = [];
       arrayNFT.forEach((item, index) => {
+        window.gtag('event', 'Token Mint', { tokenId: nftTokenIds[index] });
+        window.gtag('event', 'conversion', { send_to: 'AW-826595197/bzVlCJuK78EDEP2uk4oD' });
         pmarketItem.push({
           nftContract: REACT_APP_NFT_CONTRACT_ADDRESS,
           tokenId: nftTokenIds[index],

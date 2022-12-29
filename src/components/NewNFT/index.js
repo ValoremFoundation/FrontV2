@@ -79,7 +79,7 @@ const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT, ed
           </div>
           <div className="my-3">
             <TextInput
-              label={'Tell us about your services'}
+              label={'Describe your services'}
               type={'textarea'}
               value={itemNFT?.tellUs.value}
               require={itemNFT?.tellUs.error}
@@ -87,8 +87,13 @@ const NewNFT = memo(({ index, itemNFT, handleChangeArrayNFT, handleRemoveNFT, ed
             />
           </div>
           <div className="my-4">
+            <div className="poppins-14-500">List Specific Unique Lifetime Benefits (ULB) of this NFT</div>
+            <div className="poppins-14-500" style={{ fontStyle: 'italic' }}>
+              i.e. Service Redemption, Authenticity, Tickets, License, Merchandise, Exclusive Access, Subscriptions,
+              Membership, Other Collectible Uses or IP
+            </div>
             <TextInput
-              label={'Describe your service'}
+              label={``}
               type={'text'}
               onChange={e => handleChangeArrayNFT(e, 'description', index)}
               value={itemNFT?.description.value}
