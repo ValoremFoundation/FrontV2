@@ -28,7 +28,9 @@ const BenefitCard = ({
       </div>
       <div className="benefit-card-content">
         <div className="global-flex-between my-2">
-          <div className="poppins-16-500-gray">Expiration {dateWithTimestamp(nftData?.expiration)}</div>
+          <div className="poppins-16-500-gray">
+            Expiration : {nftData?.expiration ? dateWithTimestamp(nftData?.expiration) : 'Never'}
+          </div>
           {!isOwner && (
             <div className="global-flex-center">
               <div className="poppins-14-500 me-2">Send VLR</div>

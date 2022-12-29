@@ -107,6 +107,7 @@ const Create = () => {
     try {
       setIsLoading(true);
       savedForLater = 1;
+      const newNFTs = await handleSaveNFTAPI(arrayNFT);
       toast.success('Successfully saved!');
       setIsLoading(false);
       history.push('/profile?activeTab=created&actionTab=saved-for-later');
@@ -419,7 +420,7 @@ const Create = () => {
 
       const resp = await tokenCreate(
         {
-          marketItemId: nftData.marketItemId,
+          marketItemId: nftData?.marketItemId,
           uri: nftData.imageUrl.value,
           mediaType: nftData.type,
           name: nftData.name.value,
