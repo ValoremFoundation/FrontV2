@@ -31,7 +31,10 @@ const Transactions = ({ transactions }) => {
               </td>
               <td>{Number(numberFormat(item?.value, item?.value > 1 ? 4 : 9))}</td>
               <td>{item?.method}</td>
-              <td>{`${item?.from.slice(0, 5)}...${item?.from.slice(item?.from.length - 5, item?.from.length)}`}</td>
+              <td>
+                {item?.method === 'redeem' && item?.email ? <div>{item?.email}</div> : <></>}
+                <div>{`${item?.from.slice(0, 5)}...${item?.from.slice(item?.from.length - 5, item?.from.length)}`}</div>
+              </td>
               <td>{`${item?.to.slice(0, 5)}...${item?.to.slice(item?.to.length - 5, item?.to.length)}`}</td>
               <td>{format(new Date(item?.created_at), 'MM dd, yyyy')}</td>
             </tr>
