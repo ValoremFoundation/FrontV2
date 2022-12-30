@@ -91,8 +91,12 @@ function App() {
 
   const loginAction = async () => {
     if (account) {
-      const userName = localStorage.getItem('userName');
-      const userEmail = localStorage.getItem('userEmail');
+      let userName = ''; // localStorage.getItem('userName');
+      let userEmail = ''; // localStorage.getItem('userEmail');
+      if (!JSON.parse(localStorage?.getItem('isWalletConnected'))) {
+        userName = localStorage.getItem('userName');
+        userEmail = localStorage.getItem('userEmail');
+      }
       const {
         data: { status, token, user },
       } = await login({ wallet_address: account, userName, userEmail });
