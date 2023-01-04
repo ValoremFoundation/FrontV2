@@ -464,13 +464,13 @@ const Profile = () => {
                 </Tab>
                 <Tab
                   active={activeTab === 'buy-vlr'}
-                  path="https://quickswap.exchange/#/swap?inputCurrency=0x221d160BA7E3552FeE22A33B3982AD408C3D6E65"
+                  path="https://quickswap.exchange/#/swap?inputCurrency=ETH&swapIndex=1&currency1=0x221d160BA7E3552FeE22A33B3982AD408C3D6E65"
                   style={{ position: 'relative' }}
                 >
                   <span
                     onClick={() =>
                       window.open(
-                        'https://quickswap.exchange/#/swap?inputCurrency=0x221d160BA7E3552FeE22A33B3982AD408C3D6E65'
+                        'https://quickswap.exchange/#/swap?inputCurrency=ETH&swapIndex=1&currency1=0x221d160BA7E3552FeE22A33B3982AD408C3D6E65'
                       )
                     }
                   >
